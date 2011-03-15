@@ -7,23 +7,25 @@ using namespace std;
 #include <list>
 
 #include "commun.h"
-#include "yy.tab.h"
+#include "yy.tab_xml.h"
 
 // xml parsing functions
 int  xml_wrap(void);
 void xml_error(char *msg);
 int  xml_lex(void);
+int  xml_parse(void);
 
 // dtd parsing functions
 void dtd_error(char *msg);
 int  dtd_wrap(void);
 int  dtd_lex(void);
+int  dtd_parse(void);
 
 // globals
 extern FILE   * xml_in;
 extern FILE   * dtd_in;
 extern string   nom_dtd;
-
+extern int dtd_debug;
 
 ////////////////////////////////////////////////////////////////////////////////
 //                              main
@@ -35,6 +37,7 @@ int main(int argc, char **argv)
   FILE * xml_file;
   FILE * dtd_file;
   
+//dtd_debug=1;
   // only one argument : xml file name
   if ( argc != 2 )
   {
@@ -67,8 +70,8 @@ printf("Beginning of the XML parsing\n");
   // DEBUG
 printf("Beginning of the DTD parsing\n");
   
-  xml_file = fopen(nom_dtd.c_str(), "r");
-  xml_in = xml_file;
+  dtd_file = fopen(nom_dtd.c_str(), "r");
+  dtd_in = dtd_file;
   
   dtd_err = dtd_parse();
   if (dtd_err != 0)
