@@ -1,15 +1,13 @@
+#include <string>
+#include <list>
 #include "XMLVisitor.h"
 #include "XMLNode.h"
 #include "XMLAttr.h"
 #include "XMLTag.h"
 
-#include <iostream>
-#include <string>
-#include <list>
-
 using namespace std;
 
-XMLTag::XMLTag(string name) {
+XMLTag::XMLTag(string name) : XMLNode (NODE_XMLTAG){
 	this->name = name;
 	children = new list<XMLNode *>();
 	attrs = new list<XMLAttr>();
@@ -39,6 +37,6 @@ list<XMLAttr>* XMLTag::get_attrs() {
 	return attrs;
 }
 
-/*void XMLTag::accept(XMLVisitor* v) {
+void XMLTag::accept(XMLVisitor* v) {
 	v->visitXMLTag(this);
-}*/
+}

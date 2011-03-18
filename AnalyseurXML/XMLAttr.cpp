@@ -1,3 +1,4 @@
+#include <string>
 #include "XMLAttr.h"
 
 using namespace std;

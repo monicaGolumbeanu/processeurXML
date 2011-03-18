@@ -1,15 +1,16 @@
-#include "XMLAttr.h"
-#include "XMLNode.h"
-#include "XMLPCDATA.h"
-#include "XMLTag.h"
-#include "XMLVisitor.h"
-#include "XMLPrintVisitor.h"
 #include <list>
 #include <string>
+#include <iostream>
+#include "XMLAttr.h"
+#include "XMLNode.h"
+#include "XMLTag.h"
+#include "XMLPCDATA.h"
+#include "XMLVisitor.h"
+#include "XMLPrintVisitor.h"
 
 using namespace std;
 
-/*void pretty_print(XMLNode* node) {
+void pretty_print(XMLNode* node) {
 	XMLPrintVisitor* visitor = new XMLPrintVisitor();
 	XMLTag *tag;
 	XMLPCDATA *pcdata;
@@ -26,14 +27,13 @@ using namespace std;
 			tag->accept(visitor);
 			break;
 		case NODE_XMLPCDATA:
-			//pas encore defini XMLPCDATA
 			pcdata = static_cast<XMLPCDATA*>(node);
 			pcdata->accept(visitor);
 			break;
 		default:
 			break;
 	}
-}*/
+}
 
 int main(int argc, char *argv[]) {
 	XMLTag* root = new XMLTag("html");
@@ -42,5 +42,7 @@ int main(int argc, char *argv[]) {
 	XMLTag* p = new XMLTag("p");
 	body->add_child(p);
 	p->add_attr(XMLAttr("style", "color: rgb(80,0,0)"));
-	//pretty_print(root);
+	XMLPCDATA* blague = new XMLPCDATA("Faça o que eu digo, não faça o que eu faço!");
+	p->add_child(blague);
+	pretty_print(root);
 }

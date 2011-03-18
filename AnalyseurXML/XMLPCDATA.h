@@ -1,7 +1,6 @@
 #ifndef XMLPCDATA_H_
 #define XMLPCDATA_H_
 
-#include <string>
 #include "XMLNode.h"
 
 class XMLPCDATA: public XMLNode {
@@ -10,7 +9,7 @@ class XMLPCDATA: public XMLNode {
 	public:
 		XMLPCDATA(std::string content);
 		std::string get_content();
-		//void accept(XMLVisitor* v);
+		virtual void accept(XMLVisitor* v);
 };
 
 #endif

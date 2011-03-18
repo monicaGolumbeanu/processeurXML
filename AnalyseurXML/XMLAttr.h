@@ -1,8 +1,6 @@
 #ifndef _XMLATTR_
 #define _XMLATTR_
 
-#include <string>
-
 class XMLAttr {
  private:
 	std::string name;
