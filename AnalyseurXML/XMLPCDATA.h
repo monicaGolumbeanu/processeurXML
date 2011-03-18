@@ -1,15 +1,16 @@
 #ifndef XMLPCDATA_H_
 #define XMLPCDATA_H_
 
-#include <string.h>
+#include <string>
 #include "XMLNode.h"
 
 class XMLPCDATA: public XMLNode {
 	private:
-		string content;
+		std::string content;
 	public:
-		XMLPCDATA(string content);
-		string get_content();
+		XMLPCDATA(std::string content);
+		std::string get_content();
+		//void accept(XMLVisitor* v);
 };
 
 #endif

@@ -9,24 +9,33 @@ using namespace std;
 
 //OBS.: Pas encore un Visiteur!
 
-void XMLPrintVisitor::pretty_print(XMLNode* node) {
-	XMLTag *tag;
-	list<XMLNode *> children;
-	list<XMLNode *>::iterator iter;
-	switch (node->get_type()) {
-	  case NODE_XMLTAG:
-	    tag = static_cast<XMLTag*>(node);
-		children = *(tag->get_children());
-		cout << setw(node->get_depth()*TAB_LENGTH) << "<" << tag->get_name() << ">" << endl;
-		if(!children.empty())
-			for(iter = children.begin(); iter != children.end(); iter++)
-				pretty_print(*iter);
-		cout << setw(node->get_depth()*TAB_LENGTH) << "</" << tag->get_name() << ">" << endl;
-		break;
-	  case NODE_XMLPCDATA:
-	    //pas encore defini XMLPCDATA
-		break;
-	  default:
-	    break;
+XMLPrintVisitor::XMLPrintVisitor() : XMLVisitor(VISITOR_PRINT){
+	;
+}
+
+void XMLPrintVisitor::visitXMLTag(XMLTag* tag) {
+	list<XMLAttr>* attrs;
+	list<XMLAttr>::iterator iter;
+	if (!tag->get_visited()) {
+		attrs = tag->get_attrs();
+		cout << setw(tag->get_depth() * TAB_LENGTH) << "<" << tag->get_name();
+		if (!attrs->empty()) {
+			for(iter = attrs->begin(); iter != attrs->end(); iter++) {
+				//if (iter == attrs->back()) //pas d'espace pour le dernière attribut
+					cout << " ";
+				cout << iter->get_name() << "=\"" << iter->get_value() << '"';
+			}
+		}
+		cout << ">" << endl;
 	}
+	else
+		cout << setw(tag->get_depth() * TAB_LENGTH) << "</" << tag->get_name() << ">" << endl;
+	tag->set_visited(!tag->get_visited());
+}
+
+void XMLPrintVisitor::visitXMLPCDATA(XMLPCDATA* pcdata) {
+	//@TODO: Wrap lines to column 80
+	if(!pcdata->get_visited())
+		cout << setw(pcdata->get_depth() * TAB_LENGTH) << pcdata->get_content() << endl;
+	pcdata->set_visited(!pcdata->get_visited());
 }

@@ -3,6 +3,8 @@
 
 #include <list>
 #include <string>
+#include "XMLAttr.h"
+#include "XMLNode.h"
 
 class XMLTag : public XMLNode {
  private:
@@ -16,6 +18,7 @@ class XMLTag : public XMLNode {
 	std::list<XMLNode *>* get_children(); //confirmar que operador new não retorna ponteiro
 	void add_attr(XMLAttr attr);
 	std::list<XMLAttr>* get_attrs();
+	//void accept(XMLVisitor* v);
 };
 
 #endif

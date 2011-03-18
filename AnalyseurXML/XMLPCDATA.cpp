@@ -1,4 +1,7 @@
 #include "XMLPCDATA.h"
+#include "XMLVisitor.h"
+
+using namespace std;
 
 XMLPCDATA::XMLPCDATA(string content) {
 	this->content = content;
@@ -7,3 +10,7 @@ XMLPCDATA::XMLPCDATA(string content) {
 string XMLPCDATA::get_content() {
 	return content;
 }
+
+/*void XMLPCDATA::accept(XMLVisitor* v) {
+	v->visitXMLPCDATA(this);
+}*/

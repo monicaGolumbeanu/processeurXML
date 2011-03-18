@@ -1,6 +1,6 @@
 COMPILER=g++
 CPPFLAGS=-Wall
-OBJS=XMLAttr.o XMLNode.o XMLTag.o XMLPrintVisitor.o
+OBJS=XMLAttr.o XMLNode.o XMLTag.o XMLPrintVisitor.o XMLVisitor.o XMLPCDATA.o
 BIN=bin
 
 all: xmltest analyseXML
@@ -12,7 +12,7 @@ analyseXML: *.l *.y
 
 xmltest: main.cpp $(OBJS)
 	mkdir -p bin
-	$(COMPILER) main.cpp XMLAttr.o XMLNode.o XMLTag.o XMLPrintVisitor.o -o $(BIN)/xmltest
+	$(COMPILER) main.cpp $(OBJS) -o $(BIN)/xmltest
 
 clean:
 	-rm -rf *.tab.c lex.*.c *.tab.h *.output analyseXML
