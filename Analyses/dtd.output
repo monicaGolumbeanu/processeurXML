@@ -1,7 +1,4 @@
-État 20conflits: 1 décalage/réduction
-
-
-Grammaire
+Grammar
 
     0 $accept: main $end
 
@@ -9,7 +6,7 @@ Grammaire
 
     2 dtd: dtd ATTLIST NAME att_definition CLOSE
     3    | dtd element
-    4    | /* vide */
+    4    | /* empty */
 
     5 element: ELEMENT NAME contenu CLOSE
 
@@ -21,693 +18,675 @@ Grammaire
    10 mixed: OPENPAR PCDATA contenu_mixed CLOSEPAR
 
    11 contenu_mixed: contenu_mixed PIPE NAME
-   12              | PIPE NAME
-   13              | /* vide */
+   12              | /* empty */
 
-   14 children: sequence_ou_choix cardinalite
+   13 children: sequence_ou_choix cardinalite
 
-   15 cardinalite: QMARK
-   16            | AST
-   17            | PLUS
-   18            | /* vide */
+   14 cardinalite: QMARK
+   15            | AST
+   16            | PLUS
+   17            | /* empty */
 
-   19 sequence_ou_choix: sequence
-   20                  | choix
+   18 sequence_ou_choix: sequence
+   19                  | choix
 
-   21 sequence: OPENPAR liste_sequence CLOSEPAR
+   20 sequence: OPENPAR liste_sequence CLOSEPAR
 
-   22 liste_sequence: item
-   23               | liste_sequence COMMA item
+   21 liste_sequence: item
+   22               | liste_sequence COMMA item
 
-   24 item: NAME cardinalite
-   25     | children
+   23 item: NAME cardinalite
+   24     | children
 
-   26 choix: OPENPAR liste_choix_plus CLOSEPAR
+   25 choix: OPENPAR liste_choix_plus CLOSEPAR
 
-   27 liste_choix_plus: liste_choix PIPE item
+   26 liste_choix_plus: liste_choix PIPE item
 
-   28 liste_choix: liste_choix PIPE item
-   29            | item
+   27 liste_choix: liste_choix PIPE item
+   28            | item
 
-   30 att_definition: att_definition attribut
-   31               | /* vide */
+   29 att_definition: att_definition attribut
+   30               | /* empty */
 
-   32 attribut: NAME att_type defaut_declaration
+   31 attribut: NAME att_type defaut_declaration
 
-   33 att_type: CDATA
-   34         | TOKENTYPE
-   35         | type_enumere
+   32 att_type: CDATA
+   33         | TOKENTYPE
+   34         | type_enumere
 
-   36 type_enumere: OPENPAR liste_enum_plus CLOSEPAR
+   35 type_enumere: OPENPAR liste_enum_plus CLOSEPAR
 
-   37 liste_enum_plus: liste_enum PIPE item_enum
+   36 liste_enum_plus: liste_enum PIPE item_enum
 
-   38 liste_enum: item_enum
-   39           | liste_enum PIPE item_enum
+   37 liste_enum: item_enum
+   38           | liste_enum PIPE item_enum
 
-   40 item_enum: NAME
+   39 item_enum: NAME
 
-   41 defaut_declaration: DECLARATION
-   42                   | STRING
-   43                   | FIXED STRING
+   40 defaut_declaration: DECLARATION
+   41                   | STRING
+   42                   | FIXED STRING
 
 
-Terminaux, suivis des règles où ils apparaissent
+Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
 ELEMENT (258) 5
 ATTLIST (259) 2
 CLOSE (260) 2 5
-OPENPAR (261) 10 21 26 36
-CLOSEPAR (262) 10 21 26 36
-COMMA (263) 23
-PIPE (264) 11 12 27 28 37 39
-FIXED (265) 43
+OPENPAR (261) 10 20 25 35
+CLOSEPAR (262) 10 20 25 35
+COMMA (263) 22
+PIPE (264) 11 26 27 36 38
+FIXED (265) 42
 EMPTY (266) 6
 ANY (267) 7
 PCDATA (268) 10
-AST (269) 16
-QMARK (270) 15
-PLUS (271) 17
-CDATA (272) 33
-NAME (273) 2 5 11 12 24 32 40
-TOKENTYPE (274) 34
-DECLARATION (275) 41
-STRING (276) 42 43
+AST (269) 15
+QMARK (270) 14
+PLUS (271) 16
+CDATA (272) 32
+NAME (273) 2 5 11 23 31 39
+TOKENTYPE (274) 33
+DECLARATION (275) 40
+STRING (276) 41 42
 
 
-Non-terminaux, suivis des règles où ils apparaissent
+Nonterminals, with rules where they appear
 
 $accept (22)
-    à gauche: 0
+    on left: 0
 main (23)
-    à gauche: 1, à droite: 0
+    on left: 1, on right: 0
 dtd (24)
-    à gauche: 2 3 4, à droite: 1 2 3
+    on left: 2 3 4, on right: 1 2 3
 element (25)
-    à gauche: 5, à droite: 3
+    on left: 5, on right: 3
 contenu (26)
-    à gauche: 6 7 8 9, à droite: 5
+    on left: 6 7 8 9, on right: 5
 mixed (27)
-    à gauche: 10, à droite: 8
+    on left: 10, on right: 8
 contenu_mixed (28)
-    à gauche: 11 12 13, à droite: 10 11
+    on left: 11 12, on right: 10 11
 children (29)
-    à gauche: 14, à droite: 9 25
+    on left: 13, on right: 9 24
 cardinalite (30)
-    à gauche: 15 16 17 18, à droite: 14 24
+    on left: 14 15 16 17, on right: 13 23
 sequence_ou_choix (31)
-    à gauche: 19 20, à droite: 14
+    on left: 18 19, on right: 13
 sequence (32)
-    à gauche: 21, à droite: 19
+    on left: 20, on right: 18
 liste_sequence (33)
-    à gauche: 22 23, à droite: 21 23
+    on left: 21 22, on right: 20 22
 item (34)
-    à gauche: 24 25, à droite: 22 23 27 28 29
+    on left: 23 24, on right: 21 22 26 27 28
 choix (35)
-    à gauche: 26, à droite: 20
+    on left: 25, on right: 19
 liste_choix_plus (36)
-    à gauche: 27, à droite: 26
+    on left: 26, on right: 25
 liste_choix (37)
-    à gauche: 28 29, à droite: 27 28
+    on left: 27 28, on right: 26 27
 att_definition (38)
-    à gauche: 30 31, à droite: 2 30
+    on left: 29 30, on right: 2 29
 attribut (39)
-    à gauche: 32, à droite: 30
+    on left: 31, on right: 29
 att_type (40)
-    à gauche: 33 34 35, à droite: 32
+    on left: 32 33 34, on right: 31
 type_enumere (41)
-    à gauche: 36, à droite: 35
+    on left: 35, on right: 34
 liste_enum_plus (42)
-    à gauche: 37, à droite: 36
+    on left: 36, on right: 35
 liste_enum (43)
-    à gauche: 38 39, à droite: 37 39
+    on left: 37 38, on right: 36 38
 item_enum (44)
-    à gauche: 40, à droite: 37 38 39
+    on left: 39, on right: 36 37 38
 defaut_declaration (45)
-    à gauche: 41 42 43, à droite: 32
+    on left: 40 41 42, on right: 31
 
 
-état 0
+state 0
 
     0 $accept: . main $end
 
-    $défaut  réduction par utilisation de la règle 4 (dtd)
+    $default  reduce using rule 4 (dtd)
 
-    main  aller à l'état 1
-    dtd   aller à l'état 2
+    main  go to state 1
+    dtd   go to state 2
 
 
-état 1
+state 1
 
     0 $accept: main . $end
 
-    $end  décalage et aller à l'état 3
+    $end  shift, and go to state 3
 
 
-état 2
+state 2
 
     1 main: dtd .
     2 dtd: dtd . ATTLIST NAME att_definition CLOSE
     3    | dtd . element
 
-    ELEMENT  décalage et aller à l'état 4
-    ATTLIST  décalage et aller à l'état 5
+    ELEMENT  shift, and go to state 4
+    ATTLIST  shift, and go to state 5
 
-    $défaut  réduction par utilisation de la règle 1 (main)
+    $default  reduce using rule 1 (main)
 
-    element  aller à l'état 6
+    element  go to state 6
 
 
-état 3
+state 3
 
     0 $accept: main $end .
 
-    $défaut  accepter
+    $default  accept
 
 
-état 4
+state 4
 
     5 element: ELEMENT . NAME contenu CLOSE
 
-    NAME  décalage et aller à l'état 7
+    NAME  shift, and go to state 7
 
 
-état 5
+state 5
 
     2 dtd: dtd ATTLIST . NAME att_definition CLOSE
 
-    NAME  décalage et aller à l'état 8
+    NAME  shift, and go to state 8
 
 
-état 6
+state 6
 
     3 dtd: dtd element .
 
-    $défaut  réduction par utilisation de la règle 3 (dtd)
+    $default  reduce using rule 3 (dtd)
 
 
-état 7
+state 7
 
     5 element: ELEMENT NAME . contenu CLOSE
 
-    OPENPAR  décalage et aller à l'état 9
-    EMPTY    décalage et aller à l'état 10
-    ANY      décalage et aller à l'état 11
+    OPENPAR  shift, and go to state 9
+    EMPTY    shift, and go to state 10
+    ANY      shift, and go to state 11
 
-    contenu            aller à l'état 12
-    mixed              aller à l'état 13
-    children           aller à l'état 14
-    sequence_ou_choix  aller à l'état 15
-    sequence           aller à l'état 16
-    choix              aller à l'état 17
+    contenu            go to state 12
+    mixed              go to state 13
+    children           go to state 14
+    sequence_ou_choix  go to state 15
+    sequence           go to state 16
+    choix              go to state 17
 
 
-état 8
+state 8
 
     2 dtd: dtd ATTLIST NAME . att_definition CLOSE
 
-    $défaut  réduction par utilisation de la règle 31 (att_definition)
+    $default  reduce using rule 30 (att_definition)
 
-    att_definition  aller à l'état 18
+    att_definition  go to state 18
 
 
-état 9
+state 9
 
    10 mixed: OPENPAR . PCDATA contenu_mixed CLOSEPAR
-   21 sequence: OPENPAR . liste_sequence CLOSEPAR
-   26 choix: OPENPAR . liste_choix_plus CLOSEPAR
+   20 sequence: OPENPAR . liste_sequence CLOSEPAR
+   25 choix: OPENPAR . liste_choix_plus CLOSEPAR
 
-    OPENPAR  décalage et aller à l'état 19
-    PCDATA   décalage et aller à l'état 20
-    NAME     décalage et aller à l'état 21
+    OPENPAR  shift, and go to state 19
+    PCDATA   shift, and go to state 20
+    NAME     shift, and go to state 21
 
-    children           aller à l'état 22
-    sequence_ou_choix  aller à l'état 15
-    sequence           aller à l'état 16
-    liste_sequence     aller à l'état 23
-    item               aller à l'état 24
-    choix              aller à l'état 17
-    liste_choix_plus   aller à l'état 25
-    liste_choix        aller à l'état 26
+    children           go to state 22
+    sequence_ou_choix  go to state 15
+    sequence           go to state 16
+    liste_sequence     go to state 23
+    item               go to state 24
+    choix              go to state 17
+    liste_choix_plus   go to state 25
+    liste_choix        go to state 26
 
 
-état 10
+state 10
 
     6 contenu: EMPTY .
 
-    $défaut  réduction par utilisation de la règle 6 (contenu)
+    $default  reduce using rule 6 (contenu)
 
 
-état 11
+state 11
 
     7 contenu: ANY .
 
-    $défaut  réduction par utilisation de la règle 7 (contenu)
+    $default  reduce using rule 7 (contenu)
 
 
-état 12
+state 12
 
     5 element: ELEMENT NAME contenu . CLOSE
 
-    CLOSE  décalage et aller à l'état 27
+    CLOSE  shift, and go to state 27
 
 
-état 13
+state 13
 
     8 contenu: mixed .
 
-    $défaut  réduction par utilisation de la règle 8 (contenu)
+    $default  reduce using rule 8 (contenu)
 
 
-état 14
+state 14
 
     9 contenu: children .
 
-    $défaut  réduction par utilisation de la règle 9 (contenu)
+    $default  reduce using rule 9 (contenu)
 
 
-état 15
+state 15
 
-   14 children: sequence_ou_choix . cardinalite
+   13 children: sequence_ou_choix . cardinalite
 
-    AST    décalage et aller à l'état 28
-    QMARK  décalage et aller à l'état 29
-    PLUS   décalage et aller à l'état 30
+    AST    shift, and go to state 28
+    QMARK  shift, and go to state 29
+    PLUS   shift, and go to state 30
 
-    $défaut  réduction par utilisation de la règle 18 (cardinalite)
+    $default  reduce using rule 17 (cardinalite)
 
-    cardinalite  aller à l'état 31
-
-
-état 16
-
-   19 sequence_ou_choix: sequence .
-
-    $défaut  réduction par utilisation de la règle 19 (sequence_ou_choix)
+    cardinalite  go to state 31
 
 
-état 17
+state 16
 
-   20 sequence_ou_choix: choix .
+   18 sequence_ou_choix: sequence .
 
-    $défaut  réduction par utilisation de la règle 20 (sequence_ou_choix)
+    $default  reduce using rule 18 (sequence_ou_choix)
 
 
-état 18
+state 17
+
+   19 sequence_ou_choix: choix .
+
+    $default  reduce using rule 19 (sequence_ou_choix)
+
+
+state 18
 
     2 dtd: dtd ATTLIST NAME att_definition . CLOSE
-   30 att_definition: att_definition . attribut
+   29 att_definition: att_definition . attribut
 
-    CLOSE  décalage et aller à l'état 32
-    NAME   décalage et aller à l'état 33
+    CLOSE  shift, and go to state 32
+    NAME   shift, and go to state 33
 
-    attribut  aller à l'état 34
-
-
-état 19
-
-   21 sequence: OPENPAR . liste_sequence CLOSEPAR
-   26 choix: OPENPAR . liste_choix_plus CLOSEPAR
-
-    OPENPAR  décalage et aller à l'état 19
-    NAME     décalage et aller à l'état 21
-
-    children           aller à l'état 22
-    sequence_ou_choix  aller à l'état 15
-    sequence           aller à l'état 16
-    liste_sequence     aller à l'état 23
-    item               aller à l'état 24
-    choix              aller à l'état 17
-    liste_choix_plus   aller à l'état 25
-    liste_choix        aller à l'état 26
+    attribut  go to state 34
 
 
-état 20
+state 19
+
+   20 sequence: OPENPAR . liste_sequence CLOSEPAR
+   25 choix: OPENPAR . liste_choix_plus CLOSEPAR
+
+    OPENPAR  shift, and go to state 19
+    NAME     shift, and go to state 21
+
+    children           go to state 22
+    sequence_ou_choix  go to state 15
+    sequence           go to state 16
+    liste_sequence     go to state 23
+    item               go to state 24
+    choix              go to state 17
+    liste_choix_plus   go to state 25
+    liste_choix        go to state 26
+
+
+state 20
 
    10 mixed: OPENPAR PCDATA . contenu_mixed CLOSEPAR
 
-    PIPE  décalage et aller à l'état 35
+    $default  reduce using rule 12 (contenu_mixed)
 
-    PIPE      [réduction par utilisation de la règle 13 (contenu_mixed)]
-    $défaut  réduction par utilisation de la règle 13 (contenu_mixed)
-
-    contenu_mixed  aller à l'état 36
+    contenu_mixed  go to state 35
 
 
-état 21
+state 21
 
-   24 item: NAME . cardinalite
+   23 item: NAME . cardinalite
 
-    AST    décalage et aller à l'état 28
-    QMARK  décalage et aller à l'état 29
-    PLUS   décalage et aller à l'état 30
+    AST    shift, and go to state 28
+    QMARK  shift, and go to state 29
+    PLUS   shift, and go to state 30
 
-    $défaut  réduction par utilisation de la règle 18 (cardinalite)
+    $default  reduce using rule 17 (cardinalite)
 
-    cardinalite  aller à l'état 37
-
-
-état 22
-
-   25 item: children .
-
-    $défaut  réduction par utilisation de la règle 25 (item)
+    cardinalite  go to state 36
 
 
-état 23
+state 22
 
-   21 sequence: OPENPAR liste_sequence . CLOSEPAR
-   23 liste_sequence: liste_sequence . COMMA item
+   24 item: children .
 
-    CLOSEPAR  décalage et aller à l'état 38
-    COMMA     décalage et aller à l'état 39
+    $default  reduce using rule 24 (item)
 
 
-état 24
+state 23
 
-   22 liste_sequence: item .
-   29 liste_choix: item .
+   20 sequence: OPENPAR liste_sequence . CLOSEPAR
+   22 liste_sequence: liste_sequence . COMMA item
 
-    PIPE      réduction par utilisation de la règle 29 (liste_choix)
-    $défaut  réduction par utilisation de la règle 22 (liste_sequence)
-
-
-état 25
-
-   26 choix: OPENPAR liste_choix_plus . CLOSEPAR
-
-    CLOSEPAR  décalage et aller à l'état 40
+    CLOSEPAR  shift, and go to state 37
+    COMMA     shift, and go to state 38
 
 
-état 26
+state 24
 
-   27 liste_choix_plus: liste_choix . PIPE item
-   28 liste_choix: liste_choix . PIPE item
+   21 liste_sequence: item .
+   28 liste_choix: item .
 
-    PIPE  décalage et aller à l'état 41
+    PIPE      reduce using rule 28 (liste_choix)
+    $default  reduce using rule 21 (liste_sequence)
 
 
-état 27
+state 25
+
+   25 choix: OPENPAR liste_choix_plus . CLOSEPAR
+
+    CLOSEPAR  shift, and go to state 39
+
+
+state 26
+
+   26 liste_choix_plus: liste_choix . PIPE item
+   27 liste_choix: liste_choix . PIPE item
+
+    PIPE  shift, and go to state 40
+
+
+state 27
 
     5 element: ELEMENT NAME contenu CLOSE .
 
-    $défaut  réduction par utilisation de la règle 5 (element)
+    $default  reduce using rule 5 (element)
 
 
-état 28
+state 28
 
-   16 cardinalite: AST .
+   15 cardinalite: AST .
 
-    $défaut  réduction par utilisation de la règle 16 (cardinalite)
-
-
-état 29
-
-   15 cardinalite: QMARK .
-
-    $défaut  réduction par utilisation de la règle 15 (cardinalite)
+    $default  reduce using rule 15 (cardinalite)
 
 
-état 30
+state 29
 
-   17 cardinalite: PLUS .
+   14 cardinalite: QMARK .
 
-    $défaut  réduction par utilisation de la règle 17 (cardinalite)
-
-
-état 31
-
-   14 children: sequence_ou_choix cardinalite .
-
-    $défaut  réduction par utilisation de la règle 14 (children)
+    $default  reduce using rule 14 (cardinalite)
 
 
-état 32
+state 30
+
+   16 cardinalite: PLUS .
+
+    $default  reduce using rule 16 (cardinalite)
+
+
+state 31
+
+   13 children: sequence_ou_choix cardinalite .
+
+    $default  reduce using rule 13 (children)
+
+
+state 32
 
     2 dtd: dtd ATTLIST NAME att_definition CLOSE .
 
-    $défaut  réduction par utilisation de la règle 2 (dtd)
+    $default  reduce using rule 2 (dtd)
 
 
-état 33
+state 33
 
-   32 attribut: NAME . att_type defaut_declaration
+   31 attribut: NAME . att_type defaut_declaration
 
-    OPENPAR    décalage et aller à l'état 42
-    CDATA      décalage et aller à l'état 43
-    TOKENTYPE  décalage et aller à l'état 44
+    OPENPAR    shift, and go to state 41
+    CDATA      shift, and go to state 42
+    TOKENTYPE  shift, and go to state 43
 
-    att_type      aller à l'état 45
-    type_enumere  aller à l'état 46
-
-
-état 34
-
-   30 att_definition: att_definition attribut .
-
-    $défaut  réduction par utilisation de la règle 30 (att_definition)
+    att_type      go to state 44
+    type_enumere  go to state 45
 
 
-état 35
+state 34
 
-   12 contenu_mixed: PIPE . NAME
+   29 att_definition: att_definition attribut .
 
-    NAME  décalage et aller à l'état 47
+    $default  reduce using rule 29 (att_definition)
 
 
-état 36
+state 35
 
    10 mixed: OPENPAR PCDATA contenu_mixed . CLOSEPAR
    11 contenu_mixed: contenu_mixed . PIPE NAME
 
-    CLOSEPAR  décalage et aller à l'état 48
-    PIPE      décalage et aller à l'état 49
+    CLOSEPAR  shift, and go to state 46
+    PIPE      shift, and go to state 47
 
 
-état 37
+state 36
 
-   24 item: NAME cardinalite .
+   23 item: NAME cardinalite .
 
-    $défaut  réduction par utilisation de la règle 24 (item)
-
-
-état 38
-
-   21 sequence: OPENPAR liste_sequence CLOSEPAR .
-
-    $défaut  réduction par utilisation de la règle 21 (sequence)
+    $default  reduce using rule 23 (item)
 
 
-état 39
+state 37
 
-   23 liste_sequence: liste_sequence COMMA . item
+   20 sequence: OPENPAR liste_sequence CLOSEPAR .
 
-    OPENPAR  décalage et aller à l'état 19
-    NAME     décalage et aller à l'état 21
-
-    children           aller à l'état 22
-    sequence_ou_choix  aller à l'état 15
-    sequence           aller à l'état 16
-    item               aller à l'état 50
-    choix              aller à l'état 17
+    $default  reduce using rule 20 (sequence)
 
 
-état 40
+state 38
 
-   26 choix: OPENPAR liste_choix_plus CLOSEPAR .
+   22 liste_sequence: liste_sequence COMMA . item
 
-    $défaut  réduction par utilisation de la règle 26 (choix)
+    OPENPAR  shift, and go to state 19
+    NAME     shift, and go to state 21
 
-
-état 41
-
-   27 liste_choix_plus: liste_choix PIPE . item
-   28 liste_choix: liste_choix PIPE . item
-
-    OPENPAR  décalage et aller à l'état 19
-    NAME     décalage et aller à l'état 21
-
-    children           aller à l'état 22
-    sequence_ou_choix  aller à l'état 15
-    sequence           aller à l'état 16
-    item               aller à l'état 51
-    choix              aller à l'état 17
+    children           go to state 22
+    sequence_ou_choix  go to state 15
+    sequence           go to state 16
+    item               go to state 48
+    choix              go to state 17
 
 
-état 42
+state 39
 
-   36 type_enumere: OPENPAR . liste_enum_plus CLOSEPAR
+   25 choix: OPENPAR liste_choix_plus CLOSEPAR .
 
-    NAME  décalage et aller à l'état 52
-
-    liste_enum_plus  aller à l'état 53
-    liste_enum       aller à l'état 54
-    item_enum        aller à l'état 55
+    $default  reduce using rule 25 (choix)
 
 
-état 43
+state 40
 
-   33 att_type: CDATA .
+   26 liste_choix_plus: liste_choix PIPE . item
+   27 liste_choix: liste_choix PIPE . item
 
-    $défaut  réduction par utilisation de la règle 33 (att_type)
+    OPENPAR  shift, and go to state 19
+    NAME     shift, and go to state 21
 
-
-état 44
-
-   34 att_type: TOKENTYPE .
-
-    $défaut  réduction par utilisation de la règle 34 (att_type)
-
-
-état 45
-
-   32 attribut: NAME att_type . defaut_declaration
-
-    FIXED        décalage et aller à l'état 56
-    DECLARATION  décalage et aller à l'état 57
-    STRING       décalage et aller à l'état 58
-
-    defaut_declaration  aller à l'état 59
+    children           go to state 22
+    sequence_ou_choix  go to state 15
+    sequence           go to state 16
+    item               go to state 49
+    choix              go to state 17
 
 
-état 46
+state 41
 
-   35 att_type: type_enumere .
+   35 type_enumere: OPENPAR . liste_enum_plus CLOSEPAR
 
-    $défaut  réduction par utilisation de la règle 35 (att_type)
+    NAME  shift, and go to state 50
 
-
-état 47
-
-   12 contenu_mixed: PIPE NAME .
-
-    $défaut  réduction par utilisation de la règle 12 (contenu_mixed)
+    liste_enum_plus  go to state 51
+    liste_enum       go to state 52
+    item_enum        go to state 53
 
 
-état 48
+state 42
+
+   32 att_type: CDATA .
+
+    $default  reduce using rule 32 (att_type)
+
+
+state 43
+
+   33 att_type: TOKENTYPE .
+
+    $default  reduce using rule 33 (att_type)
+
+
+state 44
+
+   31 attribut: NAME att_type . defaut_declaration
+
+    FIXED        shift, and go to state 54
+    DECLARATION  shift, and go to state 55
+    STRING       shift, and go to state 56
+
+    defaut_declaration  go to state 57
+
+
+state 45
+
+   34 att_type: type_enumere .
+
+    $default  reduce using rule 34 (att_type)
+
+
+state 46
 
    10 mixed: OPENPAR PCDATA contenu_mixed CLOSEPAR .
 
-    $défaut  réduction par utilisation de la règle 10 (mixed)
+    $default  reduce using rule 10 (mixed)
 
 
-état 49
+state 47
 
    11 contenu_mixed: contenu_mixed PIPE . NAME
 
-    NAME  décalage et aller à l'état 60
+    NAME  shift, and go to state 58
 
 
-état 50
+state 48
 
-   23 liste_sequence: liste_sequence COMMA item .
+   22 liste_sequence: liste_sequence COMMA item .
 
-    $défaut  réduction par utilisation de la règle 23 (liste_sequence)
-
-
-état 51
-
-   27 liste_choix_plus: liste_choix PIPE item .
-   28 liste_choix: liste_choix PIPE item .
-
-    PIPE      réduction par utilisation de la règle 28 (liste_choix)
-    $défaut  réduction par utilisation de la règle 27 (liste_choix_plus)
+    $default  reduce using rule 22 (liste_sequence)
 
 
-état 52
+state 49
 
-   40 item_enum: NAME .
+   26 liste_choix_plus: liste_choix PIPE item .
+   27 liste_choix: liste_choix PIPE item .
 
-    $défaut  réduction par utilisation de la règle 40 (item_enum)
-
-
-état 53
-
-   36 type_enumere: OPENPAR liste_enum_plus . CLOSEPAR
-
-    CLOSEPAR  décalage et aller à l'état 61
+    PIPE      reduce using rule 27 (liste_choix)
+    $default  reduce using rule 26 (liste_choix_plus)
 
 
-état 54
+state 50
 
-   37 liste_enum_plus: liste_enum . PIPE item_enum
-   39 liste_enum: liste_enum . PIPE item_enum
+   39 item_enum: NAME .
 
-    PIPE  décalage et aller à l'état 62
-
-
-état 55
-
-   38 liste_enum: item_enum .
-
-    $défaut  réduction par utilisation de la règle 38 (liste_enum)
+    $default  reduce using rule 39 (item_enum)
 
 
-état 56
+state 51
 
-   43 defaut_declaration: FIXED . STRING
+   35 type_enumere: OPENPAR liste_enum_plus . CLOSEPAR
 
-    STRING  décalage et aller à l'état 63
-
-
-état 57
-
-   41 defaut_declaration: DECLARATION .
-
-    $défaut  réduction par utilisation de la règle 41 (defaut_declaration)
+    CLOSEPAR  shift, and go to state 59
 
 
-état 58
+state 52
 
-   42 defaut_declaration: STRING .
+   36 liste_enum_plus: liste_enum . PIPE item_enum
+   38 liste_enum: liste_enum . PIPE item_enum
 
-    $défaut  réduction par utilisation de la règle 42 (defaut_declaration)
-
-
-état 59
-
-   32 attribut: NAME att_type defaut_declaration .
-
-    $défaut  réduction par utilisation de la règle 32 (attribut)
+    PIPE  shift, and go to state 60
 
 
-état 60
+state 53
+
+   37 liste_enum: item_enum .
+
+    $default  reduce using rule 37 (liste_enum)
+
+
+state 54
+
+   42 defaut_declaration: FIXED . STRING
+
+    STRING  shift, and go to state 61
+
+
+state 55
+
+   40 defaut_declaration: DECLARATION .
+
+    $default  reduce using rule 40 (defaut_declaration)
+
+
+state 56
+
+   41 defaut_declaration: STRING .
+
+    $default  reduce using rule 41 (defaut_declaration)
+
+
+state 57
+
+   31 attribut: NAME att_type defaut_declaration .
+
+    $default  reduce using rule 31 (attribut)
+
+
+state 58
 
    11 contenu_mixed: contenu_mixed PIPE NAME .
 
-    $défaut  réduction par utilisation de la règle 11 (contenu_mixed)
+    $default  reduce using rule 11 (contenu_mixed)
 
 
-état 61
+state 59
 
-   36 type_enumere: OPENPAR liste_enum_plus CLOSEPAR .
+   35 type_enumere: OPENPAR liste_enum_plus CLOSEPAR .
 
-    $défaut  réduction par utilisation de la règle 36 (type_enumere)
-
-
-état 62
-
-   37 liste_enum_plus: liste_enum PIPE . item_enum
-   39 liste_enum: liste_enum PIPE . item_enum
-
-    NAME  décalage et aller à l'état 52
-
-    item_enum  aller à l'état 64
+    $default  reduce using rule 35 (type_enumere)
 
 
-état 63
+state 60
 
-   43 defaut_declaration: FIXED STRING .
+   36 liste_enum_plus: liste_enum PIPE . item_enum
+   38 liste_enum: liste_enum PIPE . item_enum
 
-    $défaut  réduction par utilisation de la règle 43 (defaut_declaration)
+    NAME  shift, and go to state 50
+
+    item_enum  go to state 62
 
 
-état 64
+state 61
 
-   37 liste_enum_plus: liste_enum PIPE item_enum .
-   39 liste_enum: liste_enum PIPE item_enum .
+   42 defaut_declaration: FIXED STRING .
 
-    PIPE      réduction par utilisation de la règle 39 (liste_enum)
-    $défaut  réduction par utilisation de la règle 37 (liste_enum_plus)
+    $default  reduce using rule 42 (defaut_declaration)
+
+
+state 62
+
+   36 liste_enum_plus: liste_enum PIPE item_enum .
+   38 liste_enum: liste_enum PIPE item_enum .
+
+    PIPE      reduce using rule 38 (liste_enum)
+    $default  reduce using rule 36 (liste_enum_plus)
