@@ -8,6 +8,10 @@ void XMLNode::set_parent(XMLTag* parent) {
 	this->parent = parent;
 }
 
+XMLTag* XMLNode::get_parent() {
+	return this->parent;
+}
+
 NODE_TYPE XMLNode::get_type() {
 	return type;
 }

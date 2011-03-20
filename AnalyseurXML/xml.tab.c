@@ -1605,7 +1605,7 @@ int main(int argc, char **argv)
   fid = fopen(argv[1], "r");
   yyin = fid;
   
-printf("Beginning of the XML parsing");
+printf("Beginning of the XML parsing\n");
 
   err = yyparse();
   if (err != 0) printf("Parse ended with %d error(s)\n", err);

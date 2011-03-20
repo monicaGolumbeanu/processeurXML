@@ -98,7 +98,7 @@ int    yylex(void);
 
 string   nom_dtd;
 XMLTag * root;
-XMLTag * current = root;
+XMLTag * current;
 string   buffer;
 
 
@@ -468,8 +468,8 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    39,    39,    42,    43,    46,    50,    51,    55,    59,
-      63,    75,    88,    89,    94,    95,    98,   101,   102,   103,
-     106,   111,   112,   113,   114
+      63,    77,    92,    93,    98,    99,   102,   105,   106,   107,
+     110,   115,   116,   117,   118
 };
 #endif
 
@@ -1398,14 +1398,16 @@ yyreduce:
 /* Line 1455 of yacc.c  */
 #line 64 "xml.y"
     {
-        buffer = (yyvsp[(1) - (1)].en)->second;
         if (current == NULL )
         {
-            current = new XMLTag(buffer);
+            root = new XMLTag((yyvsp[(1) - (1)].en)->second);
+            current = root;
         }
         else
         {
-            current->add_child( new XMLTag(buffer) );
+            XMLTag * newTag = new XMLTag((yyvsp[(1) - (1)].en)->second);
+            current->add_child( newTag );
+            current = newTag;
         }
     ;}
     break;
@@ -1413,16 +1415,18 @@ yyreduce:
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 76 "xml.y"
+#line 78 "xml.y"
     {
-        buffer = (yyvsp[(1) - (1)].en)->second;
         if (current == NULL )
         {
-            current = new XMLTag(buffer);
+            root = new XMLTag((yyvsp[(1) - (1)].en)->second);
+            current = root;
         }
         else
         {
-            current->add_child( new XMLTag(buffer) );
+            XMLTag * newTag = new XMLTag((yyvsp[(1) - (1)].en)->second);
+            current->add_child( newTag );
+            current = newTag;
         }
     ;}
     break;
@@ -1430,14 +1434,14 @@ yyreduce:
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 108 "xml.y"
+#line 112 "xml.y"
     { current = current->get_parent(); ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1441 "xml.tab.c"
+#line 1445 "xml.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1649,7 +1653,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 116 "xml.y"
+#line 120 "xml.y"
 
 
 

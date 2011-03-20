@@ -19,7 +19,7 @@ int    yylex(void);
 
 string   nom_dtd;
 XMLTag * root;
-XMLTag * current = root;
+XMLTag * current;
 string   buffer;
 
 %}
@@ -62,26 +62,30 @@ element
 start
  : START
     {
-        buffer = $1->second;
         if (current == NULL )
         {
-            current = new XMLTag(buffer);
+            root = new XMLTag($1->second);
+            current = root;
         }
         else
         {
-            current->add_child( new XMLTag(buffer) );
+            XMLTag * newTag = new XMLTag($1->second);
+            current->add_child( newTag );
+            current = newTag;
         }
     }
  | NSSTART
     {
-        buffer = $1->second;
         if (current == NULL )
         {
-            current = new XMLTag(buffer);
+            root = new XMLTag($1->second);
+            current = root;
         }
         else
         {
-            current->add_child( new XMLTag(buffer) );
+            XMLTag * newTag = new XMLTag($1->second);
+            current->add_child( newTag );
+            current = newTag;
         }
     };
 empty_or_content

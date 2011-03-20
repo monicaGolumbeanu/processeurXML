@@ -1,4 +1,5 @@
 using namespace std;
+
 #include <cstring>
 #include <string>
 #include <cstdio>
@@ -6,8 +7,11 @@ using namespace std;
 #include <stack>
 #include <list>
 #include <iostream>
-#include <iomanip>
 
+#include "XMLAttr.h"
+#include "XMLPCDATA.h"
+#include "XMLVisitor.h"
+#include "XMLPrintVisitor.h"
 #include "XMLNode.h"
 #include "XMLTag.h"
 #include "commun.h"
@@ -32,27 +36,33 @@ extern string   nom_dtd;
 extern int      dtd_debug;
 extern XMLTag * root;
 
-void pretty_print( XMLNode * node)
-{
-    XMLTag *tag;
+////////////////////////////////////////////////////////////////////////////////
+//                              pretty_print
+////////////////////////////////////////////////////////////////////////////////
+void pretty_print(XMLNode* node) {
+	XMLPrintVisitor* visitor = new XMLPrintVisitor();
+	XMLTag *tag;
+	XMLPCDATA *pcdata;
 	list<XMLNode *> children;
 	list<XMLNode *>::iterator iter;
-	switch (node->get_type())
-	{
-	  case NODE_XMLTAG:
-	    tag = static_cast<XMLTag*>(node);
-		children = *(tag->get_children());
-		cout << setw(node->get_depth()*TAB_LENGTH) << "<" << tag->get_name() << ">" << endl;
-		if(!children.empty())
-			for(iter = children.begin(); iter != children.end(); iter++)
-				pretty_print(*iter);
-		cout << setw(node->get_depth()*TAB_LENGTH) << "</" << tag->get_name() << ">" << endl;
-		break;
-	  case NODE_XMLPCDATA:
-	    //pas encore defini XMLPCDATA
-		break;
-	  default:
-	    break;
+	switch (node->get_type()) {
+		case NODE_XMLTAG:
+			tag = static_cast<XMLTag*> (node);
+			children = *(tag->get_children());
+			tag->accept(visitor);
+			if (!children.empty())
+			{
+				for (iter = children.begin(); iter != children.end(); iter++)
+					pretty_print(*iter);
+			}
+			tag->accept(visitor);
+			break;
+		case NODE_XMLPCDATA:
+			pcdata = static_cast<XMLPCDATA*>(node);
+			pcdata->accept(visitor);
+			break;
+		default:
+			break;
 	}
 }
 
@@ -113,7 +123,7 @@ printf("Beginning of the DTD parsing\n");
   }
   
   pretty_print(root);
-  	
+  
   return 0;
 }
 

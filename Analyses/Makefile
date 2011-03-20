@@ -1,6 +1,6 @@
 COMPILER=g++
 CPPFLAGS=-Wall
-OBJSCPP=XMLAttr.ocpp XMLNode.ocpp XMLTag.ocpp XMLPCDATA.ocpp XMLPrintVisitor XMLVisitor
+OBJSCPP=XMLAttr.ocpp XMLNode.ocpp XMLTag.ocpp XMLPCDATA.ocpp XMLPrintVisitor.ocpp XMLVisitor.ocpp
 OBJSC=lex.xml_.oc  xml.tab.oc lex.dtd_.oc  dtd.tab.oc
 
 BIN=bin
