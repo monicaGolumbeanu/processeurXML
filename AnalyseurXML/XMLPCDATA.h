@@ -3,13 +3,13 @@
 
 #include "XMLNode.h"
 
-class XMLPCDATA: public XMLNode {
-	private:
-		std::string content;
-	public:
-		XMLPCDATA(std::string content);
-		std::string get_content();
-		virtual void accept(XMLVisitor* v);
+class XMLPCDATA : public XMLNode {
+    public:
+        XMLPCDATA(std::string content);
+        std::string get_content();
+        virtual void accept(XMLVisitor* v);
+    private:
+        std::string content;
 };
 
 #endif

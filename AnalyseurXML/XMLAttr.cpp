@@ -4,8 +4,8 @@
 using namespace std;
 
 XMLAttr::XMLAttr(string name, string value) {
-	this->name = name;
-	this->value = value;
+    this->name = name;
+    this->value = value;
 }
 
 string XMLAttr::get_name() {

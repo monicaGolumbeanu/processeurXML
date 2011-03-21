@@ -2,13 +2,13 @@
 #define _XMLATTR_
 
 class XMLAttr {
- private:
-	std::string name;
-	std::string value;
- public:
-	XMLAttr(std::string name, std::string value);
-	std::string get_name();
-	std::string get_value();
+    public:
+        XMLAttr(std::string name, std::string value);
+        std::string get_name();
+        std::string get_value();
+    private:
+        std::string name;
+        std::string value;
 };
 
 #endif

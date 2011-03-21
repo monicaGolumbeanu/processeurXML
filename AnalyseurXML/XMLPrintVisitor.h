@@ -8,11 +8,11 @@ class XMLPCDATA;
 
 #define TAB_LENGTH 4
 
-class XMLPrintVisitor: public XMLVisitor {
-	public:
-		XMLPrintVisitor();
-		virtual void visitXMLTag(XMLTag* tag);
-		virtual void visitXMLPCDATA(XMLPCDATA* pcdata);
+class XMLPrintVisitor : public XMLVisitor {
+    public:
+        XMLPrintVisitor();
+        virtual void visitXMLTag(XMLTag* tag);
+        virtual void visitXMLPCDATA(XMLPCDATA* pcdata);
 };
 
 #endif
