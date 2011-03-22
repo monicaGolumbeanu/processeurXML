@@ -11,7 +11,7 @@ XMLTag::XMLTag(string name, string ns) : XMLNode(NODE_XMLTAG) {
     this->name = name;
     this->ns = ns;
     children = new list<XMLNode *> ();
-    attrs = new list<XMLAttr> ();
+    attrs = new list<XMLAttr*> ();
     type = NODE_XMLTAG;
     depth = 0;
 }
@@ -34,11 +34,11 @@ list<XMLNode *>* XMLTag::get_children() {
     return children;
 }
 
-void XMLTag::add_attr(XMLAttr attr) {
+void XMLTag::add_attr(XMLAttr* attr) {
     attrs->push_back(attr);
 }
 
-list<XMLAttr>* XMLTag::get_attrs() {
+list<XMLAttr*>* XMLTag::get_attrs() {
     return attrs;
 }
 

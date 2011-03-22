@@ -13,11 +13,11 @@ typedef enum {
 } TYPE_INFO;
 
 class DTDInfo {
-private:
-	TYPE_INFO idInfo;
 public:
 	DTDInfo(TYPE_INFO);
 	TYPE_INFO get_idInfo();
+private:
+	TYPE_INFO idInfo;
 };
 
 #endif /* DTDINFO_H_ */

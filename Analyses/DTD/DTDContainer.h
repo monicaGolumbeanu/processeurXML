@@ -14,11 +14,11 @@ using namespace std;
 
 class DTDContainer
 {
-private:
-	vector<DTDInfo*> vectorInfo;
 public:
 	DTDContainer(vector<DTDInfo*>);
 	vector<DTDInfo*> getVectorInfo();
+private:
+	vector<DTDInfo*> vectorInfo;
 };
 
 #endif /* DTDCONTAINER_H_ */

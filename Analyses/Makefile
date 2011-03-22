@@ -12,6 +12,8 @@ BINDIR=bin
 
 all: bison analyse
 
+.PHONY : all
+
 bison: *.l *.y
 	flex  -Pxml_ xml.l
 	flex  -Pdtd_ dtd.l
