@@ -9,17 +9,16 @@
 #define DTDCONTAINER_H_
 
 #include <vector>
-#include "Info.h"
+#include "DTDInfo.h"
 using namespace std;
 
 class DTDContainer
 {
 private:
-	vector<Info*> vectorInfo;
+	vector<DTDInfo*> vectorInfo;
 public:
-	DTDContainer(vector<Info*>);
-	vector<Info*> getVectorInfo();
-	virtual ~DTDContainer();
+	DTDContainer(vector<DTDInfo*>);
+	vector<DTDInfo*> getVectorInfo();
 };
 
 #endif /* DTDCONTAINER_H_ */

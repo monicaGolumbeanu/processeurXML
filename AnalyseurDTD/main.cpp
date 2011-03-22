@@ -9,27 +9,26 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Element.h"
-#include "Attlist.h"
-#include "Attribut.h"
-#include "Type.h"
-#include "Info.h"
-#include "TypeAtomique.h"
-#include "TypeSequence.h"
-#include "TypeChoice.h"
+#include "DTDElement.h"
+#include "DTDAttlist.h"
+#include "DTDAttribut.h"
+#include "DTDType.h"
+#include "DTDInfo.h"
+#include "DTDTypeAtomique.h"
+#include "DTDTypeSequence.h"
+#include "DTDTypeChoice.h"
 #include "DTDContainer.h"
-
 
 using namespace std;
 
-void writeTypeName(Type* elemType)
+void writeTypeName(DTDType* elemType)
 {
 
 	if(elemType->get_idType() == TYPE_SEQUENCE)
 	{
-		TypeSequence* seq = static_cast<TypeSequence*>(elemType);
+		DTDTypeSequence* seq = static_cast<DTDTypeSequence*>(elemType);
 
-		vector<Type*> vectorType;
+		vector<DTDType*> vectorType;
 
 		vectorType = seq->getvectorType();
 
@@ -37,7 +36,7 @@ void writeTypeName(Type* elemType)
 
 		for(unsigned int i = 0; i < vectorType.size(); i++)
 		{
-			Type* theType = vectorType[i];
+			DTDType* theType = vectorType[i];
 
 			writeTypeName(theType);
 
@@ -49,9 +48,9 @@ void writeTypeName(Type* elemType)
 	}
 	else if(elemType->get_idType() == TYPE_CHOICE)
 	{
-		TypeChoice* choice = static_cast<TypeChoice*>(elemType);
+		DTDTypeChoice* choice = static_cast<DTDTypeChoice*>(elemType);
 
-		vector<Type*> vectorType;
+		vector<DTDType*> vectorType;
 
 		vectorType = choice->getvectorType();
 
@@ -59,7 +58,7 @@ void writeTypeName(Type* elemType)
 
 		for(unsigned int i = 0; i < vectorType.size(); i++)
 		{
-			Type* theType = vectorType[i];
+			DTDType* theType = vectorType[i];
 
 			writeTypeName(theType);
 
@@ -71,28 +70,28 @@ void writeTypeName(Type* elemType)
 	}
 	else if(elemType->get_idType() == TYPE_ATOMIC)
 	{
-		TypeAtomique* atom = static_cast<TypeAtomique*>(elemType);
+		DTDTypeAtomique* atom = static_cast<DTDTypeAtomique*>(elemType);
 
 		cout << atom->get_name() << atom->get_card();
 	}
 }
 
-void writeElement(Element* element)
+void writeElement(DTDElement* element)
 {
 	cout << "<!ELEMENT " << element->get_name() << " ";
 
-	Type* elemType = element->get_type();
+	DTDType* elemType = element->get_type();
 
 	writeTypeName(elemType);
 
 	cout << ">" << endl;
 }
 
-void writeAttlist(Attlist* attlist)
+void writeAttlist(DTDAttlist* attlist)
 {
 	cout << "<!ATTLIST " << attlist->get_attName() << " ";
 
-	vector<Attribut*> vectorAtt = attlist->get_attList();
+	vector<DTDAttribut*> vectorAtt = attlist->get_attList();
 
 	for(unsigned int i = 0; i < vectorAtt.size(); i++)
 	{
@@ -104,19 +103,19 @@ void writeAttlist(Attlist* attlist)
 
 void writeDTD(DTDContainer dtd)
 {
-	vector<Info*> vectorDTD = dtd.getVectorInfo();
+	vector<DTDInfo*> vectorDTD = dtd.getVectorInfo();
 
 	for(unsigned int i = 0; i < vectorDTD.size(); i++)
 	{
 		if(vectorDTD[i]->get_idInfo() == TYPE_ELEMENT)
 		{
-			Element* elem = static_cast<Element*>(vectorDTD[i]);
+			DTDElement* elem = static_cast<DTDElement*>(vectorDTD[i]);
 
 			writeElement(elem);
 		}
 		else if(vectorDTD[i]->get_idInfo() == TYPE_ATTLIST)
 		{
-			Attlist* att = static_cast<Attlist*>(vectorDTD[i]);
+			DTDAttlist* att = static_cast<DTDAttlist*>(vectorDTD[i]);
 
 			writeAttlist(att);
 		}
@@ -127,45 +126,45 @@ void writeDTD(DTDContainer dtd)
 
 int main()
 {
-	TypeAtomique type1 = TypeAtomique("x", "");
-	TypeAtomique type2 = TypeAtomique("y", "");
-	TypeAtomique type3 = TypeAtomique("z", "");
-	TypeAtomique type4 = TypeAtomique("l", "");
+	DTDTypeAtomique type1 = DTDTypeAtomique("x", "");
+	DTDTypeAtomique type2 = DTDTypeAtomique("y", "");
+	DTDTypeAtomique type3 = DTDTypeAtomique("z", "");
+	DTDTypeAtomique type4 = DTDTypeAtomique("l", "");
 
-	vector<Type*> vectorType1;
+	vector<DTDType*> vectorType1;
 
 	vectorType1.push_back(&type1);
 	vectorType1.push_back(&type2);
 
-	vector<Type*> vectorType2;
+	vector<DTDType*> vectorType2;
 
 	vectorType2.push_back(&type3);
 	vectorType2.push_back(&type4);
 
-	TypeSequence seq = TypeSequence(vectorType1, "");
+	DTDTypeSequence seq = DTDTypeSequence(vectorType1, "");
 
-	TypeChoice choix = TypeChoice(vectorType2, "");
+	DTDTypeChoice choix = DTDTypeChoice(vectorType2, "");
 
-	vector<Type*> vectorTypeComplet;
+	vector<DTDType*> vectorTypeComplet;
 
 	vectorTypeComplet.push_back(&seq);
 	vectorTypeComplet.push_back(&choix);
 
-	TypeSequence seqComplet = TypeSequence(vectorTypeComplet, "*");
+	DTDTypeSequence seqComplet = DTDTypeSequence(vectorTypeComplet, "*");
 
-	Element* element = new Element("a", &seqComplet);
+	DTDElement* element = new DTDElement("a", &seqComplet);
 
-	vector<Attribut*> vectorAttr;
+	vector<DTDAttribut*> vectorAttr;
 
-	Attribut att1 = Attribut("att1", "CDATA", "#IMPLIED");
-	Attribut att2 = Attribut("att2", "CDATA", "#IMPLIED");
+	DTDAttribut att1 = DTDAttribut("att1", "CDATA", "#IMPLIED");
+	DTDAttribut att2 = DTDAttribut("att2", "CDATA", "#IMPLIED");
 
 	vectorAttr.push_back(&att1);
 	vectorAttr.push_back(&att2);
 
-	Attlist* attlist = new Attlist("status", vectorAttr);
+	DTDAttlist* attlist = new DTDAttlist("status", vectorAttr);
 
-	vector<Info*> vectorInfo;
+	vector<DTDInfo*> vectorInfo;
 
 	vectorInfo.push_back(element);
 	vectorInfo.push_back(attlist);
