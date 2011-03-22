@@ -113,6 +113,6 @@ closespecial "?>"{nl}?
 
 <CONTENT>{ws}?{pcdata}		{xml_lval.s = strdup(skipSpace(xml_text)); return DATA;}
 
-{nl}			{}
+{nl}		{/* skip */}
 .			{fprintf(stderr, "!ERROR(%c)\n", *xml_text);}
 

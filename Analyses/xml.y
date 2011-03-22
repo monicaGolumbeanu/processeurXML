@@ -18,6 +18,7 @@ void   yyerror(char *msg);
 int    yylex(void);
 
 string   nom_dtd;
+string   nom_xsl;
 XMLTag * root;
 XMLTag * current;
 string   buffer;
@@ -36,8 +37,12 @@ string   buffer;
 %%
 
 document
- : declarations element misc_seq_opt
+ : refXSL declarations element misc_seq_opt 
  ;
+refXSL
+ : STARTSPECIAL NAME EQ VALUE NAME EQ VALUE CLOSESPECIAL { nom_xsl=$4;}
+|/*empty*/
+;
 misc_seq_opt
  : misc_seq_opt misc
  | /*empty*/
@@ -52,9 +57,12 @@ declarations
  ;
  
 declaration
- : DOCTYPE NAME NAME VALUE CLOSE { nom_dtd=$4;}
+ : DOCTYPE debut NAME VALUE CLOSE { nom_dtd=$4;}
  ;
-
+debut
+: NAME
+|NSNAME
+;
 element
  : start
    empty_or_content
@@ -99,7 +107,7 @@ attributes
 | /*empty*/
 ;
 single_attribute
-: NAME EQ VALUE
+: debut EQ VALUE
 ;
 name_or_nsname_opt 
  : NAME     
