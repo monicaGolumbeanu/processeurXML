@@ -11,6 +11,7 @@ using namespace std;
 #include "XML/XMLNode.h"
 #include "XML/XMLTag.h"
 #include "XML/XMLAttr.h"
+#include "XML/XMLPCDATA.h"
 
 
 int    yywrap(void);
@@ -124,7 +125,7 @@ close_content_and_end
    END { current = current->get_parent(); }
  ;
 content 
- : content DATA		
+ : content DATA	{ XMLPCDATA * newData = new XMLPCDATA( $2 ) }
  | content misc        
  | content element      
  | /*empty*/         
