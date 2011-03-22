@@ -11,13 +11,12 @@ using namespace std;
 
 //OBS.: Pas encore un Visiteur!
 
-XMLPrintVisitor::XMLPrintVisitor() : XMLVisitor(VISITOR_PRINT) {
-}
+XMLPrintVisitor::XMLPrintVisitor() : XMLVisitor(VISITOR_PRINT) {}
 
 void XMLPrintVisitor::visitXMLTag(XMLTag* tag) {
-    list<XMLAttr>* attrs;
-    list<XMLAttr>::iterator iter;
-    list<XMLAttr>::iterator end;
+    list<XMLAttr*>* attrs;
+    list<XMLAttr*>::iterator iter;
+    list<XMLAttr*>::iterator end;
     string ns;
     if (!tag->get_visited()) {
         attrs = tag->get_attrs();
@@ -33,7 +32,7 @@ void XMLPrintVisitor::visitXMLTag(XMLTag* tag) {
             for (iter = attrs->begin(); iter != attrs->end(); iter++) {
                 if (iter != end) //pas d'espace pour le dernière attribut
                     cout << " ";
-                cout << iter->get_name() << "=\"" << iter->get_value() << '"';
+                cout << (*iter)->get_name() << "=\"" << (*iter)->get_value() << '"';
             }
         }
         cout << ">" << endl;
