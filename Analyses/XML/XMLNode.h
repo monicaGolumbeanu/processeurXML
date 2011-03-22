@@ -12,6 +12,7 @@ class XMLNode {
     public:
         XMLNode(NODE_TYPE type);
         void set_parent(XMLTag* parent);
+        XMLTag* get_parent();
         NODE_TYPE get_type();
         int get_depth();
         void set_depth(int depth);
