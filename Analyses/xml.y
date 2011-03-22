@@ -8,9 +8,9 @@ using namespace std;
 
 #include "commun.h"
 #include "yy.tab_xml.h"
-#include "XMLNode.h"
-#include "XMLTag.h"
-#include "XMLAttr.h"
+#include "XML/XMLNode.h"
+#include "XML/XMLTag.h"
+#include "XML/XMLAttr.h"
 
 
 int    yywrap(void);
