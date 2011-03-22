@@ -33,6 +33,8 @@ XMLTag * current;
 %token <s> ENCODING VALUE DATA COMMENT NAME NSNAME
 %token <en> NSSTART START STARTSPECIAL
 
+%type <s> debut
+
 %%
 
 document
@@ -106,10 +108,10 @@ attributes
 | /*empty*/
 ;
 single_attribute
-: debut EQ VALUE 
+: debut EQ VALUE
     {
-        /*XML_Attr * newAttr = new XMLAttr( $1, $3 );
-        current->add_child();*/
+        XMLAttr * newAttr = new XMLAttr( $1, $3 );
+        current->add_attr( newAttr );
     };
 name_or_nsname_opt 
  : NAME     

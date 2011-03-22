@@ -39,6 +39,36 @@ extern XMLTag * xml_root;
 extern XMLTag * xsl_root;
 
 ////////////////////////////////////////////////////////////////////////////////
+//                              pretty_print
+////////////////////////////////////////////////////////////////////////////////
+void pretty_print(XMLNode* node) {
+	XMLPrintVisitor* visitor = new XMLPrintVisitor();
+	XMLTag *tag;
+	XMLPCDATA *pcdata;
+	list<XMLNode *> children;
+	list<XMLNode *>::iterator iter;
+	switch (node->get_type()) {
+		case NODE_XMLTAG:
+			tag = static_cast<XMLTag*> (node);
+			children = *(tag->get_children());
+			tag->accept(visitor);
+			if (!children.empty())
+			{
+				for (iter = children.begin(); iter != children.end(); iter++)
+					pretty_print(*iter);
+			}
+			tag->accept(visitor);
+			break;
+		case NODE_XMLPCDATA:
+			pcdata = static_cast<XMLPCDATA*>(node);
+			pcdata->accept(visitor);
+			break;
+		default:
+			break;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
 //                              main
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char **argv)
@@ -97,14 +127,8 @@ printf("Beginning of the DTD parsing\n");
   {
     printf("DTD Parse ended with success\n");
   }
-  
-<<<<<<< HEAD
+ 
   pretty_print(xml_root);
-  
-=======
-  //pretty_print(root);
-
->>>>>>> 7b797d0962a3cbe65512272bc408a559c8f3166f
   return 0;
 }
 
