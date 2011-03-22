@@ -5,13 +5,22 @@ using namespace std;
 #include <string>
 #include <cstdio>
 #include <cstdlib>
+
 #include "commun.h"
 #include "yy.tab_xml.h"
+#include "XMLNode.h"
+#include "XMLTag.h"
+#include "XMLAttr.h"
 
-int yywrap(void);
-void yyerror(char *msg);
-int yylex(void);
-string nom_dtd;
+
+int    yywrap(void);
+void   yyerror(char *msg);
+int    yylex(void);
+
+string   nom_dtd;
+XMLTag * root;
+XMLTag * current;
+string   buffer;
 
 %}
 
@@ -27,7 +36,7 @@ string nom_dtd;
 %%
 
 document
- : declarations element misc_seq_opt 
+ : declarations element misc_seq_opt
  ;
 misc_seq_opt
  : misc_seq_opt misc
@@ -48,12 +57,37 @@ declaration
 
 element
  : start
-   empty_or_content 
+   empty_or_content
  ;
 start
- : START		
- | NSSTART	
- ;
+ : START
+    {
+        if (current == NULL )
+        {
+            root = new XMLTag($1->second);
+            current = root;
+        }
+        else
+        {
+            XMLTag * newTag = new XMLTag($1->second);
+            current->add_child( newTag );
+            current = newTag;
+        }
+    }
+ | NSSTART
+    {
+        if (current == NULL )
+        {
+            root = new XMLTag($1->second);
+            current = root;
+        }
+        else
+        {
+            XMLTag * newTag = new XMLTag($1->second);
+            current->add_child( newTag );
+            current = newTag;
+        }
+    };
 empty_or_content
  : SLASH CLOSE	
  | attributes 
@@ -75,7 +109,7 @@ name_or_nsname_opt
 close_content_and_end
  : CLOSE			
    content 
-   END 
+   END { current = current->get_parent(); }
  ;
 content 
  : content DATA		

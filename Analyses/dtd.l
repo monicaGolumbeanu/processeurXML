@@ -61,27 +61,27 @@ any "ANY"
 
 %%
 
-<INITIAL>{ws}		            { /* skip */}
-<INITIAL>{element}            {printf("%s",dtd_text); BEGIN(INSIDE); return ELEMENT; }
-<INITIAL>{attlist}            {printf("%s",dtd_text); BEGIN(INSIDE); return ATTLIST; }
-<INSIDE>{close}               {printf("%s",dtd_text); BEGIN(INITIAL); return CLOSE; }
-<INSIDE>{openpar}             {printf("%s",dtd_text); return OPENPAR; }
-<INSIDE>{closepar}{ws}?       {printf("%s",dtd_text); return CLOSEPAR; }
-<INSIDE>{comma}{ws}?          {printf("%s",dtd_text); return COMMA; }
-<INSIDE>{pipe}{ws}?           {printf("%s",dtd_text); return PIPE; }
-<INSIDE>{declaration}         {printf("%s",dtd_text); stringreturn(DECLARATION); }
-<INSIDE>{fixed}               {printf("%s",dtd_text); return FIXED; }
-<INSIDE>{ast}                 {printf("%s",dtd_text); return AST ; }
-<INSIDE>{qmark}               {printf("%s",dtd_text); return QMARK ; }
-<INSIDE>{plus}                {printf("%s",dtd_text); return PLUS ; }
-<INSIDE>{empty}               {printf("%s",dtd_text); return EMPTY; }
-<INSIDE>{any}                 {printf("%s",dtd_text); return ANY; }
-<INSIDE>{pcdata}              {printf("%s",dtd_text); return PCDATA; }
-<INSIDE>{cdata}               {printf("%s",dtd_text); return CDATA; }
-<INSIDE>{string}              {printf("%s",dtd_text); stringreturn(STRING); }
-<INSIDE>{tokentype}{ws}?      {printf("%s",dtd_text); stringreturn(TOKENTYPE); }
-<INSIDE>{name}{ws}?           {printf("%s",dtd_text); stringreturn(NAME); }
-{comment}		               {printf("%s",dtd_text); /* skip comments stringreturn(COMMENT); */ }
+<INITIAL>{ws}		          { /* skip */}
+<INITIAL>{element}            {BEGIN(INSIDE); return ELEMENT; }
+<INITIAL>{attlist}            {BEGIN(INSIDE); return ATTLIST; }
+<INSIDE>{close}               {BEGIN(INITIAL); return CLOSE; }
+<INSIDE>{openpar}             {return OPENPAR; }
+<INSIDE>{closepar}{ws}?       {return CLOSEPAR; }
+<INSIDE>{comma}{ws}?          {return COMMA; }
+<INSIDE>{pipe}{ws}?           {return PIPE; }
+<INSIDE>{declaration}         {stringreturn(DECLARATION); }
+<INSIDE>{fixed}               {return FIXED; }
+<INSIDE>{ast}                 {return AST ; }
+<INSIDE>{qmark}               {return QMARK ; }
+<INSIDE>{plus}                {return PLUS ; }
+<INSIDE>{empty}               {return EMPTY; }
+<INSIDE>{any}                 {return ANY; }
+<INSIDE>{pcdata}              {return PCDATA; }
+<INSIDE>{cdata}               {return CDATA; }
+<INSIDE>{string}              {stringreturn(STRING); }
+<INSIDE>{tokentype}{ws}?      {stringreturn(TOKENTYPE); }
+<INSIDE>{name}{ws}?           {stringreturn(NAME); }
+{comment}		               {/* skip comments stringreturn(COMMENT); */ }
 
-.			{printf("%s",dtd_text);fprintf(stderr, "!ERROR(%c)\n", *dtd_text);}
-{nl}			{printf("%s",dtd_text);/* skip, must be an extra one at EOF */;}
+.			{fprintf(stderr, "!ERROR(%c)\n", *dtd_text);}
+{nl}			{/* skip, must be an extra one at EOF */;}

@@ -1,11 +1,19 @@
 using namespace std;
+
 #include <cstring>
 #include <string>
 #include <cstdio>
 #include <cstdlib>
 #include <stack>
 #include <list>
+#include <iostream>
 
+#include "XMLAttr.h"
+#include "XMLPCDATA.h"
+#include "XMLVisitor.h"
+#include "XMLPrintVisitor.h"
+#include "XMLNode.h"
+#include "XMLTag.h"
 #include "commun.h"
 #include "yy.tab_xml.h"
 
@@ -25,7 +33,38 @@ int  dtd_parse(void);
 extern FILE   * xml_in;
 extern FILE   * dtd_in;
 extern string   nom_dtd;
-extern int dtd_debug;
+extern int      dtd_debug;
+extern XMLTag * root;
+
+////////////////////////////////////////////////////////////////////////////////
+//                              pretty_print
+////////////////////////////////////////////////////////////////////////////////
+void pretty_print(XMLNode* node) {
+	XMLPrintVisitor* visitor = new XMLPrintVisitor();
+	XMLTag *tag;
+	XMLPCDATA *pcdata;
+	list<XMLNode *> children;
+	list<XMLNode *>::iterator iter;
+	switch (node->get_type()) {
+		case NODE_XMLTAG:
+			tag = static_cast<XMLTag*> (node);
+			children = *(tag->get_children());
+			tag->accept(visitor);
+			if (!children.empty())
+			{
+				for (iter = children.begin(); iter != children.end(); iter++)
+					pretty_print(*iter);
+			}
+			tag->accept(visitor);
+			break;
+		case NODE_XMLPCDATA:
+			pcdata = static_cast<XMLPCDATA*>(node);
+			pcdata->accept(visitor);
+			break;
+		default:
+			break;
+	}
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //                              main
@@ -82,7 +121,9 @@ printf("Beginning of the DTD parsing\n");
   {
     printf("DTD Parse ended with sucess\n", dtd_err);
   }
-  	
+  
+  pretty_print(root);
+  
   return 0;
 }
 

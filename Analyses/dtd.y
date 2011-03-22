@@ -42,7 +42,6 @@ mixed
 ;
 contenu_mixed
 :contenu_mixed PIPE NAME
-|PIPE NAME
 |/*empty*/
 ;
 children
