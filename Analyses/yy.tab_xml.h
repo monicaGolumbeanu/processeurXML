@@ -64,7 +64,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 28 "xml.y"
+#line 27 "xml.y"
 
    char * s;
    ElementName * en;  /* le nom d'un element avec son namespace */

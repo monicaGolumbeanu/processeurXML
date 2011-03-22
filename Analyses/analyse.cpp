@@ -32,9 +32,11 @@ int  dtd_parse(void);
 // globals
 extern FILE   * xml_in;
 extern FILE   * dtd_in;
-extern string   nom_dtd;
+extern char   * dtd_name;
+extern char   * xsl_name;
 extern int      dtd_debug;
-extern XMLTag * root;
+extern XMLTag * xml_root;
+extern XMLTag * xsl_root;
 
 ////////////////////////////////////////////////////////////////////////////////
 //                              main
@@ -43,8 +45,6 @@ int main(int argc, char **argv)
 {
   int    xml_err;
   int    dtd_err;
-  FILE * xml_file;
-  FILE * dtd_file;
   
 //dtd_debug=1;
   // only one argument : xml file name
@@ -57,9 +57,12 @@ int main(int argc, char **argv)
   {
     printf("Your XML file : %s\n", argv[1]);
   }
-  
-  xml_file = fopen(argv[1], "r");
-  xml_in = xml_file;
+
+  xml_in = fopen(argv[1], "r");
+  if ( xml_in == 0 )
+  {
+    printf("Can't open XML file\n");
+  }
   
 // DEBUG
 printf("Beginning of the XML parsing\n");
@@ -74,13 +77,16 @@ printf("Beginning of the XML parsing\n");
     printf("XML Parse ended with success\n");
   }
   
-  printf("Your DTD file : %s\n", nom_dtd.c_str() );
+  printf("Your DTD file : %s\n", dtd_name );
   
   // DEBUG
 printf("Beginning of the DTD parsing\n");
-  
-  dtd_file = fopen(nom_dtd.c_str(), "r");
-  dtd_in = dtd_file;
+
+  dtd_in = fopen(dtd_name, "r");
+  if ( dtd_in == 0 )
+  {
+    printf("Can't open DTD file\n");
+  }
   
   dtd_err = dtd_parse();
   if (dtd_err != 0)
@@ -92,8 +98,13 @@ printf("Beginning of the DTD parsing\n");
     printf("DTD Parse ended with success\n");
   }
   
+<<<<<<< HEAD
+  pretty_print(xml_root);
+  
+=======
   //pretty_print(root);
 
+>>>>>>> 7b797d0962a3cbe65512272bc408a559c8f3166f
   return 0;
 }
 
