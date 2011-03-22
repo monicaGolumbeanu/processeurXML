@@ -38,6 +38,7 @@ namestart	[A-Za-z\200-\377_]
 namechar	[A-Za-z\200-\377_0-9.-]
 tokentype "ID"|"IDREF"|"IDREFS"|"ENTITY"|"ENTITIES"|"NMTOKEN"|"NMTOKENS"
 name		{namestart}{namechar}*
+nsname		{namestart}{namechar}*":"{namestart}{namechar}*
 comment		{open}"!--"([^-]|"-"[^-])*"--"{close}
 string		\"([^"&]|{esc})*\"|\'([^'&]|{esc})*\'
 element {open}"!ELEMENT"{ws}
@@ -81,7 +82,9 @@ any "ANY"
 <INSIDE>{string}              {stringreturn(STRING); }
 <INSIDE>{tokentype}{ws}?      {stringreturn(TOKENTYPE); }
 <INSIDE>{name}{ws}?           {stringreturn(NAME); }
-{comment}		               {/* skip comments stringreturn(COMMENT); */ }
+{comment}		              {/* skip comments stringreturn(COMMENT); */ }
+
+<INSIDE>{nsname}{ws}?		{printf("%s",dtd_text);dtd_lval.s = strdup(dtd_text); return NSNAME;}
 
 .			{fprintf(stderr, "!ERROR(%c)\n", *dtd_text);}
 {nl}			{/* skip, must be an extra one at EOF */;}

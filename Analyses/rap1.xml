@@ -1,6 +1,7 @@
+<?xml-stylesheet href="rap1.xsl" type="text/xsl"?>
 <!DOCTYPE rapport SYSTEM "rap1.dtd">
 <rapport>
-  <titre>R�aliser un compilateur</titre>
+  <titre>Realiser un compilateur</titre>
   <auteur>
     <prenom> Nino </prenom>
     <nom> Silverio </nom>

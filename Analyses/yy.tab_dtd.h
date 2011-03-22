@@ -57,7 +57,8 @@
      NAME = 273,
      TOKENTYPE = 274,
      DECLARATION = 275,
-     STRING = 276
+     STRING = 276,
+     NSNAME = 277
    };
 #endif
 
@@ -75,7 +76,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 79 "yy.tab_dtd.h"
+#line 80 "yy.tab_dtd.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

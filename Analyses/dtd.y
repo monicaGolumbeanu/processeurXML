@@ -17,19 +17,23 @@ int yylex(void);
    }
 
 %token ELEMENT ATTLIST CLOSE OPENPAR CLOSEPAR COMMA PIPE FIXED EMPTY ANY PCDATA AST QMARK PLUS CDATA
-%token <s> NAME TOKENTYPE DECLARATION STRING
+%token <s> NAME TOKENTYPE DECLARATION STRING NSNAME
 %%
 
 main: dtd                           
     ;
-dtd: dtd ATTLIST NAME 
+dtd: dtd ATTLIST debut 
      att_definition CLOSE            
    | dtd element
    | /* empty */                     
    ;
 
 element
-: ELEMENT NAME contenu CLOSE
+: ELEMENT debut contenu CLOSE
+;
+debut
+: NAME
+| NSNAME
 ;
 contenu
 : EMPTY
@@ -38,10 +42,10 @@ contenu
 | children
 ;
 mixed
-:OPENPAR PCDATA contenu_mixed CLOSEPAR
+:OPENPAR PCDATA contenu_mixed CLOSEPAR cardinalite
 ;
 contenu_mixed
-:contenu_mixed PIPE NAME
+:contenu_mixed PIPE debut
 |/*empty*/
 ;
 children
@@ -65,7 +69,7 @@ liste_sequence
 | liste_sequence COMMA item
 ;
 item
-: NAME cardinalite
+: debut cardinalite
 | children
 ;
 choix
@@ -83,7 +87,7 @@ att_definition
 | /* empty */
 ;
 attribut
-: NAME att_type defaut_declaration
+: debut att_type defaut_declaration
 ;
 att_type
 : CDATA    
@@ -102,7 +106,7 @@ liste_enum
 | liste_enum PIPE item_enum
 ;
 item_enum
-: NAME
+: debut
 ;
 defaut_declaration
 : DECLARATION 
