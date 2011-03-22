@@ -17,11 +17,10 @@ int    yywrap(void);
 void   yyerror(char *msg);
 int    yylex(void);
 
-string   nom_dtd;
-string   nom_xsl;
-XMLTag * root;
+char   * dtd_name;
+char   * xsl_name;
+XMLTag * xml_root;
 XMLTag * current;
-string   buffer;
 
 %}
 
@@ -40,7 +39,7 @@ document
  : refXSL declarations element misc_seq_opt 
  ;
 refXSL
- : STARTSPECIAL NAME EQ VALUE NAME EQ VALUE CLOSESPECIAL { nom_xsl=$4;}
+ : STARTSPECIAL NAME EQ VALUE NAME EQ VALUE CLOSESPECIAL { xsl_name=$4; }
 |/*empty*/
 ;
 misc_seq_opt
@@ -57,7 +56,7 @@ declarations
  ;
  
 declaration
- : DOCTYPE debut NAME VALUE CLOSE { nom_dtd=$4;}
+ : DOCTYPE debut NAME VALUE CLOSE { dtd_name=$4;}
  ;
 debut
 : NAME
@@ -72,8 +71,8 @@ start
     {
         if (current == NULL )
         {
-            root = new XMLTag($1->second);
-            current = root;
+            xml_root = new XMLTag($1->second);
+            current = xml_root;
         }
         else
         {
@@ -86,8 +85,8 @@ start
     {
         if (current == NULL )
         {
-            root = new XMLTag($1->second);
-            current = root;
+            xml_root = new XMLTag($1->second);
+            current = xml_root;
         }
         else
         {
@@ -97,7 +96,7 @@ start
         }
     };
 empty_or_content
- : SLASH CLOSE	
+ : SLASH CLOSE { current = current->get_parent(); }
  | attributes 
    close_content_and_end 
    name_or_nsname_opt CLOSE 
@@ -107,8 +106,11 @@ attributes
 | /*empty*/
 ;
 single_attribute
-: debut EQ VALUE
-;
+: debut EQ VALUE 
+    {
+        /*XML_Attr * newAttr = new XMLAttr( $1, $3 );
+        current->add_child();*/
+    };
 name_or_nsname_opt 
  : NAME     
  | NSNAME  
