@@ -1,9 +1,14 @@
 COMPILER=g++
-CPPFLAGS=-Wall
-OBJSCPP=XMLAttr.ocpp XMLNode.ocpp XMLTag.ocpp XMLPCDATA.ocpp XMLPrintVisitor.ocpp XMLVisitor.ocpp
-OBJSC=lex.xml_.oc  xml.tab.oc lex.dtd_.oc  dtd.tab.oc
-
-BIN=bin
+CPPFLAGS=-Wall -IXML -IDTD
+SRC_C=$(wildcard *.c)
+OBJS_C=$(SRC_C:.c=.c.o)
+SRC_CPP=$(wildcard *.cpp) 
+SRC_CPP+= $(wildcard XML/*.cpp)
+SRC_CPP+= $(wildcard DTD/*.cpp)
+OBJS_CPP=$(SRC_CPP:.cpp=.cpp.o)
+VPATH=XML DTD
+OBJDIR=obj
+BINDIR=bin
 
 all: bison analyse
 
@@ -13,15 +18,18 @@ bison: *.l *.y
 	bison -pxml_ --debug --verbose --defines=yy.tab_xml.h xml.y
 	bison -pdtd_ --debug --verbose --defines=yy.tab_dtd.h dtd.y
 
-analyse: $(OBJSCPP) $(OBJSC)
-	g++ -g -DYYDEBUG=1 -o $(BIN)/analyse $(OBJSCPP) $(OBJSC) analyse.cpp 
+analyse: $(OBJS_CPP) $(OBJS_C)
+	mkdir -p $(BINDIR)
+	g++ -g -DYYDEBUG=1 $(OBJS_CPP) $(OBJS_C) $(CPPFLAGS) -o $(BINDIR)/analyse
 
 clean:
 	-rm -rf *.tab.c lex.*.c *.tab.h *.output
-	-rm -f *.oc *.ocpp
+	-rm -f *.o
+	-rm -f XML/*.o
+	-rm -f DTD/*.o
 
-%.ocpp: %.cpp %.h
+%.cpp.o: %.cpp
 	$(COMPILER) -c $(CPPFLAGS) $< -o $@
 
-%.oc: %.c
+%.c.o: %.c
 	$(COMPILER) -c $(CPPFLAGS) $< -o $@

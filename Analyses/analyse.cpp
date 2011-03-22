@@ -8,12 +8,12 @@ using namespace std;
 #include <list>
 #include <iostream>
 
-#include "XMLAttr.h"
-#include "XMLPCDATA.h"
-#include "XMLVisitor.h"
-#include "XMLPrintVisitor.h"
-#include "XMLNode.h"
-#include "XMLTag.h"
+#include <XMLAttr.h>
+#include <XMLPCDATA.h>
+#include <XMLVisitor.h>
+#include <XMLPrintVisitor.h>
+#include <XMLNode.h>
+#include <XMLTag.h>
 #include "commun.h"
 #include "yy.tab_xml.h"
 
@@ -37,36 +37,6 @@ extern char   * xsl_name;
 extern int      dtd_debug;
 extern XMLTag * xml_root;
 extern XMLTag * xsl_root;
-
-////////////////////////////////////////////////////////////////////////////////
-//                              pretty_print
-////////////////////////////////////////////////////////////////////////////////
-void pretty_print(XMLNode* node) {
-	XMLPrintVisitor* visitor = new XMLPrintVisitor();
-	XMLTag *tag;
-	XMLPCDATA *pcdata;
-	list<XMLNode *> children;
-	list<XMLNode *>::iterator iter;
-	switch (node->get_type()) {
-		case NODE_XMLTAG:
-			tag = static_cast<XMLTag*> (node);
-			children = *(tag->get_children());
-			tag->accept(visitor);
-			if (!children.empty())
-			{
-				for (iter = children.begin(); iter != children.end(); iter++)
-					pretty_print(*iter);
-			}
-			tag->accept(visitor);
-			break;
-		case NODE_XMLPCDATA:
-			pcdata = static_cast<XMLPCDATA*>(node);
-			pcdata->accept(visitor);
-			break;
-		default:
-			break;
-	}
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 //                              main
@@ -104,7 +74,7 @@ printf("Beginning of the XML parsing\n");
   }
   else
   {
-    printf("XML Parse ended with sucess\n", xml_err);
+    printf("XML Parse ended with success\n");
   }
   
   printf("Your DTD file : %s\n", dtd_name );
@@ -125,11 +95,16 @@ printf("Beginning of the DTD parsing\n");
   }
   else
   {
-    printf("DTD Parse ended with sucess\n", dtd_err);
+    printf("DTD Parse ended with success\n");
   }
   
+<<<<<<< HEAD
   pretty_print(xml_root);
   
+=======
+  //pretty_print(root);
+
+>>>>>>> 7b797d0962a3cbe65512272bc408a559c8f3166f
   return 0;
 }
 
