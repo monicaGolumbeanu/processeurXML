@@ -1,0 +1,4 @@
+#!/bin/sh
+make clean
+make bison
+make analyse
