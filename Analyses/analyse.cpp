@@ -18,19 +18,23 @@ using namespace std;
 #include "yy.tab_xml.h"
 
 // xml parsing functions
-int  xml_wrap(void);
 void xml_error(char *msg);
 int  xml_lex(void);
 int  xml_parse(void);
 
 // dtd parsing functions
 void dtd_error(char *msg);
-int  dtd_wrap(void);
 int  dtd_lex(void);
 int  dtd_parse(void);
 
+// xml parsing functions
+void xsl_error(char *msg);
+int  xsl_lex(void);
+int  xsl_parse(void);
+
 // globals
 extern FILE   * xml_in;
+extern FILE   * xsl_in;
 extern FILE   * dtd_in;
 extern char   * dtd_name;
 extern char   * xsl_name;
@@ -74,6 +78,7 @@ void pretty_print(XMLNode* node) {
 int main(int argc, char **argv)
 {
   int    xml_err;
+  int    xsl_err;
   int    dtd_err;
   
 //dtd_debug=1;
@@ -100,11 +105,30 @@ printf("Beginning of the XML parsing\n");
   xml_err = xml_parse();
   if (xml_err != 0)
   {
-    printf("XML Parse ended with %d error(s)\n", xml_err);
+    printf("XML Parse ended with %d error(s)\n\n", xml_err);
   }
   else
   {
-    printf("XML Parse ended with success\n");
+    printf("XML Parse ended with success\n\n");
+  }
+  printf("xsl_name : %s\n", xsl_name);
+  xsl_in = fopen(xsl_name, "r");
+  if ( xsl_in == 0 )
+  {
+    printf("Can't open XSL file\n");
+  }
+  else
+  {
+    printf("XSL file open\n");
+  }
+  xsl_err = xsl_parse();
+  if (xsl_err != 0)
+  {
+    printf("SECOND XSL Parse ended with %d error(s)\n\n", xml_err);
+  }
+  else
+  {
+    printf("SECOND XSL Parse ended with success\n\n");
   }
   
   printf("Your DTD file : %s\n", dtd_name );
@@ -129,15 +153,8 @@ printf("Beginning of the DTD parsing\n");
   }
  
   pretty_print(xml_root);
+  pretty_print(xsl_root);
   return 0;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-//                              xml_wrap
-////////////////////////////////////////////////////////////////////////////////
-int xml_wrap(void)
-{
-  return 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -149,17 +166,17 @@ void xml_error(char *msg)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//                              dtd_wrap
-////////////////////////////////////////////////////////////////////////////////
-int dtd_wrap(void)
-{
-  return 1;
-}
-
-////////////////////////////////////////////////////////////////////////////////
 //                              dtd_error
 ////////////////////////////////////////////////////////////////////////////////
 void dtd_error(char *msg)
+{
+  fprintf(stderr, "%s\n", msg);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//                              xsl_error
+////////////////////////////////////////////////////////////////////////////////
+void xsl_error(char *msg)
 {
   fprintf(stderr, "%s\n", msg);
 }

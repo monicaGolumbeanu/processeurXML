@@ -64,7 +64,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 24 "xml.y"
+#line 22 "xsl.y"
 
    char * s;
    ElementName * en;  /* le nom d'un element avec son namespace */
@@ -72,13 +72,13 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 76 "yy.tab_xml.h"
+#line 76 "yy.tab_xsl.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
-extern YYSTYPE xml_lval;
+extern YYSTYPE xsl_lval;
 
 

@@ -7,17 +7,15 @@ using namespace std;
 #include <cstdlib>
 
 #include "commun.h"
-#include "yy.tab_xml.h"
+#include "yy.tab_xsl.h"
 #include "XML/XMLNode.h"
 #include "XML/XMLTag.h"
 #include "XML/XMLAttr.h"
 #include "XML/XMLPCDATA.h"
 #include "analyse.h"
 
-char   * dtd_name;
-char   * xsl_name;
-XMLTag * xml_root;
-XMLTag * xml_current;
+XMLTag * xsl_root;
+XMLTag * xsl_current;
 
 %}
 
@@ -38,7 +36,7 @@ document
  : refXSL declarations element misc_seq_opt 
  ;
 refXSL
- : STARTSPECIAL NAME EQ VALUE NAME EQ VALUE CLOSESPECIAL { xsl_name=$4; }
+ : STARTSPECIAL NAME EQ VALUE NAME EQ VALUE CLOSESPECIAL
 |/*empty*/
 ;
 misc_seq_opt
@@ -55,7 +53,7 @@ declarations
  ;
  
 declaration
- : DOCTYPE debut NAME VALUE CLOSE { dtd_name=$4;}
+ : DOCTYPE debut NAME VALUE CLOSE
  ;
 debut
 : NAME
@@ -68,34 +66,34 @@ element
 start
  : START
     {
-        if (xml_current == NULL )
+        if (xsl_current == NULL )
         {
-            xml_root = new XMLTag($1->second);
-            xml_current = xml_root;
+            xsl_root = new XMLTag($1->second);
+            xsl_current = xsl_root;
         }
         else
         {
             XMLTag * newTag = new XMLTag($1->second);
-            xml_current->add_child( newTag );
-            xml_current = newTag;
+            xsl_current->add_child( newTag );
+            xsl_current = newTag;
         }
     }
  | NSSTART
     {
-        if (xml_current == NULL )
+        if (xsl_current == NULL )
         {
-            xml_root = new XMLTag($1->second);
-            xml_current = xml_root;
+            xsl_root = new XMLTag($1->second);
+            xsl_current = xsl_root;
         }
         else
         {
             XMLTag * newTag = new XMLTag($1->second);
-            xml_current->add_child( newTag );
-            xml_current = newTag;
+            xsl_current->add_child( newTag );
+            xsl_current = newTag;
         }
     };
 empty_or_content
- : SLASH CLOSE { xml_current = xml_current->get_parent(); }
+ : SLASH CLOSE { xsl_current = xsl_current->get_parent(); }
  | attributes 
    close_content_and_end 
    name_or_nsname_opt CLOSE 
@@ -108,7 +106,7 @@ single_attribute
 : debut EQ VALUE
     {
         XMLAttr * newAttr = new XMLAttr( $1, $3 );
-        xml_current->add_attr( newAttr );
+        xsl_current->add_attr( newAttr );
     };
 name_or_nsname_opt 
  : NAME     
@@ -118,7 +116,7 @@ name_or_nsname_opt
 close_content_and_end
  : CLOSE			
    content 
-   END { xml_current = xml_current->get_parent(); }
+   END { xsl_current = xsl_current->get_parent(); }
  ;
 content 
  : content DATA	{ XMLPCDATA * newData = new XMLPCDATA( $2 ) }
