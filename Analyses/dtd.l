@@ -84,7 +84,7 @@ any "ANY"
 <INSIDE>{name}{ws}?           {stringreturn(NAME); }
 {comment}		              {/* skip comments stringreturn(COMMENT); */ }
 
-<INSIDE>{nsname}{ws}?		{printf("%s",dtd_text);dtd_lval.s = strdup(dtd_text); return NSNAME;}
+<INSIDE>{nsname}{ws}?		{/*printf("%s",dtd_text);*/dtd_lval.s = strdup(dtd_text); return NSNAME;}
 
 .			{fprintf(stderr, "!ERROR(%c)\n", *dtd_text);}
 {nl}			{/* skip, must be an extra one at EOF */;}

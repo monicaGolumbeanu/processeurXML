@@ -14,6 +14,7 @@ using namespace std;
 #include "XML/XMLPCDATA.h"
 #include "analyse.h"
 
+char   * xsl_dtd_name;
 XMLTag * xsl_root;
 XMLTag * xsl_current;
 
@@ -44,7 +45,7 @@ misc_seq_opt
  | /*empty*/
  ;
 misc
- : COMMENT		
+ : COMMENT { XMLPCDATA * newData = new XMLPCDATA( $1 ); xsl_current->add_child( newData); }
  ;
 
 declarations
@@ -53,7 +54,7 @@ declarations
  ;
  
 declaration
- : DOCTYPE debut NAME VALUE CLOSE
+ : DOCTYPE debut NAME VALUE CLOSE { xsl_dtd_name=$4;}
  ;
 debut
 : NAME
@@ -80,14 +81,18 @@ start
     }
  | NSSTART
     {
+        /*const char * tagName = $1->second.c_str();
+        const char * tagNS = $1->first.c_str();
+        printf("nsstart : %s\n", tagName);
+        printf("nsfirst : %s\n", tagNS);*/
         if (xsl_current == NULL )
         {
-            xsl_root = new XMLTag($1->second);
+            xsl_root = new XMLTag($1->second, $1->first.c_str());
             xsl_current = xsl_root;
         }
         else
         {
-            XMLTag * newTag = new XMLTag($1->second);
+            XMLTag * newTag = new XMLTag($1->second, $1->first.c_str());
             xsl_current->add_child( newTag );
             xsl_current = newTag;
         }
@@ -119,7 +124,7 @@ close_content_and_end
    END { xsl_current = xsl_current->get_parent(); }
  ;
 content 
- : content DATA	{ XMLPCDATA * newData = new XMLPCDATA( $2 ) }
+ : content DATA	{ XMLPCDATA * newData = new XMLPCDATA( $2 ); xsl_current->add_child( newData ); }
  | content misc        
  | content element      
  | /*empty*/         

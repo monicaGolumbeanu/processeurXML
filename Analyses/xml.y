@@ -14,7 +14,7 @@ using namespace std;
 #include "XML/XMLPCDATA.h"
 #include "analyse.h"
 
-char   * dtd_name;
+char   * xml_dtd_name;
 char   * xsl_name;
 XMLTag * xml_root;
 XMLTag * xml_current;
@@ -46,7 +46,7 @@ misc_seq_opt
  | /*empty*/
  ;
 misc
- : COMMENT		
+ : COMMENT { XMLPCDATA * newData = new XMLPCDATA( $1 ); xml_current->add_child( newData ); }
  ;
 
 declarations
@@ -55,7 +55,7 @@ declarations
  ;
  
 declaration
- : DOCTYPE debut NAME VALUE CLOSE { dtd_name=$4;}
+ : DOCTYPE debut NAME VALUE CLOSE { xml_dtd_name=$4; }
  ;
 debut
 : NAME
@@ -84,12 +84,12 @@ start
     {
         if (xml_current == NULL )
         {
-            xml_root = new XMLTag($1->second);
+            xml_root = new XMLTag($1->second, $1->first.c_str());
             xml_current = xml_root;
         }
         else
         {
-            XMLTag * newTag = new XMLTag($1->second);
+            XMLTag * newTag = new XMLTag($1->second, $1->first.c_str());
             xml_current->add_child( newTag );
             xml_current = newTag;
         }
@@ -121,7 +121,7 @@ close_content_and_end
    END { xml_current = xml_current->get_parent(); }
  ;
 content 
- : content DATA	{ XMLPCDATA * newData = new XMLPCDATA( $2 ) }
+ : content DATA	{ XMLPCDATA * newData = new XMLPCDATA( $2 ); xml_current->add_child( newData ); }
  | content misc        
  | content element      
  | /*empty*/         
