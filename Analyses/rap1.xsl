@@ -1,3 +1,4 @@
+<?xml-stylesheet href="rap1.xsl" type="text/xsl"?>
 <!DOCTYPE xsl:stylesheet SYSTEM "rap1_xsl.dtd">
 <xsl:stylesheet version="1.0"
 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">

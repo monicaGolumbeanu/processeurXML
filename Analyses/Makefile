@@ -17,10 +17,8 @@ all: bison analyse
 bison: *.l *.y
 	flex  -Pxml_ xml.l
 	flex  -Pdtd_ dtd.l
-	flex  -Pxsl_ xsl.l
 	bison -pxml_ --debug --verbose --defines=yy.tab_xml.h xml.y
 	bison -pdtd_ --debug --verbose --defines=yy.tab_dtd.h dtd.y
-	bison -pxsl_ --debug --verbose --defines=yy.tab_xsl.h xsl.y
 
 analyse: $(OBJS_CPP) $(OBJS_C)
 	mkdir -p $(BINDIR)

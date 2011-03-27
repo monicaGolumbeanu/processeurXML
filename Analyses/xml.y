@@ -14,10 +14,10 @@ using namespace std;
 #include "XML/XMLPCDATA.h"
 #include "analyse.h"
 
-char   * xml_dtd_name;
+char   * dtd_name;
 char   * xsl_name;
-XMLTag * xml_root;
-XMLTag * xml_current;
+XMLTag * root;
+XMLTag * current;
 
 %}
 
@@ -35,18 +35,18 @@ XMLTag * xml_current;
 %%
 
 document
- : refXSL declarations element misc_seq_opt 
+ : refXSL declarations element misc_seq_opt { delete( current ); }
  ;
 refXSL
  : STARTSPECIAL NAME EQ VALUE NAME EQ VALUE CLOSESPECIAL { xsl_name=$4; }
-|/*empty*/
-;
+ | /*empty*/
+ ;
 misc_seq_opt
  : misc_seq_opt misc
  | /*empty*/
  ;
 misc
- : COMMENT { XMLPCDATA * newData = new XMLPCDATA( $1 ); xml_current->add_child( newData ); }
+ : COMMENT { XMLPCDATA * newData = new XMLPCDATA( $1 ); current->add_child( newData ); }
  ;
 
 declarations
@@ -55,7 +55,7 @@ declarations
  ;
  
 declaration
- : DOCTYPE debut NAME VALUE CLOSE { xml_dtd_name=$4; }
+ : DOCTYPE debut NAME VALUE CLOSE { dtd_name=$4; }
  ;
 debut
 : NAME
@@ -68,34 +68,34 @@ element
 start
  : START
     {
-        if (xml_current == NULL )
+        if (current == NULL )
         {
-            xml_root = new XMLTag($1->second);
-            xml_current = xml_root;
+            root = new XMLTag($1->second);
+            current = root;
         }
         else
         {
             XMLTag * newTag = new XMLTag($1->second);
-            xml_current->add_child( newTag );
-            xml_current = newTag;
+            current->add_child( newTag );
+            current = newTag;
         }
     }
  | NSSTART
     {
-        if (xml_current == NULL )
+        if (current == NULL )
         {
-            xml_root = new XMLTag($1->second, $1->first.c_str());
-            xml_current = xml_root;
+            root = new XMLTag($1->second, $1->first.c_str());
+            current = root;
         }
         else
         {
             XMLTag * newTag = new XMLTag($1->second, $1->first.c_str());
-            xml_current->add_child( newTag );
-            xml_current = newTag;
+            current->add_child( newTag );
+            current = newTag;
         }
     };
 empty_or_content
- : SLASH CLOSE { xml_current = xml_current->get_parent(); }
+ : SLASH CLOSE { current = current->get_parent(); }
  | attributes 
    close_content_and_end 
    name_or_nsname_opt CLOSE 
@@ -108,7 +108,7 @@ single_attribute
 : debut EQ VALUE
     {
         XMLAttr * newAttr = new XMLAttr( $1, $3 );
-        xml_current->add_attr( newAttr );
+        current->add_attr( newAttr );
     };
 name_or_nsname_opt 
  : NAME     
@@ -118,10 +118,10 @@ name_or_nsname_opt
 close_content_and_end
  : CLOSE			
    content 
-   END { xml_current = xml_current->get_parent(); }
+   END { current = current->get_parent(); }
  ;
 content 
- : content DATA	{ XMLPCDATA * newData = new XMLPCDATA( $2 ); xml_current->add_child( newData ); }
+ : content DATA	{ XMLPCDATA * newData = new XMLPCDATA( $2 ); current->add_child( newData ); }
  | content misc        
  | content element      
  | /*empty*/         
