@@ -1,0 +1,12 @@
+#!/bin/sh
+./bin/analyse rap1.xml
+# should test the return value of the script
+./bin/analyse rap2.xml
+# should test the return value of the script
+
+# and so on...
+
+# Could be interesting to loop on all the arguments and parse them if they are
+# files ending with .xml
+# Pourrait etre interessant de faire une boucle qui parcours tous les arguments
+# et les parse si c'est des fichiers qui se terminent par .xml

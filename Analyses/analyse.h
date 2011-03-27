@@ -11,9 +11,4 @@ void dtd_error(char *msg);
 int  dtd_lex(void);
 int  dtd_parse(void);
 
-// xml parsing functions
-void xsl_error(char *msg);
-int  xsl_lex(void);
-int  xsl_parse(void);
-
 #endif

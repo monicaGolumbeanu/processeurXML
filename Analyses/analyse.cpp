@@ -27,7 +27,7 @@ extern XMLTag * root;
 
 // some useful functions
 void pretty_print(XMLNode* node);
-void check_xml(char * file_name);
+int  check_xml(char * file_name);
 
 ////////////////////////////////////////////////////////////////////////////////
 //                              main
@@ -36,20 +36,31 @@ int main(int argc, char **argv)
 {
   XMLTag * xml_root;
   XMLTag * xsl_root;
+  int      parse_error;
   
-  // only one argument : xml file name
+  // only one argument allowed : xml file name
   if ( argc != 2 ) {
     printf("Please enter the name of the XML file only\n");
     return 1;
   }
 
-  check_xml(argv[1]);
+  // Parsing XML
+  parse_error = check_xml(argv[1]);
+  if ( parse_error == 1 )
+  {
+    return 1;
+  }
   xml_root = root;
-  check_xml(xsl_name);
+  // Parsing XSL
+  parse_error = check_xml(xsl_name);
+  if ( parse_error == 1 )
+  {
+    return 1;
+  }
   xsl_root = root;
  
-  pretty_print(xml_root);
-  pretty_print(xsl_root);
+  /*pretty_print(xml_root);
+  pretty_print(xsl_root);*/
   
   delete(xml_root);
   delete(xsl_root);
@@ -60,7 +71,7 @@ int main(int argc, char **argv)
 ////////////////////////////////////////////////////////////////////////////////
 //                              check_xml
 ////////////////////////////////////////////////////////////////////////////////
-void check_xml( char * file_name )
+int check_xml( char * file_name )
 {
   int    xml_err;
   int    dtd_err;
@@ -71,11 +82,13 @@ void check_xml( char * file_name )
   if ( xml_in == 0 )
   {
     printf("Can't open XML file\n");
+    return 1;
   }
   xml_err = xml_parse();
   if (xml_err != 0)
   {
     printf("XML Parse ended with %d error(s)\n\n", xml_err);
+    return 1;
   }
   else
   {
@@ -87,12 +100,14 @@ void check_xml( char * file_name )
   if ( dtd_in == 0 )
   {
     printf("Can't open DTD file : %s\n", dtd_name);
+    return 1;
   }
   
   dtd_err = dtd_parse();
   if (dtd_err != 0)
   {
     printf("DTD Parse ended with %d error(s)\n\n", dtd_err);
+    return 1;
   }
   else
   {
@@ -133,6 +148,7 @@ void pretty_print(XMLNode* node) {
 		default:
 			break;
 	}
+	delete( visitor );
 }
 
 ////////////////////////////////////////////////////////////////////////////////
