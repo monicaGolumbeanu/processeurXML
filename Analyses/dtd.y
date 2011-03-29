@@ -5,27 +5,26 @@ using namespace std;
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
-#include <vector>
 
-#include "DTD.h"
+#include "DTDContainer.h"
+#include "DTDAttlist.h"
 #include "DTDElement.h"
-#include "DTDAttribute.h"
-#include "DTDRule.h"
+#include "DTDAttribut.h"
+#include "DTDType.h"
 
 
 void yyerror(char *msg);
 int  yywrap(void);
 int  yylex(void);
 
-DTD             * theDTD; // La racine du document DTD
+DTDContainer    * high; // La racine du document DTD
+DTDAttlist      * currAttlist;
 DTDElement      * currElement;
-DTDAttribute    * currAttribute;
+DTDAttribut     * currAttribut;
 
-DTDRule         * currRule;
-DTDRuleAtomic   * currRuleAtomic;
+DTDType         * currType;
+DTDTypeAtomique * currTypeAtomique;
 String            keyAttribut;
-
-vector<DTDElement*> probs;
 
 %}
 
@@ -47,30 +46,24 @@ dtd
 | dtd element
 | /* empty */
 	{
-		if(theDTD == NULL)
-			theDTD = new DTD();
+		if(high == NULL) 
+			high = new DTDContainer();
 	}
    ;
 attlist
 : ATTLIST debut att_definition CLOSE
 	{
-        DTDElement* element;
-        currElement = dtd->getElementByName($2);
-        if(currElement == NULL) {
-            element = new DTDElement($2);
-            probs.push_back(element);
-        }
+	    currAttlist->set_name($2);
+		high->addAttList(currAttlist);
 	}
 ;
 element
 : ELEMENT debut contenu CLOSE
 	{
-	    currElement = new DTDElement($2);
-		currElement->setRule(currRule);
-		theDTD->addElement(currElement);
-		for(unsigned int i = 0; i < probs.size(); i++)
-		    if(probs[i]->getName() == $2)
-		        probs.erase(probs.begin() + i);
+	    currElement = new DTDElement();
+	    currElement->set_name($2);
+		currElement->set_type(currType);
+		high->addElement(currElement);
 	}
 ;
 debut
@@ -81,23 +74,24 @@ att_definition
 : att_definition attribut
 | /* empty */
 	{
+		currAttlist = new DTDAttlist();
 	}
 ;
 attribut
 : debut att_type defaut_declaration
 	{
-	    currAttribute->set_name( $1 );
-		currAttlist->addAttribut(currAttribute);
+	    currAttribut->set_name( $1 );
+		currAttlist->addAttribut(currAttribut);
 	}
 ;
 att_type
 : CDATA
   {
-	/*currAttribute->add_data($1);*/ // ne marche pas car ce n'est pas du texte
+	/*currAttribut->add_data($1);*/ // ne marche pas car ce n'est pas du texte
   }
 | TOKENTYPE
   {
-	currAttribute->add_data($1);
+	currAttribut->add_data($1);
   }
 | type_enumere
 ;
@@ -114,43 +108,43 @@ liste_enum
 item_enum
 : NAME
 	{
-		currAttribute->set_name($1); // A confirmer si enum name ou data
+		currAttribut->set_name($1); // A confirmer si enum name ou data
 	}
 | NSNAME
 	{
-		currAttribute->set_name($1); // A confirmer si enum name ou data
+		currAttribut->set_name($1); // A confirmer si enum name ou data
 	}
 ;
 defaut_declaration
 : DECLARATION 
 	{
-		currAttribute = new DTDAttribut();
-		currAttribute->set_flag($1);
+		currAttribut = new DTDAttribut();
+		currAttribut->set_flag($1); 
 	}
 | STRING     
 	{
-		currAttribute = new DTDAttribut();
-		currAttribute->set_flag($1);
+		currAttribut = new DTDAttribut();
+		currAttribut->set_flag($1); 
 	}
 | FIXED STRING 
 	{
-		currAttribute = new DTDAttribut();
-		currAttribute->set_flag($2); // Y a-t-il quelque chose a faire pour le fait que c'est un FIXED??
+		currAttribut = new DTDAttribut();
+		currAttribut->set_flag($2); // Y a-t-il quelque chose a faire pour le fait que c'est un FIXED??
 	}
 ;
 
 contenu
 : EMPTY
 	{
-		currRule = new DTDRule();
-		currRule->set_idType(TYPE_ATOMIC);
-		currElement->set_type(currRule);
+		currType = new DTDType();
+		currType->set_idType(TYPE_ATOMIC);
+		currElement->set_type(currType);
 	}
 | ANY
 	{
-		currRule = new DTDRule();
-		currRule->set_idType(TYPE_ATOMIC);
-		currElement->set_type(currRule);
+		currType = Type();
+		currType->set_idType(TYPE_ATOMIC);
+		currElement->set_type(currType);
 	}
 | mixed //TODO
 | children
@@ -165,7 +159,7 @@ contenu_mixed
 :contenu_mixed PIPE debut
 |/*empty*/
 	{
-		currRule = new DTDRule();
+		currType = new DTDType();
 	}
 ;
 children
@@ -174,15 +168,15 @@ children
 cardinalite
 : QMARK
 	{
-		currRule->set_card(QMARK);
+		currType->set_card(QMARK);
 	}
 | AST
 	{
-		currRule->set_card(AST);
+		currType->set_card(AST);
 	}
 | PLUS
 	{
-		currRule->set_card(PLUS);
+		currType->set_card(PLUS);
 	}
 | /*empty*/
 ;
@@ -197,15 +191,15 @@ liste_sequence
 : item
 | liste_sequence COMMA item
 {
-	currRule->addType( currRule );
+	currType->addType( currType );
 }
 ;
 item // Peut-être vaut-il mieux créer un vector
 : debut cardinalite
 {
-	currRule = new DTDTypeSequence();
-    currRule->set_name( $1 );
-	currElement->addType(currRule);
+	currType = new DTDTypeSequence();
+    currType->set_name( $1 );
+	currElement->addType(currType);
 }
 | children
 ;

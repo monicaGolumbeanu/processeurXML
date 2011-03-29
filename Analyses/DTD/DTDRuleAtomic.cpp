@@ -47,19 +47,19 @@ bool DTDRuleAtomic::validate(XMLTag* tag) {
         do {
             //PCDATA not allowed here. Only for DTDRuleFinal
             if((*children)[i]->getType() != NODE_XMLTAG) {
-                ;//throw InvalidElement
+                ;//throw InvalidElementException
                 return false;
             }
             //Child tag must have the proper name (rule name)
             childTag = static_cast<XMLTag*>((*children)[i]);
             if(childTag->getName() != rule->getTagName()) {
-                ;//throw InvalidElement
+                ;//throw InvalidElementException
                 return false;
             }
             i++;
         } while(canRepeat() && i < children->size());
         if(i < children->size()) {
-            ;//throw ExtraElementFound
+            ;//throw ExtraElementFoundException
             return false;
         }
         else
@@ -86,14 +86,14 @@ int DTDRuleAtomic::partialValidate(XMLTag* tag, unsigned int position) {
         //PCDATA not allowed here. Only for DTDRuleFinal
         if((*children)[i]->getType() != NODE_XMLTAG) {
             if(!isOptional() && !foundOnce)
-                ;//throw InvalidElement
+                ;//throw InvalidElementException
             return i;
         }
         //Child tag must have the proper name (rule name)
         childTag = static_cast<XMLTag*>((*children)[i]);
         if(childTag->getName() != rule->getTagName()) {
             if(!isOptional() && !foundOnce)
-                ;//throw InvalidElement
+                ;//throw InvalidElementException
             return i;
         }
         //Valid child, verify in child's scope
