@@ -355,20 +355,25 @@ void transform_xml( XMLNode * xml_node, XMLTag * html_node )
 		    tag = static_cast<XMLTag*> (xml_node);
 			children = tag->get_children();
             
-            // be recursive with all the children
+            // look at the children
             for (iter = children->begin(); iter != children->end(); iter++)
             {
                 switch ( (*iter)->get_type() )
                 {
+                    // Child is a XMLTag
 		            case NODE_XMLTAG:
 		                child_tag = static_cast<XMLTag*> (*iter);
+		                // Find the associated xsl template
 		                newXSLNode = XSLmap[ child_tag->get_name() ];
+		                // if there is no template
                         if ( newXSLNode == NULL )
                         {
+                            // be recursive
                             transform_xml( *iter, html_node );
                         }
-                        else
+                        else // if there is a template associated
                         {
+                            // apply the children of <template> to the  xml
                             xsl_children = newXSLNode->get_children();
                             for ( xsl_iter = xsl_children->begin(); xsl_iter != xsl_children->end(); xsl_iter++ )
                             {
@@ -385,8 +390,6 @@ void transform_xml( XMLNode * xml_node, XMLTag * html_node )
 		            default:
 			            break;
 		        }
-		            
-                
             }
 			break;
 		case NODE_XMLPCDATA:
