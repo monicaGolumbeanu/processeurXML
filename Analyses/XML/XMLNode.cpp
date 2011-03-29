@@ -1,3 +1,4 @@
+#include "XMLTag.h"
 #include "XMLNode.h"
 
 XMLNode::XMLNode(NODE_TYPE type) {

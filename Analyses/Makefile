@@ -1,7 +1,7 @@
 CXX=g++
-CXXFLAGS=-Wall -IXML -IDTD -IDTD/Exceptions -D_GLIBCXX_DEBUG
-SRC_C=lex.xml_.c xml.tab.c
-OBJS_C=$(SRC_C:.c=.c.o)
+CXXFLAGS=-Wall -IXML -IDTD -IDTD/Exceptions -D_GLIBCXX_DEBUG -D DEBUG
+#SRC_C=lex.xml_.c xml.tab.c
+#OBJS_C=$(SRC_C:.c=.c.o)
 SRC_CPP=$(shell find -name "*.cpp" | xargs -l1 basename | xargs)
 OBJS_CPP=$(SRC_CPP:.cpp=.cpp.o)
 VPATH=XML DTD DTD/Exceptions

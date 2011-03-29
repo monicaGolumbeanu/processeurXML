@@ -12,7 +12,6 @@ namespace DTDExceptions {
         public:
             InvalidElementException(XMLTag* context, XMLNode* element);
             virtual const char* what() const throw ();
-            virtual ~InvalidElementException();
         private:
             XMLTag* context;
             XMLNode* element;

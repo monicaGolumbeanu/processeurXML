@@ -11,7 +11,6 @@ namespace DTDExceptions {
         public:
             EmptyTagException(XMLTag* context);
             virtual const char* what() const throw ();
-            virtual ~EmptyTagException();
         private:
             XMLTag* context;
     };

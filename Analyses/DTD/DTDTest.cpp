@@ -1,3 +1,4 @@
+#include <XMLAttr.h>
 #include <XMLTag.h>
 #include <XMLPCDATA.h>
 #include <DTD.h>
@@ -11,17 +12,19 @@
 #include <DTDTest.h>
 
 void DTDTest() {
-    //Árvore
+    //XML Tree
     XMLTag* html = new XMLTag("html");
     XMLTag* head = new XMLTag("head");
     XMLTag* body = new XMLTag("body");
     body->addChild(new XMLPCDATA("It works!"));
     XMLTag* title = new XMLTag("title");
-    //title->addChild(new XMLPCDATA("BLA!!"));
+    title->addChild(new XMLPCDATA("BLA!!"));
     head->addChild(title);
     html->addChild(body);
     html->addChild(head);
-    //Regras
+    head->addAttr(new XMLAttr("attrQuiNexistePas"));
+    html->addChild(new XMLTag("jeNexistePas"));
+    //Elements
     DTD* dtd = new DTD();
     DTDElement* html_element = new DTDElement("html");
     DTDElement* head_element = new DTDElement("head");
@@ -35,14 +38,10 @@ void DTDTest() {
     dtd->addElement(title_element);
     dtd->addElement(link_element);
     dtd->addElement(meta_element);
-    DTDRuleAtomic* rule_title = new DTDRuleAtomic();
-    rule_title->setRule(new DTDRuleFinal());
-    DTDRuleAtomic* rule_meta = new DTDRuleAtomic();
-    rule_meta->setRule(new DTDRuleFinal());
-    DTDRuleAtomic* rule_link = new DTDRuleAtomic();
-    rule_link->setRule(new DTDRuleFinal());
-    DTDRuleAtomic* rule_body = new DTDRuleAtomic();
-    rule_body->setRule(new DTDRuleFinal());
+    DTDRuleFinal* rule_title = new DTDRuleFinal();
+    DTDRuleFinal* rule_meta = new DTDRuleFinal();
+    DTDRuleFinal* rule_link = new DTDRuleFinal();
+    DTDRuleFinal* rule_body = new DTDRuleFinal();
     title_element->setRule(rule_title);
     link_element->setRule(rule_link);
     meta_element->setRule(rule_meta);
@@ -56,11 +55,8 @@ void DTDTest() {
     rule_html->addRule(rule_head);
     rule_html->addRule(rule_body);
     html_element->setRule(rule_html);
-    try {
-        dtd->validate(head);
+    if(dtd->validate(html))
         cout << "VALID!" << endl;
-    }
-    catch(...) {
+    else
         cout << "NOT VALID!" << endl;
-    }
 }

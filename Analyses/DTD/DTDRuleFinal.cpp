@@ -1,7 +1,13 @@
+#include <iostream>
 #include <vector>
 #include <XMLNode.h>
 #include <XMLTag.h>
 #include <DTDRuleFinal.h>
+#include <InvalidElementException.h>
+#include <EmptyTagException.h>
+#include <ExtraElementFoundException.h>
+
+using namespace DTDExceptions;
 
 DTDRuleFinal::DTDRuleFinal(bool empty) :
     DTDRule("", RULE_FINAL) {
@@ -19,7 +25,7 @@ bool DTDRuleFinal::validate(XMLTag* tag) {
     //==================
     if(isEmpty()) {
         if(tag->hasChildren()) {
-            ;//throw ExtraElementFoundException
+            throw ExtraElementFoundException(tag, (*tag->getChildren())[0]);
             return false;
         }
         else
@@ -30,21 +36,26 @@ bool DTDRuleFinal::validate(XMLTag* tag) {
     //========================
     else {
         if(!tag->hasChildren()) {
-            ;//throw RequiredElementNotFoundException("PCDATA")
+            throw EmptyTagException(tag);
             return false;
         }
         else {
             children = tag->getChildren();
             if ((*children)[0]->getType() != NODE_XMLPCDATA) {
-                ;//throw InvalidElementException : Tag no lugar de PCDATA
+                throw InvalidElementException(tag, (*children)[0]);
                 return false;
             }
             else if (children->size() > 1) {
-                ;//throw ExtraElementFoundException :
+                throw ExtraElementFoundException(tag, (*children)[1]);
                 return false;
             }
-            else
+            else {
+#ifdef DEBUG
+                cout << "[VALIDATED] " << getTagName() << " --> ";
+                cout << (isEmpty() ? "<EMPTY>" : "#PCDATA") << endl;
+#endif
                 return true;
+            }
         }
     }
 }
@@ -60,10 +71,15 @@ int DTDRuleFinal::partialValidate(XMLTag* tag, unsigned int position) {
     //Trying to match #PCDATA
     //=======================
     if ((*children)[position]->getType() != NODE_XMLPCDATA) {
-        ;//throw InvalidElementException : Tag no lugar de PCDATA
+        throw InvalidElementException(tag, (*children)[position]);
         return position;
     }
-    else
+    else {
+#ifdef DEBUG
+        cout << "[VALIDATED] " << getTagName() << " --> ";
+        cout << (isEmpty() ? "<EMPTY>" : "#PCDATA") << endl;
+#endif
         return position+1;
+    }
 }
 

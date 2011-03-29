@@ -17,7 +17,4 @@ namespace DTDExceptions {
         return message.c_str();
     }
 
-    EmptyTagException::~EmptyTagException() {
-    }
-
 }

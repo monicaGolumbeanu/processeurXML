@@ -20,7 +20,4 @@ namespace DTDExceptions {
         return message.c_str();
     }
 
-    ExtraElementFoundException::~ExtraElementFoundException() {
-    }
-
 }

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <vector>
 #include <stack>
@@ -6,12 +7,16 @@
 #include <DTDRule.h>
 #include <DTDAttribute.h>
 #include <XMLTag.h>
+#include <XMLPCDATA.h>
 #include <XMLVisitor.h>
 #include <XMLValidateWithDTDVisitor.h>
 #include <XMLAttr.h>
 #include <XMLNode.h>
+#include <TagNotDefinedException.h>
+#include <AttributeNotDefinedException.h>
 
 using namespace std;
+using namespace DTDExceptions;
 
 XMLValidateWithDTDVisitor::XMLValidateWithDTDVisitor() :
     XMLVisitor(VISITOR_DTDVALIDATION) {
@@ -39,8 +44,7 @@ bool XMLValidateWithDTDVisitor::visitXMLTag(XMLTag* tag) {
         }
     }
     if(!element) {
-        cout << "TagNotDefined!!!" << tag->getName();
-        ; //throw TagNotDefinedException;
+        throw TagNotDefinedException(tag);
         return false;
     }
 
@@ -65,7 +69,7 @@ bool XMLValidateWithDTDVisitor::visitXMLTag(XMLTag* tag) {
             }
         }
         if(!attributeDefined)
-            ;//throw AttributeNotDefinedException
+            throw AttributeNotDefinedException(tag, (*xmlAttrs)[i]);
     }
 
     return true;

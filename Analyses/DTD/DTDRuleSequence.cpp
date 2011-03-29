@@ -1,8 +1,10 @@
-#include <iostream>
 #include <vector>
 #include <XMLNode.h>
 #include <XMLTag.h>
 #include "DTDRuleSequence.h"
+#include <InvalidElementException.h>
+
+using namespace DTDExceptions;
 
 DTDRuleSequence::DTDRuleSequence(string card) :
     DTDRule(card, RULE_SEQUENCE) {
@@ -33,10 +35,9 @@ bool DTDRuleSequence::validate(XMLTag* tag) {
                 try {
                     position = applyChildRule(tag, position, rule);
                 }
-                catch(int error) { //catch Exception
+                catch(...) {
                     if(children->size() != 0)
-                        cout << "Error: " << tag->getName() << ". InvalidElementException --> " << endl;
-                        ;//throw InvalidElementException
+                        throw InvalidElementException(tag, (*children)[0]);
                     return false; //required child rule inside optional parent rule
                 }
             }

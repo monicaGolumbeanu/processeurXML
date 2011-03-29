@@ -1,7 +1,11 @@
+#include <iostream>
 #include <XMLNode.h>
 #include <XMLTag.h>
 #include <DTDElement.h>
 #include <DTDRule.h>
+#include <InvalidElementException.h>
+
+using namespace DTDExceptions;
 
 DTDRule::DTDRule(string card, RULE_ID identifType) {
     cardinalite = card;
@@ -55,19 +59,20 @@ int DTDRule::applyChildRule(XMLTag* tag, unsigned int position, DTDRule* childRu
         return childRule->partialValidate(tag, position);
     else {
         if((*children)[position]->getType() != NODE_XMLTAG) {
-            ;//throw InvalidElementException
-            cout << "Error: " << tag->getName() << ". InvalidElementException --> " << endl;
+            throw InvalidElementException(tag, (*children)[position]);
             return position;
         }
         else {
             childTag = static_cast<XMLTag*>((*children)[position]);
             if(childRule->getTagName() != childTag->getName()) {
-                ;//throw InvalidElementException
-                cout << "Error: " << tag->getName() << ". InvalidElementException --> " << endl;
+                throw InvalidElementException(tag, (*children)[position]);
                 return position;
             }
             else {
-                //childRule->validate(childTag);
+#ifdef DEBUG
+                cout << "[VALIDATED] " << tag->getName() << " --- ";
+                cout << childRule->getTagName() << endl;
+#endif
                 return position + 1;
             }
         }

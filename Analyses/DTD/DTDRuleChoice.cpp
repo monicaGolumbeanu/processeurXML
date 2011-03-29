@@ -3,6 +3,10 @@
 #include <XMLNode.h>
 #include <XMLTag.h>
 #include <DTDRuleChoice.h>
+#include <EmptyTagException.h>
+#include <ExtraElementFoundException.h>
+
+using namespace DTDExceptions;
 
 DTDRuleChoice::DTDRuleChoice(string card) :
     DTDRule(card, RULE_CHOICE) {
@@ -23,13 +27,15 @@ bool DTDRuleChoice::validate(XMLTag* tag) {
     unsigned int i;
     bool foundOnce = false;
     bool validated;
+    DTDRule* rule;
     vector<XMLNode*>* children = tag->getChildren();
     do {
         bakPosition = position;
         validated = false;
         for (i = 0; i < rules->size(); i++) {
+            rule = (*rules)[i];
             try {
-                position = (*rules)[i]->partialValidate(tag, position);
+                position = applyChildRule(tag, position, rule);
                 validated = true;
                 if (position != bakPosition)
                     break;
@@ -43,8 +49,7 @@ bool DTDRuleChoice::validate(XMLTag* tag) {
         //==================
         if (!validated && !foundOnce) {
             if (!isOptional())
-                cout << "Error: " << tag->getName() << ". RequiredRuleNotMatched --> " << endl;
-                ;//throw RequiredRuleNotMatched
+                throw EmptyTagException(tag);
             return false;
         }
         //==========================
@@ -55,8 +60,7 @@ bool DTDRuleChoice::validate(XMLTag* tag) {
                 if (position >= children->size())
                     return true;
                 else {
-                    cout << "Error: " << tag->getName() << ". ExtraElementFoundException --> " << endl;
-                    ;//throw ExtraElementFoundException
+                    throw ExtraElementFoundException(tag, (*children)[position+1]);
                     return false;
                 }
             }
@@ -66,8 +70,7 @@ bool DTDRuleChoice::validate(XMLTag* tag) {
             else if (validated && position >= children->size())
                 return true;
             else if (!validated && position < children->size()) {
-                cout << "Error: " << tag->getName() << ". ExtraElementFoundException --> " << endl;
-                ;//throw ExtraElementFoundException
+                throw ExtraElementFoundException(tag, (*children)[position+1]);
                 return false;
             }
             //else : yet another iteration...
@@ -81,28 +84,27 @@ int DTDRuleChoice::partialValidate(XMLTag* tag, unsigned int position) {
     unsigned int i;
     bool foundOnce = false;
     bool validated;
+    DTDRule* rule;
     vector<XMLNode*>* children = tag->getChildren();
     do {
         bakPosition = position;
         validated = false;
         for (i = 0; i < rules->size(); i++) {
+            rule = (*rules)[i];
             try {
-                position = (*rules)[i]->partialValidate(tag, position);
+                position = applyChildRule(tag, position, rule);
                 validated = true;
                 if (position != bakPosition)
                     break;
             }
-            catch (int error) {
-                ;
-            }
+            catch (...) {;}
         }
         //==================
         //Rule never matched
         //==================
         if (!validated && !foundOnce) {
             if (!isOptional())
-                cout << "Error: " << tag->getName() << ". RequiredRuleNotMatched --> " << endl;
-                ;//throw RequiredRuleNotMatched
+                throw EmptyTagException(tag);
             return position;
         }
         //==========================
@@ -111,8 +113,7 @@ int DTDRuleChoice::partialValidate(XMLTag* tag, unsigned int position) {
         else if (foundOnce) {
             if (!canRepeat()) {
                 if (position < children->size())
-                    cout << "Error: " << tag->getName() << ". ExtraElementFoundException --> " << endl;
-                    ;//throw ExtraElementFoundException
+                    throw ExtraElementFoundException(tag, (*children)[position+1]);
                 return position;
             }
             //==================
@@ -121,8 +122,7 @@ int DTDRuleChoice::partialValidate(XMLTag* tag, unsigned int position) {
             else if (validated && position >= children->size())
                 return position;
             else if (!validated && position < children->size()) {
-                cout << "Error: " << tag->getName() << ". ExtraElementFoundException --> " << endl;
-                ;//throw ExtraElementFoundException
+                throw ExtraElementFoundException(tag, (*children)[position+1]);
                 return position;
             }
             //else : yet another iteration...

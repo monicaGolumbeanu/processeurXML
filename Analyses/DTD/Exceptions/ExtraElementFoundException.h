@@ -12,7 +12,6 @@ namespace DTDExceptions {
         public:
             ExtraElementFoundException(XMLTag* context, XMLNode* element);
             virtual const char* what() const throw ();
-            virtual ~ExtraElementFoundException();
         private:
             XMLTag* context;
             XMLNode* element;

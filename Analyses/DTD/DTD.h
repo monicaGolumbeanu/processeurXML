@@ -11,7 +11,7 @@ class DTD {
         void addElement(DTDElement* element);
         std::vector<DTDElement*>* getElements();
         DTDElement* getElementByName(std::string name);
-        void validate(XMLNode* root);
+        bool validate(XMLNode* root);
         //void print();
     private:
         std::vector<DTDElement*>* elements;

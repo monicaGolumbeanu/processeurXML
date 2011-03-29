@@ -33,25 +33,34 @@ DTDElement* DTD::getElementByName(string name) {
     return NULL;
 }
 
-void DTD::validate(XMLNode* node) {
+bool DTD::validate(XMLNode* node) {
     XMLTag *tag;
     XMLPCDATA *pcdata;
     vector<XMLNode *>* children;
     if ( node == NULL )
-        return;
+        return true;
     switch (node->getType()) {
         case NODE_XMLTAG:
             tag = static_cast<XMLTag*> (node);
             children = tag->getChildren();
             for (unsigned int i = 0; i < children->size(); i++)
                 validate((*children)[i]);
-            tag->accept(validate_visitor);
+            try {
+                tag->accept(validate_visitor);
+                return true;
+            }
+            catch(exception &e) {
+                cout << "[ERROR] " << e.what() << endl;
+                return false;
+            }
             break;
         case NODE_XMLPCDATA:
             pcdata = static_cast<XMLPCDATA*>(node);
             pcdata->accept(validate_visitor);
+            return true;
             break;
         default:
+            return false;
             break;
     }
 }

@@ -14,13 +14,10 @@ namespace DTDExceptions {
 
     const char* InvalidElementException::what() const throw () {
         string message;
-        XMLTag* elementTag;
-        message = "Invalid element '" + element->getName() + "' in the scope of '"
-                + context->getName() + "'.";
+        message = "Invalid element '" + element->getName() + "' in the scope of '" +
+                context->getName() + "'.\n" +
+                "    * Either this tag is not allowed or it wasn't expected right now.";
         return message.c_str();
-    }
-
-    InvalidElementException::~InvalidElementException() {
     }
 
 }
