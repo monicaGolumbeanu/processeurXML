@@ -67,7 +67,7 @@ int DTDRule::applyChildRule(XMLTag* tag, unsigned int position, DTDRule* childRu
                 return position;
             }
             else {
-                childRule->validate(childTag);
+                //childRule->validate(childTag);
                 return position + 1;
             }
         }

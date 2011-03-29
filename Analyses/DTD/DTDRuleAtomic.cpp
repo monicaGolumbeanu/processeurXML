@@ -56,8 +56,6 @@ bool DTDRuleAtomic::validate(XMLTag* tag) {
                 ;//throw InvalidElement
                 return false;
             }
-            //Valid child, verify in child's scope
-            rule->validate(childTag);
             i++;
         } while(canRepeat() && i < children->size());
         if(i < children->size()) {
@@ -99,7 +97,6 @@ int DTDRuleAtomic::partialValidate(XMLTag* tag, unsigned int position) {
             return i;
         }
         //Valid child, verify in child's scope
-        rule->validate(childTag);
         foundOnce = true;
         i++;
     } while(canRepeat() && i < children->size());

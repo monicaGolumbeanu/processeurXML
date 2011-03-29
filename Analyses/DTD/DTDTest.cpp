@@ -17,7 +17,7 @@ void DTDTest() {
     XMLTag* body = new XMLTag("body");
     body->addChild(new XMLPCDATA("It works!"));
     XMLTag* title = new XMLTag("title");
-    title->addChild(new XMLPCDATA("BLA!!"));
+    //title->addChild(new XMLPCDATA("BLA!!"));
     head->addChild(title);
     html->addChild(body);
     html->addChild(head);
@@ -56,10 +56,11 @@ void DTDTest() {
     rule_html->addRule(rule_head);
     rule_html->addRule(rule_body);
     html_element->setRule(rule_html);
-    XMLValidateWithDTDVisitor* v = new XMLValidateWithDTDVisitor();
-    v->setDTD(dtd);
-    if(v->visitXMLTag(html))
+    try {
+        dtd->validate(head);
         cout << "VALID!" << endl;
-    else
+    }
+    catch(...) {
         cout << "NOT VALID!" << endl;
+    }
 }

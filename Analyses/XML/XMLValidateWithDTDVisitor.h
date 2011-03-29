@@ -1,6 +1,7 @@
 #ifndef XMLVALIDATEWITHDTDVISITOR_H_
 #define XMLVALIDATEWITHDTDVISITOR_H_
 
+#include <vector>
 #include "XMLVisitor.h"
 
 class DTD;
@@ -14,9 +15,8 @@ class XMLValidateWithDTDVisitor : public XMLVisitor {
         virtual bool visitXMLPCDATA(XMLPCDATA* pcdata);
         void setDTD(DTD* dtd);
     private:
-        bool rootElementFound;
         DTD* dtd;
-        vector<DTDElement*>* elements;
+        std::vector<DTDElement*>* elements;
 
 };
 

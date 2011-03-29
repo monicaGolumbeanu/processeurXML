@@ -22,7 +22,6 @@ void XMLValidateWithDTDVisitor::setDTD(DTD* dtd) {
     elements = dtd->getElements();
 }
 
-//OBS.: Recursão é feita no percurso, não no visitador
 bool XMLValidateWithDTDVisitor::visitXMLTag(XMLTag* tag) {
     DTDElement* element = NULL;
     vector<DTDAttribute*>* dtdAttrs;
@@ -40,6 +39,7 @@ bool XMLValidateWithDTDVisitor::visitXMLTag(XMLTag* tag) {
         }
     }
     if(!element) {
+        cout << "TagNotDefined!!!" << tag->getName();
         ; //throw TagNotDefinedException;
         return false;
     }
@@ -47,12 +47,7 @@ bool XMLValidateWithDTDVisitor::visitXMLTag(XMLTag* tag) {
     //=========================
     //Verify children hierarchy
     //=========================
-    try {
-        element->getRule()->validate(tag);
-    }
-    catch(...) {
-        return false;
-    }
+    element->getRule()->validate(tag);
 
     //=================
     //Verify attributes
