@@ -22,6 +22,11 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	</p>
 </xsl:template>
 	
+<xsl:template match="prenom">
+	<span style="color:#ff0000">
+		<xsl:apply-templates />  
+	</span>
+</xsl:template>
 
 <xsl:template match="auteur">
 	<p>
