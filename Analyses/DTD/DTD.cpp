@@ -15,7 +15,10 @@ DTD::DTD() {
 }
 
 void DTD::addElement(DTDElement* element) {
-    elements->push_back(element);
+    if(getElementByName(element->getName()) == NULL)
+        elements->push_back(element);
+    else
+        ;//throw ElementAlreadyDefinedException
 }
 
 vector<DTDElement*>* DTD::getElements() {
