@@ -1,26 +1,34 @@
 CXX=g++
-CXXFLAGS=-Wall -IXML -IDTD -D_GLIBCXX_DEBUG
-SRC_C=$(wildcard *.c)
+CXXFLAGS=-Wall -IXML -IDTD -IDTD/Exceptions -D_GLIBCXX_DEBUG
+SRC_C=lex.xml_.c xml.tab.c
 OBJS_C=$(SRC_C:.c=.c.o)
 SRC_CPP=$(shell find -name "*.cpp" | xargs -l1 basename | xargs)
 OBJS_CPP=$(SRC_CPP:.cpp=.cpp.o)
-VPATH=XML DTD
+VPATH=XML DTD DTD/Exceptions
 OBJDIR=obj
 BINDIR=bin
 
-all: bison analyse
+all: analyse
 
 .PHONY : all
 
-bison: *.l *.y
-	flex  -Pxml_ xml.l
-	flex  -Pdtd_ dtd.l
-	bison -pxml_ --debug --verbose --defines=yy.tab_xml.h xml.y
-	bison -pdtd_ --debug --verbose --defines=yy.tab_dtd.h dtd.y
+lex.xml_.c: xml.l
+	@echo " * " Generating XML scanner...
+	@flex  -Pxml_ xml.l
+
+xml.tab.c: xml.y
+	@echo " * " Generating XML parser...
+	@bison -pxml_ --debug --verbose --defines=yy.tab_xml.h xml.y
+	
+#	@echo " * " Generating DTD scanner...	
+#	@flex  -Pdtd_ dtd.l
+#	@echo " * " Generating DTD parser...
+#	@bison -pdtd_ --debug --verbose --defines=yy.tab_dtd.h dtd.y
 
 analyse: $(OBJS_CPP) $(OBJS_C)
 	@mkdir -p $(BINDIR)
 	@g++ -g -DYYDEBUG=1 $(OBJS_CPP) $(OBJS_C) $(CPPFLAGS) -o $(BINDIR)/analyse
+	@echo "=========================================="
 	@echo " * " Finished. Executable file: $(BINDIR)/analyse
 
 clean:
