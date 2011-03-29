@@ -34,7 +34,7 @@ bool DTDRuleChoice::validate(XMLTag* tag) {
                 if (position != bakPosition)
                     break;
             }
-            catch (int error) { //catch Exception
+            catch (int error) {
                 ;
             }
         }
@@ -92,7 +92,7 @@ int DTDRuleChoice::partialValidate(XMLTag* tag, unsigned int position) {
                 if (position != bakPosition)
                     break;
             }
-            catch (int error) { //catch Exception
+            catch (int error) {
                 ;
             }
         }

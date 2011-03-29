@@ -1,6 +1,8 @@
 #ifndef _XMLNODE_
 #define _XMLNODE_
 
+#include <string>
+
 class XMLTag;
 class XMLVisitor;
 
@@ -18,6 +20,7 @@ class XMLNode {
         void setDepth(int depth);
         bool getVisited();
         void setVisited(bool visited);
+        std::string getName();
         virtual bool accept(XMLVisitor* v) = 0;
     protected:
         NODE_TYPE type;

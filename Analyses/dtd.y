@@ -6,24 +6,22 @@ using namespace std;
 #include <cstdio>
 #include <cstdlib>
 
-#include "DTDContainer.h"
-#include "DTDAttlist.h"
+#include "DTD.h"
 #include "DTDElement.h"
-#include "DTDAttribut.h"
-#include "DTDType.h"
+#include "DTDAttribute.h"
+#include "DTDRule.h"
 
 
 void yyerror(char *msg);
 int  yywrap(void);
 int  yylex(void);
 
-DTDContainer    * high; // La racine du document DTD
-DTDAttlist      * currAttlist;
+DTD    * high; // La racine du document DTD
 DTDElement      * currElement;
-DTDAttribut     * currAttribut;
+DTDAttribute     * currAttribut;
 
-DTDType         * currType;
-DTDTypeAtomique * currTypeAtomique;
+DTDRule         * currType;
+DTDRuleAtomic * currTypeAtomique;
 String            keyAttribut;
 
 %}
@@ -47,13 +45,13 @@ dtd
 | /* empty */
 	{
 		if(high == NULL) 
-			high = new DTDContainer();
+			high = new DTD();
 	}
    ;
 attlist
 : ATTLIST debut att_definition CLOSE
 	{
-	    currAttlist->set_name($2);
+	    //currAttlist->set_name($2);
 		high->addAttList(currAttlist);
 	}
 ;

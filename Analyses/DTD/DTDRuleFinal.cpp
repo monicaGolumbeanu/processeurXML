@@ -19,7 +19,7 @@ bool DTDRuleFinal::validate(XMLTag* tag) {
     //==================
     if(isEmpty()) {
         if(tag->hasChildren()) {
-            ;//throw ExtraElementException
+            ;//throw ExtraElementFoundException
             return false;
         }
         else
@@ -30,17 +30,17 @@ bool DTDRuleFinal::validate(XMLTag* tag) {
     //========================
     else {
         if(!tag->hasChildren()) {
-            ;//throw RequiredElementNotFound("PCDATA")
+            ;//throw RequiredElementNotFoundException("PCDATA")
             return false;
         }
         else {
             children = tag->getChildren();
             if ((*children)[0]->getType() != NODE_XMLPCDATA) {
-                ;//throw InvalidElement : Tag no lugar de PCDATA
+                ;//throw InvalidElementException : Tag no lugar de PCDATA
                 return false;
             }
             else if (children->size() > 1) {
-                ;//throw ExtraElementFound :
+                ;//throw ExtraElementFoundException :
                 return false;
             }
             else
@@ -60,7 +60,7 @@ int DTDRuleFinal::partialValidate(XMLTag* tag, unsigned int position) {
     //Trying to match #PCDATA
     //=======================
     if ((*children)[position]->getType() != NODE_XMLPCDATA) {
-        ;//throw InvalidElement : Tag no lugar de PCDATA
+        ;//throw InvalidElementException : Tag no lugar de PCDATA
         return position;
     }
     else

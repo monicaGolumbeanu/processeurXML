@@ -31,3 +31,19 @@ bool XMLNode::getVisited() {
 void XMLNode::setVisited(bool visited) {
     this->visited = visited;
 }
+
+std::string XMLNode::getName() {
+    XMLTag* tag;
+    switch(type) {
+        case NODE_XMLTAG:
+            tag = static_cast<XMLTag*>(this);
+            return tag->getName();
+            break;
+        case NODE_XMLPCDATA:
+            return "PCDATA";
+            break;
+        default:
+            return "";
+            break;
+    }
+}
