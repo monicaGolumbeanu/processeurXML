@@ -1,12 +1,6 @@
 CXX=g++
-<<<<<<< HEAD
 CXXFLAGS=-Wall -IXML -IDTD -IDTD/Exceptions -D_GLIBCXX_DEBUG
 SRC_C=lex.xml_.c xml.tab.c
-=======
-CXXFLAGS=-Wall -IXML -IDTD -D_GLIBCXX_DEBUG
-#SRC_C=lex.dtd_.c lex.xml_.c xml.tab.c
-SRC_C=$(wildcard *.c)
->>>>>>> 8fa0e72c3f1fd9118ec23adae9f3c64129879768
 OBJS_C=$(SRC_C:.c=.c.o)
 SRC_CPP=$(shell find -name "*.cpp" | xargs -l1 basename | xargs)
 OBJS_CPP=$(SRC_CPP:.cpp=.cpp.o)
@@ -18,7 +12,6 @@ all: analyse
 
 .PHONY : all
 
-<<<<<<< HEAD
 lex.xml_.c: xml.l
 	@echo " * " Generating XML scanner...
 	@flex  -Pxml_ xml.l
@@ -31,13 +24,6 @@ xml.tab.c: xml.y
 #	@flex  -Pdtd_ dtd.l
 #	@echo " * " Generating DTD parser...
 #	@bison -pdtd_ --debug --verbose --defines=yy.tab_dtd.h dtd.y
-=======
-#bison: *.l *.y
-#	flex  -Pxml_ xml.l
-#	flex  -Pdtd_ dtd.l
-#	bison -pxml_ --debug --verbose --defines=yy.tab_xml.h xml.y
-#	bison -pdtd_ --debug --verbose --defines=yy.tab_dtd.h dtd.y
->>>>>>> 8fa0e72c3f1fd9118ec23adae9f3c64129879768
 
 analyse: $(OBJS_CPP) $(OBJS_C)
 	@mkdir -p $(BINDIR)
