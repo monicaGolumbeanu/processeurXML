@@ -11,14 +11,14 @@ typedef enum {
 class XMLNode {
     public:
         XMLNode(NODE_TYPE type);
-        void set_parent(XMLTag* parent);
-        XMLTag* get_parent();
-        NODE_TYPE get_type();
-        int get_depth();
-        void set_depth(int depth);
-        bool get_visited();
-        void set_visited(bool visited);
-        virtual void accept(XMLVisitor* v) = 0;
+        void setParent(XMLTag* parent);
+        XMLTag* getParent();
+        NODE_TYPE getType();
+        int getDepth();
+        void setDepth(int depth);
+        bool getVisited();
+        void setVisited(bool visited);
+        virtual bool accept(XMLVisitor* v) = 0;
     protected:
         NODE_TYPE type;
         int depth;

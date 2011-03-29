@@ -8,10 +8,10 @@ XMLPCDATA::XMLPCDATA(string content) : XMLNode(NODE_XMLPCDATA) {
     this->content = content;
 }
 
-string XMLPCDATA::get_content() {
+string XMLPCDATA::getContent() {
     return content;
 }
 
-void XMLPCDATA::accept(XMLVisitor* v) {
-    v->visitXMLPCDATA(this);
+bool XMLPCDATA::accept(XMLVisitor* v) {
+    return v->visitXMLPCDATA(this);
 }

@@ -4,8 +4,8 @@
 class XMLAttr {
     public:
         XMLAttr(std::string name, std::string value);
-        std::string get_name();
-        std::string get_value();
+        std::string getName();
+        std::string getValue();
     private:
         std::string name;
         std::string value;

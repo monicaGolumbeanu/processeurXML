@@ -6,8 +6,8 @@
 class XMLPCDATA : public XMLNode {
     public:
         XMLPCDATA(std::string content);
-        std::string get_content();
-        virtual void accept(XMLVisitor* v);
+        std::string getContent();
+        virtual bool accept(XMLVisitor* v);
     private:
         std::string content;
 };

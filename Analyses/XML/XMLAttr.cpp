@@ -8,10 +8,10 @@ XMLAttr::XMLAttr(string name, string value) {
     this->value = value;
 }
 
-string XMLAttr::get_name() {
+string XMLAttr::getName() {
     return name;
 }
 
-string XMLAttr::get_value() {
+string XMLAttr::getValue() {
     return value;
 }

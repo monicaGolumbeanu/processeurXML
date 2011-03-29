@@ -11,8 +11,8 @@ class XMLPCDATA;
 class XMLPrintVisitor : public XMLVisitor {
     public:
         XMLPrintVisitor();
-        virtual void visitXMLTag(XMLTag* tag);
-        virtual void visitXMLPCDATA(XMLPCDATA* pcdata);
+        virtual bool visitXMLTag(XMLTag* tag);
+        virtual bool visitXMLPCDATA(XMLPCDATA* pcdata);
 };
 
 #endif
