@@ -4,30 +4,30 @@ XMLNode::XMLNode(NODE_TYPE type) {
     this->type = type;
 }
 
-void XMLNode::set_parent(XMLTag* parent) {
+void XMLNode::setParent(XMLTag* parent) {
     this->parent = parent;
 }
 
-XMLTag* XMLNode::get_parent() {
+XMLTag* XMLNode::getParent() {
     return parent;
 }
 
-NODE_TYPE XMLNode::get_type() {
+NODE_TYPE XMLNode::getType() {
     return type;
 }
 
-int XMLNode::get_depth() {
+int XMLNode::getDepth() {
     return depth;
 }
 
-void XMLNode::set_depth(int depth) {
+void XMLNode::setDepth(int depth) {
     this->depth = depth;
 }
 
-bool XMLNode::get_visited() {
+bool XMLNode::getVisited() {
     return visited;
 }
 
-void XMLNode::set_visited(bool visited) {
+void XMLNode::setVisited(bool visited) {
     this->visited = visited;
 }

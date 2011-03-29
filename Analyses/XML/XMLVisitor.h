@@ -5,14 +5,14 @@ class XMLTag;
 class XMLPCDATA;
 
 typedef enum {
-    VISITOR_PRINT, VISITOR_XSLT
+    VISITOR_PRINT, VISITOR_XSLT, VISITOR_DTDVALIDATION
 } VISITOR_TYPE;
 
 class XMLVisitor {
     public:
         XMLVisitor(VISITOR_TYPE type);
-        virtual void visitXMLTag(XMLTag* tag) = 0;
-        virtual void visitXMLPCDATA(XMLPCDATA* pcdata) = 0;
+        virtual bool visitXMLTag(XMLTag* tag) = 0;
+        virtual bool visitXMLPCDATA(XMLPCDATA* pcdata) = 0;
     private:
         VISITOR_TYPE type;
 };

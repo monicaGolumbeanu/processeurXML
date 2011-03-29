@@ -1,5 +1,5 @@
 #include <string>
-#include <list>
+#include <vector>
 #include "XMLVisitor.h"
 #include "XMLNode.h"
 #include "XMLAttr.h"
@@ -10,38 +10,42 @@ using namespace std;
 XMLTag::XMLTag(string name, string ns) : XMLNode(NODE_XMLTAG) {
     this->name = name;
     this->ns = ns;
-    children = new list<XMLNode *> ();
-    attrs = new list<XMLAttr*> ();
+    children = new vector<XMLNode *> ();
+    attrs = new vector<XMLAttr*> ();
     type = NODE_XMLTAG;
     depth = 0;
 }
 
-string XMLTag::get_name() {
+string XMLTag::getName() {
     return name;
 }
 
-string XMLTag::get_namespace() {
+string XMLTag::getNamespace() {
     return ns;
 }
 
-void XMLTag::add_child(XMLNode *child) {
+void XMLTag::addChild(XMLNode *child) {
     children->push_back(child);
-    child->set_parent(this);
-    child->set_depth(depth + 1);
+    child->setParent(this);
+    child->setDepth(depth + 1);
 }
 
-list<XMLNode *>* XMLTag::get_children() {
+vector<XMLNode *>* XMLTag::getChildren() {
     return children;
 }
 
-void XMLTag::add_attr(XMLAttr* attr) {
+bool XMLTag::hasChildren() {
+	return (children->size() > 0);
+}
+
+void XMLTag::addAttr(XMLAttr* attr) {
     attrs->push_back(attr);
 }
 
-list<XMLAttr*>* XMLTag::get_attrs() {
+vector<XMLAttr*>* XMLTag::getAttrs() {
     return attrs;
 }
 
-void XMLTag::accept(XMLVisitor* v) {
-    v->visitXMLTag(this);
+bool XMLTag::accept(XMLVisitor* v) {
+    return v->visitXMLTag(this);
 }
