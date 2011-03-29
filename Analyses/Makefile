@@ -8,15 +8,15 @@ VPATH=XML DTD
 OBJDIR=obj
 BINDIR=bin
 
-all: analyse
+all: bison analyse
 
 .PHONY : all
 
-#bison: *.l *.y
-#	flex  -Pxml_ xml.l
-#	flex  -Pdtd_ dtd.l
-#	bison -pxml_ --debug --verbose --defines=yy.tab_xml.h xml.y
-#	bison -pdtd_ --debug --verbose --defines=yy.tab_dtd.h dtd.y
+bison: *.l *.y
+	flex  -Pxml_ xml.l
+	flex  -Pdtd_ dtd.l
+	bison -pxml_ --debug --verbose --defines=yy.tab_xml.h xml.y
+	bison -pdtd_ --debug --verbose --defines=yy.tab_dtd.h dtd.y
 
 analyse: $(OBJS_CPP) $(OBJS_C)
 	@mkdir -p $(BINDIR)

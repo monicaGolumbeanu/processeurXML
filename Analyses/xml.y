@@ -46,7 +46,7 @@ misc_seq_opt
  | /*empty*/
  ;
 misc
- : COMMENT { XMLPCDATA * newData = new XMLPCDATA( $1 ); current->add_child( newData ); }
+ : COMMENT { XMLPCDATA * newData = new XMLPCDATA( $1 ); current->addChild( newData ); }
  ;
 
 declarations
@@ -76,7 +76,7 @@ start
         else
         {
             XMLTag * newTag = new XMLTag($1->second);
-            current->add_child( newTag );
+            current->addChild( newTag );
             current = newTag;
         }
     }
@@ -90,12 +90,12 @@ start
         else
         {
             XMLTag * newTag = new XMLTag($1->second, $1->first.c_str());
-            current->add_child( newTag );
+            current->addChild( newTag );
             current = newTag;
         }
     };
 empty_or_content
- : SLASH CLOSE { current = current->get_parent(); }
+ : SLASH CLOSE { current = current->getParent(); }
  | attributes 
    close_content_and_end 
    name_or_nsname_opt CLOSE 
@@ -108,7 +108,7 @@ single_attribute
 : debut EQ VALUE
     {
         XMLAttr * newAttr = new XMLAttr( $1, $3 );
-        current->add_attr( newAttr );
+        current->addAttr( newAttr );
     };
 name_or_nsname_opt 
  : NAME     
@@ -118,10 +118,10 @@ name_or_nsname_opt
 close_content_and_end
  : CLOSE			
    content 
-   END { current = current->get_parent(); }
+   END { current = current->getParent(); }
  ;
 content 
- : content DATA	{ XMLPCDATA * newData = new XMLPCDATA( $2 ); current->add_child( newData ); }
+ : content DATA	{ XMLPCDATA * newData = new XMLPCDATA( $2 ); current->addChild( newData ); }
  | content misc        
  | content element      
  | /*empty*/         

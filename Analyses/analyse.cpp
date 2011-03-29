@@ -151,14 +151,14 @@ void pretty_print(XMLNode* node)
 	XMLPrintVisitor* visitor = new XMLPrintVisitor();
 	XMLTag *tag;
 	XMLPCDATA *pcdata;
-	list<XMLNode *> children;
-	list<XMLNode *>::iterator iter;
+	vector<XMLNode *> children;
+	vector<XMLNode *>::iterator iter;
 	if ( node == NULL )
 	    return;
-	switch (node->get_type()) {
+	switch (node->getType()) {
 		case NODE_XMLTAG:
 			tag = static_cast<XMLTag*> (node);
-			children = *(tag->get_children());
+			children = *(tag->getChildren());
 			tag->accept(visitor);
 			if (!children.empty())
 			{
@@ -186,25 +186,25 @@ void construct_XSLmap( XMLTag * xsl_root )
 // parameters : xsl_root : root of the xsl tree
 {
 	
-	list<XMLNode *>::iterator iter;
+	vector<XMLNode *>::iterator iter;
 	XMLTag *tag;
-	list<XMLNode *> children;
-	list<XMLAttr *> attrs;
-	list<XMLAttr *>::iterator iterList;
+	vector<XMLNode *> children;
+	vector<XMLAttr *> attrs;
+	vector<XMLAttr *>::iterator iterList;
 	if (xsl_root!=NULL)
 	{
-		children = *(xsl_root->get_children());
+		children = *(xsl_root->getChildren());
 		for (iter = children.begin(); iter != children.end(); iter++)
 		{
-			switch ((*iter)->get_type()) {
+			switch ((*iter)->getType()) {
 				case NODE_XMLTAG:
 					tag = static_cast<XMLTag*> (*iter);
-					attrs = *(tag->get_attrs());
+					attrs = *(tag->getAttrs());
 					for (iterList = attrs.begin(); iterList != attrs.end(); iterList++)
 					{
-						if((*iterList)->get_name() == "match")
+						if((*iterList)->getName() == "match")
 						{
-							XSLmap[(*iterList)->get_value()] = tag;
+							XSLmap[(*iterList)->getValue()] = tag;
 						}
 					}
 					break;
@@ -242,8 +242,8 @@ void transform( XMLTag * xml_root )
     
     // Call apply_xsl with the first child : "html" -> will be the root of the
     // new html tree
-    list<XMLNode*>            * xsl_children = xsl_root->get_children();
-	list<XMLNode *>::iterator   iter;
+    vector<XMLNode*>            * xsl_children = xsl_root->getChildren();
+	vector<XMLNode *>::iterator   iter;
     iter = xsl_children->begin();
     apply_xsl( *iter, html_root, xml_root );
 }
@@ -260,17 +260,17 @@ void apply_xsl( XMLNode * xsl_node, XMLTag * html_node, XMLNode * xml_root )
 //              xml_root : xml_root where are to be applied the xsl-templates
 {
     XMLTag                    * tag;
-    list<XMLNode *>           * children;
-    list<XMLNode *>::iterator   iter;
-    list<XMLAttr*>            * attrs;
-    list<XMLAttr*>::iterator    iter_attrs;
+    vector<XMLNode *>           * children;
+    vector<XMLNode *>::iterator   iter;
+    vector<XMLAttr*>            * attrs;
+    vector<XMLAttr*>::iterator    iter_attrs;
     // If html_node doesn't exist : create it with xsl_node and be recursive
     if ( html_node == NULL )
     {
 	    tag = static_cast<XMLTag*> (xsl_node);
-        html_root = new XMLTag( tag->get_name() );
+        html_root = new XMLTag( tag->getName() );
         html_node = html_root;
-        children = tag->get_children();
+        children = tag->getChildren();
         // be recursive with all the children
         for (iter = children->begin(); iter != children->end(); iter++)
         {
@@ -284,28 +284,28 @@ void apply_xsl( XMLNode * xsl_node, XMLTag * html_node, XMLNode * xml_root )
         XMLPCDATA * html_child_pcdata;
         
         // Treatment is different if this is PCDATA or XMLTag
-        switch ( xsl_node->get_type() )
+        switch ( xsl_node->getType() )
         {
 			case NODE_XMLTAG:
 				tag = static_cast<XMLTag*> (xsl_node);
 				// create a new pointer to duplicate the tree
-				html_child_tag = new XMLTag( tag->get_name() );
+				html_child_tag = new XMLTag( tag->getName() );
 				// If we found apply-templates then go to transform_xml which makes
 				// the treatment for the xml tree
-				if(tag->get_name() == "apply-templates")
+				if(tag->getName() == "apply-templates")
 				{
 				    transform_xml( xml_root, html_node );
 				}
 				else // if the tag is not "apply-templates"
 				{
-				    attrs = tag->get_attrs();
+				    attrs = tag->getAttrs();
 				    for ( iter_attrs = attrs->begin(); iter_attrs != attrs->end(); iter_attrs++ )
 				    {
-				        html_child_tag->add_attr( *iter_attrs );
+				        html_child_tag->addAttr( *iter_attrs );
 				    }
 				    // add the XMLTag to the html tree
-                    html_node->add_child( html_child_tag );
-                    children = tag->get_children();
+                    html_node->addChild( html_child_tag );
+                    children = tag->getChildren();
                     // be recursive with all the children
                     for (iter = children->begin(); iter != children->end(); iter++)
                     {
@@ -316,8 +316,8 @@ void apply_xsl( XMLNode * xsl_node, XMLTag * html_node, XMLNode * xml_root )
 			case NODE_XMLPCDATA:
 			    // Cast PCDATA and add it to the html tree
 			    pc_data = static_cast<XMLPCDATA *> (xsl_node);
-			    html_child_pcdata = new XMLPCDATA( pc_data->get_content() );
-			    html_node->add_child( html_child_pcdata );
+			    html_child_pcdata = new XMLPCDATA( pc_data->getContent() );
+			    html_node->addChild( html_child_pcdata );
 				break;
 			default:
 				break;
@@ -336,10 +336,10 @@ void transform_xml( XMLNode * xml_node, XMLTag * html_node )
 {
     XMLTag                    * tag;
     XMLTag                    * child_tag;
-    list<XMLNode *>           * children;
-    list<XMLNode *>::iterator   iter;
-    list<XMLNode *>           * xsl_children;
-    list<XMLNode *>::iterator   xsl_iter;
+    vector<XMLNode *>           * children;
+    vector<XMLNode *>::iterator   iter;
+    vector<XMLNode *>           * xsl_children;
+    vector<XMLNode *>::iterator   xsl_iter;
     XMLPCDATA                 * pc_data;
     XMLPCDATA                 * html_child_pcdata;
     XMLTag                    * newXSLNode;
@@ -349,22 +349,22 @@ void transform_xml( XMLNode * xml_node, XMLTag * html_node )
         cout << "PROBLEM : node not initialized" << endl;
         return;
     }
-    switch ( xml_node->get_type() )
+    switch ( xml_node->getType() )
     {
 		case NODE_XMLTAG:
 		    tag = static_cast<XMLTag*> (xml_node);
-			children = tag->get_children();
+			children = tag->getChildren();
             
             // look at the children
             for (iter = children->begin(); iter != children->end(); iter++)
             {
-                switch ( (*iter)->get_type() )
+                switch ( (*iter)->getType() )
                 {
                     // Child is a XMLTag
 		            case NODE_XMLTAG:
 		                child_tag = static_cast<XMLTag*> (*iter);
 		                // Find the associated xsl template
-		                newXSLNode = XSLmap[ child_tag->get_name() ];
+		                newXSLNode = XSLmap[ child_tag->getName() ];
 		                // if there is no template
                         if ( newXSLNode == NULL )
                         {
@@ -374,7 +374,7 @@ void transform_xml( XMLNode * xml_node, XMLTag * html_node )
                         else // if there is a template associated
                         {
                             // apply the children of <template> to the  xml
-                            xsl_children = newXSLNode->get_children();
+                            xsl_children = newXSLNode->getChildren();
                             for ( xsl_iter = xsl_children->begin(); xsl_iter != xsl_children->end(); xsl_iter++ )
                             {
                                 apply_xsl( *xsl_iter, html_node, *iter );
@@ -384,8 +384,8 @@ void transform_xml( XMLNode * xml_node, XMLTag * html_node )
 		            case NODE_XMLPCDATA:
 		                // Cast PCDATA and add it to the html tree
 		                pc_data = static_cast<XMLPCDATA *> (*iter);
-		                html_child_pcdata = new XMLPCDATA( pc_data->get_content() );
-		                html_node->add_child( html_child_pcdata );
+		                html_child_pcdata = new XMLPCDATA( pc_data->getContent() );
+		                html_node->addChild( html_child_pcdata );
 			            break;
 		            default:
 			            break;
@@ -395,8 +395,8 @@ void transform_xml( XMLNode * xml_node, XMLTag * html_node )
 		case NODE_XMLPCDATA:
 		    // Cast PCDATA and add it to the html tree
 		    pc_data = static_cast<XMLPCDATA *> (xml_node);
-		    html_child_pcdata = new XMLPCDATA( pc_data->get_content() );
-		    html_node->add_child( html_child_pcdata );
+		    html_child_pcdata = new XMLPCDATA( pc_data->getContent() );
+		    html_node->addChild( html_child_pcdata );
 			break;
 		default:
 			break;
