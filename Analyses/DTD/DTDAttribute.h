@@ -16,6 +16,8 @@ class DTDAttribute {
         string getName();
         string getData();
         string getFlag();
+        void   setName( string aName ){name = aName;}
+        void   setFlag( string aFlag ){flag = aFlag;}
 };
 
 #endif /* DTDATTRIBUTE_H_ */

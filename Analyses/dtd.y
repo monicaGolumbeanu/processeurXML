@@ -10,6 +10,10 @@ using namespace std;
 #include "DTDElement.h"
 #include "DTDAttribute.h"
 #include "DTDRule.h"
+#include "DTDRuleAtomic.h"
+#include "DTDRuleFinal.h"
+#include "DTDRuleChoice.h"
+#include "DTDRuleSequence.h"
 
 
 void yyerror(char *msg);
@@ -22,7 +26,7 @@ DTDAttribute    * currAttribute;
 
 DTDRule         * currRule;
 DTDRuleAtomic   * currRuleAtomique;
-string            keyAttribute;
+string            currFlag;
 
 vector<DTDAttribute*> currAttributes;
 vector<DTDElement*>   problems;
@@ -42,7 +46,7 @@ int linkRules()
 %token ELEMENT ATTLIST CLOSE OPENPAR CLOSEPAR COMMA PIPE FIXED EMPTY ANY PCDATA AST QMARK PLUS CDATA
 %token <s> NAME TOKENTYPE DECLARATION STRING NSNAME
 
-%type <s> debut
+%type <s> debut item_enum
 
 %%
 
@@ -52,6 +56,10 @@ main: dtd
         {
             printf( "There are %d attributes with no element\n", problems.size() );
             printf( "The elements needed are : \n" );
+            for ( int i=0; i<problems.size(); i++ )
+            {
+                printf("\t%s\n", problems[i]->getName() );
+            }
         }
     }                         
     ;
@@ -67,7 +75,7 @@ dtd
 attlist
 : ATTLIST debut att_definition CLOSE
     {
-        DTDElement * elem = dtd->getElementByName($2);
+        DTDElement * elem = high->getElementByName($2);
         if ( elem == NULL ) { 
             elem = new DTDElement($2);
             problems.push_back(elem);
@@ -107,12 +115,12 @@ attribut
 att_type
 : CDATA
   {
-    currAttribute = new DTDAttribute();
+    currAttribute = new DTDAttribute("", "", "CDATA");
 	/*currAttribut->add_data($1);*/ // ne marche pas car ce n'est pas du texte
   }
 | TOKENTYPE
   {
-    currAttribute = new DTDAttribute();
+    currAttribute = new DTDAttribute("", "", "TOKENTYPE");
 	/*currAttribut->add_data($1);*/
   }
 | type_enumere
@@ -125,17 +133,17 @@ liste_enum_plus
 ;
 liste_enum
 : item_enum
+    {
+        concat( currFlag, $1 );
+    }
 | liste_enum PIPE item_enum
+    {
+        concat( currFlag, $3 );
+    }
 ;
 item_enum
 : NAME
-	{
-		currAttribute->setName($1); // A confirmer si enum name ou data
-	}
 | NSNAME
-	{
-		currAttribute->setName($1); // A confirmer si enum name ou data
-	}
 ;
 defaut_declaration
 : DECLARATION 
@@ -161,7 +169,7 @@ contenu
 	{
 	    currRule = new DTDRuleFinal();
 	}
-| mixed //TODO
+| mixed
 | children
 ;
 mixed
@@ -173,7 +181,7 @@ mixed
 contenu_mixed
 :contenu_mixed PIPE debut
     {
-        currRule->addRule(new DTDRuleAtomic(
+        currRule->addRule( new DTDRuleAtomic() );
     }
 |/*empty*/
 	{
