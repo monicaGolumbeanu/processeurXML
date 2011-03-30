@@ -6,25 +6,40 @@ using namespace std;
 #include <cstdio>
 #include <cstdlib>
 
-#include "DTDContainer.h"
-#include "DTDAttlist.h"
+#include "DTD.h"
 #include "DTDElement.h"
-#include "DTDAttribut.h"
-#include "DTDType.h"
+#include "DTDAttribute.h"
+#include "DTDRule.h"
 
 
 void yyerror(char *msg);
 int  yywrap(void);
 int  yylex(void);
 
-DTDContainer    * high; // La racine du document DTD
-DTDAttlist      * currAttlist;
+DTD             * high = NULL; // DTD root
 DTDElement      * currElement;
-DTDAttribut     * currAttribut;
+DTDAttribute    * currAttribute;
 
-DTDType         * currType;
-DTDTypeAtomique * currTypeAtomique;
-String            keyAttribut;
+DTDRule         * currRule;
+DTDRuleAtomic   * currRuleAtomique;
+string            keyAttribute;
+
+vector<DTDAttribute*> currAttributes;
+vector<DTDElement*>   problems;
+
+int correctUnlinked() // ?????
+// This function check if there are not define elements needed by attributes
+{
+    /*for ( unsigned int i=0; i < problems.size(); i++ )
+    {
+        if (  )
+        {
+            problems.erase( i );
+            i--;
+        }
+    }*/
+    return problems.size();
+}
 
 %}
 
@@ -39,7 +54,18 @@ String            keyAttribut;
 
 %%
 
-main: dtd                           
+main: dtd  
+    {
+        if ( !problems->empty() )
+        {
+            int nbUnlinked = correctUnlinked();
+            if ( unlinked != 0 )
+            {
+                printf( "There are %d attributes with no element\n", nbUnliked );
+                printf( "The elements needed are : \n" );
+            }
+        }
+    }                         
     ;
 dtd
 : dtd attlist
@@ -47,22 +73,28 @@ dtd
 | /* empty */
 	{
 		if(high == NULL) 
-			high = new DTDContainer();
+			high = new DTD();
 	}
    ;
 attlist
 : ATTLIST debut att_definition CLOSE
-	{
-	    currAttlist->set_name($2);
-		high->addAttList(currAttlist);
-	}
+    {
+        DTDElement * elem = dtd->getElementByName($2);
+        if ( elem == NULL ) { 
+            elem = new DTDElement($2);
+            problems.push_back(elem);
+        }
+        while ( currAttributes.size() != 0 )
+        {
+            elem->addAttribute( currAttributes.pop_back(0) );
+        }
+    }
 ;
 element
 : ELEMENT debut contenu CLOSE
 	{
-	    currElement = new DTDElement();
-	    currElement->set_name($2);
-		currElement->set_type(currType);
+	    currElement = new DTDElement($2);
+		currElement->setRule(currRule);
 		high->addElement(currElement);
 	}
 ;
@@ -74,24 +106,26 @@ att_definition
 : att_definition attribut
 | /* empty */
 	{
-		currAttlist = new DTDAttlist();
+		currAttributes.clear();
 	}
 ;
 attribut
 : debut att_type defaut_declaration
 	{
-	    currAttribut->set_name( $1 );
-		currAttlist->addAttribut(currAttribut);
+	    currAttribute->setName( $1 );
+		currAtttributes.push_back( currAttribute );
 	}
 ;
 att_type
 : CDATA
   {
+    currAttribute = new DTDAttribute();
 	/*currAttribut->add_data($1);*/ // ne marche pas car ce n'est pas du texte
   }
 | TOKENTYPE
   {
-	currAttribut->add_data($1);
+    currAttribute = new DTDAttribute();
+	/*currAttribut->add_data($1);*/
   }
 | type_enumere
 ;
@@ -108,43 +142,36 @@ liste_enum
 item_enum
 : NAME
 	{
-		currAttribut->set_name($1); // A confirmer si enum name ou data
+		currAttribute->setName($1); // A confirmer si enum name ou data
 	}
 | NSNAME
 	{
-		currAttribut->set_name($1); // A confirmer si enum name ou data
+		currAttribute->setName($1); // A confirmer si enum name ou data
 	}
 ;
 defaut_declaration
 : DECLARATION 
 	{
-		currAttribut = new DTDAttribut();
-		currAttribut->set_flag($1); 
+		currAttribute->setFlag($1); 
 	}
 | STRING     
 	{
-		currAttribut = new DTDAttribut();
-		currAttribut->set_flag($1); 
+		currAttribute->setFlag($1); 
 	}
 | FIXED STRING 
 	{
-		currAttribut = new DTDAttribut();
-		currAttribut->set_flag($2); // Y a-t-il quelque chose a faire pour le fait que c'est un FIXED??
+		currAttribute->setFlag($2);
 	}
 ;
 
 contenu
 : EMPTY
 	{
-		currType = new DTDType();
-		currType->set_idType(TYPE_ATOMIC);
-		currElement->set_type(currType);
+		currRule = new DTDRuleFinal(true);
 	}
 | ANY
 	{
-		currType = Type();
-		currType->set_idType(TYPE_ATOMIC);
-		currElement->set_type(currType);
+	    currRule = new DTDRuleFinal();
 	}
 | mixed //TODO
 | children
@@ -152,14 +179,14 @@ contenu
 mixed
 :OPENPAR PCDATA contenu_mixed CLOSEPAR cardinalite
     {
-        /**/
+        currRule->addRule(new DTDRuleFinal(false));
     }
 ;
 contenu_mixed
 :contenu_mixed PIPE debut
 |/*empty*/
 	{
-		currType = new DTDType();
+		currRule = new DTDRuleChoice();
 	}
 ;
 children
