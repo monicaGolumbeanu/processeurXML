@@ -1,6 +1,8 @@
 #ifndef DTD_H_
 #define DTD_H_
 
+#include <string>
+
 class DTDElement;
 class XMLNode;
 class XMLValidateWithDTDVisitor;

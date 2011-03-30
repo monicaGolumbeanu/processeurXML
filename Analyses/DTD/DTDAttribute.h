@@ -17,6 +17,7 @@ class DTDAttribute {
         string getData();
         string getFlag();
         void   setName( string aName ){name = aName;}
+        void   setData( string aData ){data = aData;}
         void   setFlag( string aFlag ){flag = aFlag;}
 };
 

@@ -2,6 +2,8 @@
 using namespace std;
 #include <stack>
 #include <list>
+#include <vector>
+#include <map>
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
@@ -25,18 +27,60 @@ DTDElement      * currElement;
 DTDAttribute    * currAttribute;
 
 DTDRule         * currRule;
-DTDRuleAtomic   * currRuleAtomique;
+DTDRuleChoice   * currRuleChoice;
+DTDRuleSequence * currRuleSequence;
+DTDRuleAtomic   * currRuleAtomic;
+DTDRuleFinal    * currRuleFinal;
 string            currFlag;
 
 vector<DTDAttribute*> currAttributes;
 vector<DTDElement*>   problems;
+typedef map<DTDRule*, vector<string> > MapIncompleteRules;
+MapIncompleteRules incomplete;
 
-int linkRules()
-// 
-{
-    
+void linkRules() {
+    MapIncompleteRules::const_iterator end = incomplete.end();
+    vector<string> names;
+    DTDRuleChoice *ruleChoice;
+    DTDRuleSequence *ruleSequence;
+    DTDRuleAtomic *ruleAtomic;
+    DTDElement *elem;
+    for (MapIncompleteRules::const_iterator it = incomplete.begin(); it != end; ++it) {
+        names = it->second;
+        switch(it->first->getType()) {
+            case RULE_CHOICE:
+                ruleChoice = static_cast<DTDRuleChoice*>(it->first);
+                for(unsigned int i = 0; i < names.size(); i++) {
+                    elem = high->getElementByName(names[i]);
+                    if(elem != NULL)
+                        cout << "Error! Element " << names[i] << "not defined.";
+                    else
+                        ruleChoice->addRule(elem->getRule());
+                }
+                break;
+            case RULE_SEQUENCE:
+                ruleSequence = static_cast<DTDRuleSequence*>(it->first);
+                for(unsigned int i = 0; i < names.size(); i++) {
+                    elem = high->getElementByName(names[i]);
+                    if(elem != NULL)
+                        cout << "Error! Element " << names[i] << "not defined.";
+                    else
+                        ruleSequence->addRule(elem->getRule());
+                }
+                break;
+            case RULE_ATOMIC:
+                ruleAtomic = static_cast<DTDRuleAtomic*>(it->first);
+                for(unsigned int i = 0; i < names.size(); i++) {
+                    elem = high->getElementByName(names[i]);
+                    if(elem != NULL)
+                        cout << "Error! Element " << names[i] << "not defined.";
+                    else
+                        ruleAtomic->setRule(elem->getRule());
+                }
+                break;
+        }
+    }
 }
-
 %}
 
 %union { 
@@ -109,7 +153,7 @@ attribut
 : debut att_type defaut_declaration
 	{
 	    currAttribute->setName( $1 );
-		currAtttributes.push_back( currAttribute );
+		currAttributes.push_back( currAttribute );
 	}
 ;
 att_type
@@ -134,11 +178,13 @@ liste_enum_plus
 liste_enum
 : item_enum
     {
-        concat( currFlag, $1 );
+        currFlag += " | ";
+        currFlag += $1;
     }
 | liste_enum PIPE item_enum
     {
-        concat( currFlag, $3 );
+        currFlag += " | ";
+        currFlag += $3;
     }
 ;
 item_enum
@@ -223,9 +269,9 @@ liste_sequence
 item // Peut-être vaut-il mieux créer un vector
 : debut cardinalite
 {
-	currType = new DTDTypeSequence();
-    currType->set_name( $1 );
-	currElement->addType(currType);
+	currRule = new DTDRuleSequence();
+    currRule->set_name( $1 );
+	currElement->addType(currRule);
 }
 | children
 ;
