@@ -27,18 +27,10 @@ string            keyAttribute;
 vector<DTDAttribute*> currAttributes;
 vector<DTDElement*>   problems;
 
-int correctUnlinked() // ?????
-// This function check if there are not define elements needed by attributes
+int linkRules()
+// 
 {
-    /*for ( unsigned int i=0; i < problems.size(); i++ )
-    {
-        if (  )
-        {
-            problems.erase( i );
-            i--;
-        }
-    }*/
-    return problems.size();
+    
 }
 
 %}
@@ -56,14 +48,10 @@ int correctUnlinked() // ?????
 
 main: dtd  
     {
-        if ( !problems->empty() )
+        if ( !problems.empty() )
         {
-            int nbUnlinked = correctUnlinked();
-            if ( unlinked != 0 )
-            {
-                printf( "There are %d attributes with no element\n", nbUnliked );
-                printf( "The elements needed are : \n" );
-            }
+            printf( "There are %d attributes with no element\n", problems.size() );
+            printf( "The elements needed are : \n" );
         }
     }                         
     ;
@@ -184,6 +172,9 @@ mixed
 ;
 contenu_mixed
 :contenu_mixed PIPE debut
+    {
+        currRule->addRule(new DTDRuleAtomic(
+    }
 |/*empty*/
 	{
 		currRule = new DTDRuleChoice();
