@@ -58,9 +58,7 @@ bool DTDRuleFinal::validate(XMLTag* tag) {
             }
         }
     }
-}
-
-int DTDRuleFinal::partialValidate(XMLTag* tag, unsigned int position) {
+}int DTDRuleFinal::partialValidate(XMLTag* tag, unsigned int position) {
     vector<XMLNode*>* children = tag->getChildren();
     //===============
     //Wrong user call
@@ -81,5 +79,13 @@ int DTDRuleFinal::partialValidate(XMLTag* tag, unsigned int position) {
 #endif
         return position+1;
     }
+}
+    
+void DTDRuleFinal::printRule( )
+{
+    if ( !this->isEmpty() )
+        cout << tagName;
+    else
+        cout << "EMPTY";
 }
 

@@ -9,6 +9,7 @@ class DTDRuleFinal : public DTDRule {
         bool isEmpty();
         virtual bool validate(XMLTag* tag);
         virtual int partialValidate(XMLTag* tag, unsigned int position);
+        virtual void printRule();
     private:
         bool empty;
         std::string tagName;
