@@ -14,7 +14,7 @@ class DTDRuleAtomic : public DTDRule {
     private:
         DTDRule *rule;
     public:
-        DTDRuleAtomic(string card = "");
+        DTDRuleAtomic();
         DTDRule* getRule();
         void setRule(DTDRule* rule);
         virtual bool validate(XMLTag* tag);

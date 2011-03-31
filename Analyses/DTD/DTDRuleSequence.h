@@ -12,7 +12,7 @@ class DTDRuleSequence : public DTDRule {
     private:
         vector<DTDRule*>* rules;
     public:
-        DTDRuleSequence(string card = "");
+        DTDRuleSequence();
         virtual void addRule(DTDRule* rule);
         vector<DTDRule*>* getChildrenRules();
         virtual bool validate(XMLTag* tag);

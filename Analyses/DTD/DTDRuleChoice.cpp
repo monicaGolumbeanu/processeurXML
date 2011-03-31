@@ -8,8 +8,7 @@
 
 using namespace DTDExceptions;
 
-DTDRuleChoice::DTDRuleChoice(string card) :
-    DTDRule(card, RULE_CHOICE) {
+DTDRuleChoice::DTDRuleChoice() : DTDRule(RULE_CHOICE) {
     rules = new vector<DTDRule*> ();
 }
 

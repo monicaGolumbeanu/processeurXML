@@ -12,7 +12,7 @@ class DTDRuleChoice : public DTDRule {
     private:
         vector<DTDRule*>* rules;
     public:
-        DTDRuleChoice(string cardinalite = "");
+        DTDRuleChoice();
         void addRule(DTDRule* rule);
         vector<DTDRule*>* getChildrenRules();
         virtual bool validate(XMLTag* tag);

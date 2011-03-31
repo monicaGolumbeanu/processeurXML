@@ -7,9 +7,9 @@
 
 using namespace DTDExceptions;
 
-DTDRule::DTDRule(string card, RULE_ID identifType) {
-    cardinalite = card;
-    idType = identifType;
+DTDRule::DTDRule(RULE_ID idType) {
+    this->idType = idType;
+    cardinality = '\0';
     element = NULL;
 }
 
@@ -17,9 +17,14 @@ RULE_ID DTDRule::getType() {
     return idType;
 }
 
-string DTDRule::getCardinalite() {
-    return cardinalite;
+char DTDRule::getCardinality() {
+    return cardinality;
 }
+
+void DTDRule::setCardinality(char cardinality) {
+    this->cardinality = cardinality;
+}
+
 
 DTDElement* DTDRule::getElement() {
     return element;
@@ -27,6 +32,14 @@ DTDElement* DTDRule::getElement() {
 
 void DTDRule::setElement(DTDElement* element) {
     this->element = element;
+}
+
+string DTDRule::getName() {
+    return name;
+}
+
+void DTDRule::setName(string Name) {
+    this->name = name;
 }
 
 string DTDRule::getTagName() {
@@ -37,11 +50,11 @@ string DTDRule::getTagName() {
 }
 
 bool DTDRule::isOptional() {
-	return (cardinalite=="?" || cardinalite=="*");
+	return (cardinality=='?' || cardinality=='*');
 }
 
 bool DTDRule::canRepeat() {
-	return (cardinalite=="+" || cardinalite=="*");
+	return (cardinality=='+' || cardinality=='*');
 }
 
 int DTDRule::applyChildRule(XMLTag* tag, unsigned int position, DTDRule* childRule) {

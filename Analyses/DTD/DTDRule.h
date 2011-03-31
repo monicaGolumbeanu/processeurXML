@@ -15,20 +15,25 @@ typedef enum {
 
 class DTDRule {
     public:
+        DTDRule(RULE_ID);
         DTDRule(string, RULE_ID);
         RULE_ID getType();
-        string getCardinalite();
+        char getCardinality();
+        void setCardinality(char);
         virtual bool validate(XMLTag* tag) = 0;
         virtual int partialValidate(XMLTag* tag, unsigned int position) = 0;
         DTDElement* getElement();
-        string getTagName();
         void setElement(DTDElement* element);
+        string getTagName();
+        void setName(string name);
+        string getName();
         bool isOptional();
         bool canRepeat();
     protected:
         int applyChildRule(XMLTag* tag, unsigned int position, DTDRule* childRule);
     private:
-        string cardinalite;
+        char cardinality;
+        string name;
         DTDElement* element;
         RULE_ID idType;
 };

@@ -55,4 +55,8 @@ void DTDTest() {
     rule_html->addRule(rule_body);
     rule_html->addRule(rule_head);
     html_element->setRule(rule_html);
+    if(dtd->validate(html))
+        cout << "VALID!" << endl;
+    else
+        cout << "INVALID!" << endl;
 }

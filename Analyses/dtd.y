@@ -10,35 +10,11 @@ using namespace std;
 #include <DTD.h>
 #include <DTDParserActionHandler.h>
 
-/*#include "DTD.h"
-#include "DTDElement.h"
-#include "DTDAttribute.h"
-#include "DTDRule.h"
-#include "DTDRuleAtomic.h"
-#include "DTDRuleFinal.h"
-#include "DTDRuleChoice.h"
-#include "DTDRuleSequence.h"*/
-
-
 void yyerror(char *msg);
 int  yywrap(void);
 int  yylex(void);
 
 DTDParserActionHandler handler = DTDParserActionHandler(new DTD());
-
-/*DTD             * high = NULL; // DTD root
-DTDElement      * currElement;
-DTDAttribute    * currAttribute;
-
-DTDRule         * currRule;
-DTDRuleChoice   * currRuleChoice;
-DTDRuleSequence * currRuleSequence;
-DTDRuleAtomic   * currRuleAtomic;
-DTDRuleFinal    * currRuleFinal;
-string            currFlag;
-
-vector<DTDAttribute*> currAttributes;
-vector<DTDElement*>   problems;*/
 
 %}
 
@@ -117,15 +93,7 @@ liste_enum_plus
 ;
 liste_enum
 : item_enum
-    {
-        /*currFlag += " | ";
-        currFlag += $1;*/
-    }
 | liste_enum PIPE item_enum
-    {
-        /*currFlag += " | ";
-        currFlag += $3;*/
-    }
 ;
 item_enum
 : NAME
@@ -133,62 +101,57 @@ item_enum
 ;
 defaut_declaration
 : DECLARATION 
-	{
-		//currAttribute->setFlag($1);
-	}
 | STRING     
-	{
-		//currAttribute->setFlag($1);
-	}
 | FIXED STRING 
-	{
-//		currAttribute->setFlag($2);
-	}
 ;
 
 contenu
 : EMPTY
 	{
-//		currRule = new DTDRuleFinal(true);
+        handler.createNewEmptyRule();
 	}
 | ANY
-	{
-//	    currRule = new DTDRuleFinal();
-	}
+    {
+        handler.createNewAnyRule();
+    }
 | mixed
 | children
 ;
 mixed
 :OPENPAR PCDATA contenu_mixed CLOSEPAR cardinalite
     {
-//        currRule->addRule(new DTDRuleFinal(false));
+        handler.createNewItem("#PCDATA");
+        handler.finishRuleChoice();
     }
 ;
 contenu_mixed
 :contenu_mixed PIPE debut
     {
-//        currRule->addRule( new DTDRuleAtomic() );
+        handler.createNewItem($3);
     }
 |/*empty*/
 	{
-//		currRule = new DTDRuleChoice();
+		handler.pushNewItemList();
 	}
 ;
 children
 : sequence_ou_choix cardinalite
+  {
+    handler.updateCardinality();
+  }
 ;
 cardinalite
 : QMARK
 	{
-//		currType->set_card(QMARK);
+		handler.setNewRuleCardinality('?');
 	}
 | AST
 	{
-//		currType->set_card(AST);
+		handler.setNewRuleCardinality('*');
 	}
 | PLUS
 	{
-//		currType->set_card(PLUS);
+		handler.setNewRuleCardinality('+');
 	}
 | /*empty*/
 ;
@@ -197,26 +160,31 @@ sequence_ou_choix
 | choix
 ;
 sequence
-:OPENPAR liste_sequence CLOSEPAR
+:parOpen liste_sequence CLOSEPAR
+ {
+    handler.finishRuleSequence();
+ }
 ;
 liste_sequence
 : item
 | liste_sequence COMMA item
-{
-//	currType->addType( currType );
-}
 ;
-item // Peut-être vaut-il mieux créer un vector
+item
 : debut cardinalite
 {
-//	currRule = new DTDRuleSequence();
-//    currRule->set_name( $1 );
-//	currElement->addType(currRule);
+    handler.createNewItem($1);
 }
 | children
 ;
+parOpen : OPENPAR
+{
+    handler.pushNewItemList();
+}
 choix
-: OPENPAR liste_choix_plus CLOSEPAR
+: parOpen liste_choix_plus CLOSEPAR
+  {
+    handler.finishRuleChoice();
+  }
 ;
 liste_choix_plus
 : liste_choix PIPE item

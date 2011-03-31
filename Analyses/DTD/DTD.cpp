@@ -46,8 +46,7 @@ bool DTD::validate(XMLNode* node) {
             for (unsigned int i = 0; i < children->size(); i++)
                 validate((*children)[i]);
             try {
-                tag->accept(validate_visitor);
-                return true;
+                return tag->accept(validate_visitor);
             }
             catch(exception &e) {
                 cout << "[ERROR] " << e.what() << endl;

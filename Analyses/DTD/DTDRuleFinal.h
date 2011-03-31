@@ -5,12 +5,16 @@
 
 class DTDRuleFinal : public DTDRule {
     public:
-        DTDRuleFinal(bool empty = false);
+        DTDRuleFinal();
         bool isEmpty();
+        bool isAny();
+        void setEmpty(bool);
+        void setAny(bool);
         virtual bool validate(XMLTag* tag);
         virtual int partialValidate(XMLTag* tag, unsigned int position);
     private:
         bool empty;
+        bool any;
         std::string tagName;
 };
 

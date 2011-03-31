@@ -10,9 +10,7 @@
 using namespace std;
 using namespace DTDExceptions;
 
-DTDRuleAtomic::DTDRuleAtomic(string card) :
-    DTDRule(card, RULE_ATOMIC) {
-}
+DTDRuleAtomic::DTDRuleAtomic() : DTDRule(RULE_ATOMIC) {}
 
 DTDRule* DTDRuleAtomic::getRule() {
     return rule;

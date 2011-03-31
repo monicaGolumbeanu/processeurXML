@@ -9,13 +9,25 @@
 
 using namespace DTDExceptions;
 
-DTDRuleFinal::DTDRuleFinal(bool empty) :
-    DTDRule("", RULE_FINAL) {
-    this->empty = empty;
+DTDRuleFinal::DTDRuleFinal() : DTDRule(RULE_FINAL) {
+    empty = false;
+    any = false;
 }
 
 bool DTDRuleFinal::isEmpty() {
     return empty;
+}
+
+void DTDRuleFinal::setEmpty(bool empty) {
+    this->empty = empty;
+}
+
+bool DTDRuleFinal::isAny() {
+    return any;
+}
+
+void DTDRuleFinal::setAny(bool any) {
+    this->any = any;
 }
 
 bool DTDRuleFinal::validate(XMLTag* tag) {
@@ -28,8 +40,23 @@ bool DTDRuleFinal::validate(XMLTag* tag) {
             throw ExtraElementFoundException(tag, (*tag->getChildren())[0]);
             return false;
         }
-        else
+        else {
+#ifdef DEBUG
+            cout << "[VALIDATED] " << getTagName() << " --> ";
+            cout << "<EMPTY>" << endl;
+#endif
             return true;
+        }
+    }
+    //============
+    //Rule for ANY
+    //============
+    else if (isAny()) {
+#ifdef DEBUG
+            cout << "[VALIDATED] " << getTagName() << " --> ";
+            cout << "<ANY>" << endl;
+#endif
+        return true;
     }
     //========================
     //Rule for #PCDATA content
@@ -52,7 +79,7 @@ bool DTDRuleFinal::validate(XMLTag* tag) {
             else {
 #ifdef DEBUG
                 cout << "[VALIDATED] " << getTagName() << " --> ";
-                cout << (isEmpty() ? "<EMPTY>" : "#PCDATA") << endl;
+                cout << "#PCDATA" << endl;
 #endif
                 return true;
             }
@@ -76,6 +103,7 @@ int DTDRuleFinal::partialValidate(XMLTag* tag, unsigned int position) {
     }
     else {
 #ifdef DEBUG
+        //@TODO: Add ANY rule
         cout << "[VALIDATED] " << getTagName() << " --> ";
         cout << (isEmpty() ? "<EMPTY>" : "#PCDATA") << endl;
 #endif

@@ -6,8 +6,7 @@
 
 using namespace DTDExceptions;
 
-DTDRuleSequence::DTDRuleSequence(string card) :
-    DTDRule(card, RULE_SEQUENCE) {
+DTDRuleSequence::DTDRuleSequence() : DTDRule(RULE_SEQUENCE) {
     rules = new vector<DTDRule*>();
 }
 
