@@ -14,7 +14,7 @@ class DTD {
         std::vector<DTDElement*>* getElements();
         DTDElement* getElementByName(std::string name);
         bool validate(XMLNode* root);
-        //void print();
+        void printDTD();
     private:
         std::vector<DTDElement*>* elements;
         XMLValidateWithDTDVisitor* validate_visitor;
