@@ -6,6 +6,7 @@
 #include <DTDElement.h>
 #include <DTD.h>
 #include <DTDAttribute.h>
+#include <DTDRule.h>
 
 using namespace std;
 
@@ -69,7 +70,7 @@ bool DTD::validate(XMLNode* node) {
 void DTD::printDTD ()
 // Print the DTD
 //    <!ELEMENT a (b | (c,d,e)+ )>
-//    <!ATTLIST a EMPTY >
+//    <!ATTLIST a PCDATA #IMPLIED >
 {
     for ( unsigned int i=0; i < elements->size(); i++ )
     {
@@ -84,7 +85,9 @@ void DTD::printDTD ()
         cout << "<!ATTLIST " << (*elements)[i]->getName();
         for ( unsigned int attI=0; attI < attributes->size(); attI++ )
         {
-            cout << (*attributes)[i]->getName();
+            cout << (*attributes)[i]->getName()
+                 << " " << (*attributes)[i]->getData()
+                 << " " << (*attributes)[i]->getFlag();
         }
         cout << " >" << endl;
     }
