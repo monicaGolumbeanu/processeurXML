@@ -12,6 +12,7 @@ class DTDRuleFinal : public DTDRule {
         void setAny(bool);
         virtual bool validate(XMLTag* tag);
         virtual int partialValidate(XMLTag* tag, unsigned int position);
+        virtual void printRule();
     private:
         bool empty;
         bool any;

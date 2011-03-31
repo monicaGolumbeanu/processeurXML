@@ -29,6 +29,7 @@ class DTDRule {
         string getName();
         bool isOptional();
         bool canRepeat();
+        virtual void printRule() = 0;
     protected:
         int applyChildRule(XMLTag* tag, unsigned int position, DTDRule* childRule);
     private:

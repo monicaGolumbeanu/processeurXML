@@ -5,6 +5,8 @@
 #include <XMLValidateWithDTDVisitor.h>
 #include <DTDElement.h>
 #include <DTD.h>
+#include <DTDAttribute.h>
+#include <DTDRule.h>
 
 using namespace std;
 
@@ -61,5 +63,32 @@ bool DTD::validate(XMLNode* node) {
         default:
             return false;
             break;
+    }
+}
+
+void DTD::printDTD ()
+// Print the DTD
+//    <!ELEMENT a (b | (c,d,e)+ )>
+//    <!ATTLIST a PCDATA #IMPLIED >
+{
+    for ( unsigned int i=0; i < elements->size(); i++ )
+    {
+        cout << "<!ELEMENT " << (*elements)[i]->getName() << " ";
+        // Print the rule
+        (*elements)[i]->getRule()->printRule();
+        cout << " >" << endl;
+        // print the attribute list
+        vector<DTDAttribute *> * attributes = (*elements)[i]->getAttributes();
+        if ( attributes->size() > 0 )
+        {
+            cout << "<!ATTLIST " << (*elements)[i]->getName();
+            for ( unsigned int attI=0; attI < attributes->size(); attI++ )
+            {
+                cout << endl << "\t" << (*attributes)[attI]->getName()
+                     << " " << (*attributes)[attI]->getData()
+                     << " " << (*attributes)[attI]->getFlag();
+            }
+            cout << " >" << endl;
+        }
     }
 }

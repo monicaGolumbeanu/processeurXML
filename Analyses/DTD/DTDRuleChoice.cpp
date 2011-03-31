@@ -129,3 +129,18 @@ int DTDRuleChoice::partialValidate(XMLTag* tag, unsigned int position) {
     } while (canRepeat());
     return position;
 }
+
+void DTDRuleChoice::printRule()
+{
+    vector<DTDRule *> * childrenRules = this->getChildrenRules();
+    cout << "( ";
+    // print first rule
+    (*childrenRules)[0]->printRule();
+    for ( int i=1; i < childrenRules->size(); i++ )
+    {
+        cout << " | ";
+        (*childrenRules)[i]->printRule();
+    }
+    cout << " )" << this->getCardinalite();
+}
+

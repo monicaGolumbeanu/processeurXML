@@ -35,7 +35,7 @@ XMLTag * current;
 %%
 
 document
- : refXSL declarations element misc_seq_opt { delete( current ); }
+ : refXSL declarations element misc_seq_opt { current = NULL }
  ;
 refXSL
  : STARTSPECIAL NAME EQ VALUE NAME EQ VALUE CLOSESPECIAL { xsl_name=$4; }

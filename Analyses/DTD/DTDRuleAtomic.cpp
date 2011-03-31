@@ -111,3 +111,10 @@ int DTDRuleAtomic::partialValidate(XMLTag* tag, unsigned int position) {
 #endif
     return i;
 }
+
+void DTDRuleAtomic::printRule()
+{
+    cout << "( ";
+    this->getRule()->printRule();
+    cout << " )" << this->getCardinalite();
+}

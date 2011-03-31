@@ -17,6 +17,7 @@ class DTDRuleSequence : public DTDRule {
         vector<DTDRule*>* getChildrenRules();
         virtual bool validate(XMLTag* tag);
         virtual int partialValidate(XMLTag* tag, unsigned int position);
+        virtual void printRule();
 };
 
 #endif /* DTDRULESEQUENCE_H_ */
