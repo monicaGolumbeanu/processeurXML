@@ -1,6 +1,5 @@
 %{
 using namespace std;
-#include <stack>
 #include <list>
 #include <vector>
 #include <map>
@@ -8,21 +7,26 @@ using namespace std;
 #include <cstdio>
 #include <cstdlib>
 
-#include "DTD.h"
+#include <DTD.h>
+#include <DTDParserActionHandler.h>
+
+/*#include "DTD.h"
 #include "DTDElement.h"
 #include "DTDAttribute.h"
 #include "DTDRule.h"
 #include "DTDRuleAtomic.h"
 #include "DTDRuleFinal.h"
 #include "DTDRuleChoice.h"
-#include "DTDRuleSequence.h"
+#include "DTDRuleSequence.h"*/
 
 
 void yyerror(char *msg);
 int  yywrap(void);
 int  yylex(void);
 
-DTD             * high = NULL; // DTD root
+DTDParserActionHandler handler = DTDParserActionHandler(new DTD());
+
+/*DTD             * high = NULL; // DTD root
 DTDElement      * currElement;
 DTDAttribute    * currAttribute;
 
@@ -34,53 +38,8 @@ DTDRuleFinal    * currRuleFinal;
 string            currFlag;
 
 vector<DTDAttribute*> currAttributes;
-vector<DTDElement*>   problems;
-typedef map<DTDRule*, vector<string> > MapIncompleteRules;
-MapIncompleteRules incomplete;
+vector<DTDElement*>   problems;*/
 
-void linkRules() {
-    MapIncompleteRules::const_iterator end = incomplete.end();
-    vector<string> names;
-    DTDRuleChoice *ruleChoice;
-    DTDRuleSequence *ruleSequence;
-    DTDRuleAtomic *ruleAtomic;
-    DTDElement *elem;
-    for (MapIncompleteRules::const_iterator it = incomplete.begin(); it != end; ++it) {
-        names = it->second;
-        switch(it->first->getType()) {
-            case RULE_CHOICE:
-                ruleChoice = static_cast<DTDRuleChoice*>(it->first);
-                for(unsigned int i = 0; i < names.size(); i++) {
-                    elem = high->getElementByName(names[i]);
-                    if(elem != NULL)
-                        cout << "Error! Element " << names[i] << "not defined.";
-                    else
-                        ruleChoice->addRule(elem->getRule());
-                }
-                break;
-            case RULE_SEQUENCE:
-                ruleSequence = static_cast<DTDRuleSequence*>(it->first);
-                for(unsigned int i = 0; i < names.size(); i++) {
-                    elem = high->getElementByName(names[i]);
-                    if(elem != NULL)
-                        cout << "Error! Element " << names[i] << "not defined.";
-                    else
-                        ruleSequence->addRule(elem->getRule());
-                }
-                break;
-            case RULE_ATOMIC:
-                ruleAtomic = static_cast<DTDRuleAtomic*>(it->first);
-                for(unsigned int i = 0; i < names.size(); i++) {
-                    elem = high->getElementByName(names[i]);
-                    if(elem != NULL)
-                        cout << "Error! Element " << names[i] << "not defined.";
-                    else
-                        ruleAtomic->setRule(elem->getRule());
-                }
-                break;
-        }
-    }
-}
 %}
 
 %union { 
@@ -96,7 +55,8 @@ void linkRules() {
 
 main: dtd  
     {
-        if ( !problems.empty() )
+        handler.checkProblems();
+        /*if ( !problems.empty() )
         {
             printf( "There are %d attributes with no element\n", problems.size() );
             printf( "The elements needed are : \n" );
@@ -104,38 +64,24 @@ main: dtd
             {
                 printf("\t%s\n", problems[i]->getName() );
             }
-        }
+        }*/
     }                         
     ;
 dtd
 : dtd attlist
 | dtd element
 | /* empty */
-	{
-		if(high == NULL) 
-			high = new DTD();
-	}
-   ;
+;
 attlist
 : ATTLIST debut att_definition CLOSE
     {
-        DTDElement * elem = high->getElementByName($2);
-        if ( elem == NULL ) { 
-            elem = new DTDElement($2);
-            problems.push_back(elem);
-        }
-        while ( currAttributes.size() != 0 )
-        {
-            elem->addAttribute( currAttributes.pop_back(0) );
-        }
+        handler.finishAttlist($2);
     }
 ;
 element
 : ELEMENT debut contenu CLOSE
 	{
-	    currElement = new DTDElement($2);
-		currElement->setRule(currRule);
-		high->addElement(currElement);
+        handler.finishElement($2);
 	}
 ;
 debut
@@ -145,27 +91,21 @@ debut
 att_definition
 : att_definition attribut
 | /* empty */
-	{
-		currAttributes.clear();
-	}
 ;
 attribut
 : debut att_type defaut_declaration
 	{
-	    currAttribute->setName( $1 );
-		currAttributes.push_back( currAttribute );
+        handler.finishAttribute($1);
 	}
 ;
 att_type
 : CDATA
   {
-    currAttribute = new DTDAttribute("", "", "CDATA");
-	/*currAttribut->add_data($1);*/ // ne marche pas car ce n'est pas du texte
+    handler.setNewAttributeType("CDATA");
   }
 | TOKENTYPE
   {
-    currAttribute = new DTDAttribute("", "", "TOKENTYPE");
-	/*currAttribut->add_data($1);*/
+    handler.setNewAttributeType("TOKENTYPE");
   }
 | type_enumere
 ;
@@ -178,13 +118,13 @@ liste_enum_plus
 liste_enum
 : item_enum
     {
-        currFlag += " | ";
-        currFlag += $1;
+        /*currFlag += " | ";
+        currFlag += $1;*/
     }
 | liste_enum PIPE item_enum
     {
-        currFlag += " | ";
-        currFlag += $3;
+        /*currFlag += " | ";
+        currFlag += $3;*/
     }
 ;
 item_enum
@@ -194,26 +134,26 @@ item_enum
 defaut_declaration
 : DECLARATION 
 	{
-		currAttribute->setFlag($1); 
+		//currAttribute->setFlag($1);
 	}
 | STRING     
 	{
-		currAttribute->setFlag($1); 
+		//currAttribute->setFlag($1);
 	}
 | FIXED STRING 
 	{
-		currAttribute->setFlag($2);
+//		currAttribute->setFlag($2);
 	}
 ;
 
 contenu
 : EMPTY
 	{
-		currRule = new DTDRuleFinal(true);
+//		currRule = new DTDRuleFinal(true);
 	}
 | ANY
 	{
-	    currRule = new DTDRuleFinal();
+//	    currRule = new DTDRuleFinal();
 	}
 | mixed
 | children
@@ -221,17 +161,17 @@ contenu
 mixed
 :OPENPAR PCDATA contenu_mixed CLOSEPAR cardinalite
     {
-        currRule->addRule(new DTDRuleFinal(false));
+//        currRule->addRule(new DTDRuleFinal(false));
     }
 ;
 contenu_mixed
 :contenu_mixed PIPE debut
     {
-        currRule->addRule( new DTDRuleAtomic() );
+//        currRule->addRule( new DTDRuleAtomic() );
     }
 |/*empty*/
 	{
-		currRule = new DTDRuleChoice();
+//		currRule = new DTDRuleChoice();
 	}
 ;
 children
@@ -240,15 +180,15 @@ children
 cardinalite
 : QMARK
 	{
-		currType->set_card(QMARK);
+//		currType->set_card(QMARK);
 	}
 | AST
 	{
-		currType->set_card(AST);
+//		currType->set_card(AST);
 	}
 | PLUS
 	{
-		currType->set_card(PLUS);
+//		currType->set_card(PLUS);
 	}
 | /*empty*/
 ;
@@ -263,15 +203,15 @@ liste_sequence
 : item
 | liste_sequence COMMA item
 {
-	currType->addType( currType );
+//	currType->addType( currType );
 }
 ;
 item // Peut-être vaut-il mieux créer un vector
 : debut cardinalite
 {
-	currRule = new DTDRuleSequence();
-    currRule->set_name( $1 );
-	currElement->addType(currRule);
+//	currRule = new DTDRuleSequence();
+//    currRule->set_name( $1 );
+//	currElement->addType(currRule);
 }
 | children
 ;

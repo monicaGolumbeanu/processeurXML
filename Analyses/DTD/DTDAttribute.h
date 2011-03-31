@@ -12,13 +12,14 @@ class DTDAttribute {
         string data;
         string flag;
     public:
+        DTDAttribute() {};
         DTDAttribute(string, string, string);
         string getName();
         string getData();
         string getFlag();
-        void   setName( string aName ){name = aName;}
-        void   setData( string aData ){data = aData;}
-        void   setFlag( string aFlag ){flag = aFlag;}
+        void setName( string aName ){name = aName;}
+        void setData( string aData ){data = aData;}
+        void setFlag( string aFlag ){flag = aFlag;}
 };
 
 #endif /* DTDATTRIBUTE_H_ */
