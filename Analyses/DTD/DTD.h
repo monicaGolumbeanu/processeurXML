@@ -1,6 +1,7 @@
 #ifndef DTD_H_
 #define DTD_H_
 
+#include <vector>
 #include <string>
 
 class DTDElement;
