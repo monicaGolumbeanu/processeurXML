@@ -74,19 +74,22 @@ void DTD::printDTD ()
 {
     for ( unsigned int i=0; i < elements->size(); i++ )
     {
-        cout << "<!ELEMENT " << (*elements)[i]->getName();
+        cout << "<!ELEMENT " << (*elements)[i]->getName() << " ";
         // Print the rule
         (*elements)[i]->getRule()->printRule();
         cout << " >" << endl;
         // print the attribute list
         vector<DTDAttribute *> * attributes = (*elements)[i]->getAttributes();
-        cout << "<!ATTLIST " << (*elements)[i]->getName();
-        for ( unsigned int attI=0; attI < attributes->size(); attI++ )
+        if ( attributes->size() > 0 )
         {
-            cout << (*attributes)[i]->getName()
-                 << " " << (*attributes)[i]->getData()
-                 << " " << (*attributes)[i]->getFlag();
+            cout << "<!ATTLIST " << (*elements)[i]->getName();
+            for ( unsigned int attI=0; attI < attributes->size(); attI++ )
+            {
+                cout << endl << "\t" << (*attributes)[attI]->getName()
+                     << " " << (*attributes)[attI]->getData()
+                     << " " << (*attributes)[attI]->getFlag();
+            }
+            cout << " >" << endl;
         }
-        cout << " >" << endl;
     }
 }
