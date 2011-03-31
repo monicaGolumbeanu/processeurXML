@@ -20,6 +20,8 @@ using namespace std;
 #include "yy.tab_xml.h"
 #include "analyse.h"
 
+#include "DTDTest.h"
+
 // globals
 extern FILE   * xml_in;
 extern FILE   * dtd_in;
@@ -50,7 +52,8 @@ int main(int argc, char **argv)
   
   // only one argument allowed : xml file name
   if ( argc != 2 ) {
-    printf("Please enter the name of the XML file only\n");
+    /*printf("Please enter the name of the XML file only\n");*/
+    DTDTest();
     return 1;
   }
 
@@ -117,7 +120,7 @@ int check_xml( char * file_name )
   {
     printf("XML Parse ended with success\n\n");
   }
-  
+  /*
   //////////// DTD PARSING
   dtd_in = fopen(dtd_name, "r");
   if ( dtd_in == 0 )
@@ -135,7 +138,7 @@ int check_xml( char * file_name )
   else
   {
     printf("DTD Parse ended with success\n\n");
-  }
+  }*/
   
   //////////// XML VALIDITY CHECK
   // TODO
@@ -148,7 +151,6 @@ int check_xml( char * file_name )
 void pretty_print(XMLNode* node)
 // This function prints a xml tree in its raw shape
 {
-    //@TODO: Visitor must be created outside!!!
 	XMLPrintVisitor* visitor = new XMLPrintVisitor();
 	XMLTag *tag;
 	XMLPCDATA *pcdata;

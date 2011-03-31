@@ -14,16 +14,16 @@
 void DTDTest() {
     //XML Tree
     XMLTag* html = new XMLTag("html");
-    XMLTag* head = new XMLTag("head");
     XMLTag* body = new XMLTag("body");
+    XMLTag* head = new XMLTag("head");
     body->addChild(new XMLPCDATA("It works!"));
     XMLTag* title = new XMLTag("title");
     title->addChild(new XMLPCDATA("BLA!!"));
     head->addChild(title);
-    html->addChild(body);
     html->addChild(head);
-    head->addAttr(new XMLAttr("attrQuiNexistePas"));
-    html->addChild(new XMLTag("jeNexistePas"));
+    html->addChild(body);
+    //head->addAttr(new XMLAttr("attrQuiNexistePas"));
+    //html->addChild(new XMLTag("jeNexistePas"));
     //Elements
     DTD* dtd = new DTD();
     DTDElement* html_element = new DTDElement("html");
@@ -33,8 +33,8 @@ void DTDTest() {
     DTDElement* link_element = new DTDElement("link");
     DTDElement* meta_element = new DTDElement("meta");
     dtd->addElement(html_element);
-    dtd->addElement(head_element);
     dtd->addElement(body_element);
+    dtd->addElement(head_element);
     dtd->addElement(title_element);
     dtd->addElement(link_element);
     dtd->addElement(meta_element);
@@ -52,8 +52,8 @@ void DTDTest() {
     rule_head->addRule(rule_meta);
     head_element->setRule(rule_head);
     DTDRuleSequence* rule_html = new DTDRuleSequence();
-    rule_html->addRule(rule_head);
     rule_html->addRule(rule_body);
+    rule_html->addRule(rule_head);
     html_element->setRule(rule_html);
     if(dtd->validate(html))
         cout << "VALID!" << endl;
