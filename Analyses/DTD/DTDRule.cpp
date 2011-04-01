@@ -81,7 +81,7 @@ int DTDRule::applyChildRule(XMLTag* tag, unsigned int position, DTDRule* childRu
         return childRule->partialValidate(tag, position);
     else {
         if((*children)[position]->getType() != NODE_XMLTAG) {
-            throw InvalidElementException(tag, (*children)[position]);
+            //throw InvalidElementException(tag, (*children)[position]);
             return position;
         }
         else {

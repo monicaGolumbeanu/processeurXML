@@ -49,6 +49,7 @@ bool DTDRuleChoice::validate(XMLTag* tag) {
         if (!validated && !foundOnce) {
             if (!isOptional())
                 throw EmptyTagException(tag);
+                
             return false;
         }
         //==========================
@@ -138,24 +139,8 @@ void DTDRuleChoice::print()
     {
         if(i > 0)
             cout << " | ";
-        /*switch((*childrenRules)[i]->getType()) {
-            case RULE_FINAL:
-                if((*childrenRules)[i]->getTagName() == "")
-                    cout << "#PCDATA";
-                else {
-                    cout << (*childrenRules)[i]->getTagName();
-                    cout << (*childrenRules)[i]->getCardinality();
-                }
-                break;
-            case RULE_ATOMIC:
-                cout << (*childrenRules)[i]->getTagName();
-                cout << (*childrenRules)[i]->getCardinality();
-                break;
-            default:
-                (*childrenRules)[i]->print();
-                break;
-        }*/
-(*childrenRules)[i]->print();
+        
+        (*childrenRules)[i]->print();
     }
     cout << " )" << this->getCardinality();
 }

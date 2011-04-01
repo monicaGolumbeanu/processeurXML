@@ -124,8 +124,7 @@ void DTDRuleAtomic::print()
 #endif
     }
     else {
-        cout << "FUCKK" << this->getTagName();
+        cout << this->getTagName();
         cout << this->getCardinality();
-        this->getCardinality();
     }
 }

@@ -105,19 +105,7 @@ void DTDRuleSequence::print()
     {
         if(i > 0)
             cout << " , ";
-        /*switch((*childrenRules)[i]->getType()) {
-            case RULE_FINAL:
-                cout << (*childrenRules)[i]->getTagName();
-                cout << (*childrenRules)[i]->getCardinality();
-                break;
-            case RULE_ATOMIC:
-                cout << (*childrenRules)[i]->getTagName();
-                cout << (*childrenRules)[i]->getCardinality();
-                break;
-            default:
-                (*childrenRules)[i]->print();
-                break;
-        }*/
+        
         (*childrenRules)[i]->print();
     }
     cout << " )" << this->getCardinality();

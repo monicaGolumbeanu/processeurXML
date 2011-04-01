@@ -252,7 +252,6 @@ void DTDParserActionHandler::createNewItem(string name) {
     cout << "[INFO] New simple rule '" << genericrule->getName() <<"' created"
          << " with cardinality '" << genericrule->getCardinality()
          << "'." << endl;
-    cout << "It was added to rule : " << (*subrules.top())[0]->getName() << endl;
 #endif
 }
 

@@ -22,11 +22,7 @@ using namespace std;
 
 #include <DTD.h>
 #include <DTDParserActionHandler.h>
-/*
-#ifndef DEBUG
-#define DEBUG
-#endif
-//*/
+
 // globals
 extern FILE   * xml_in;
 extern FILE   * dtd_in;
