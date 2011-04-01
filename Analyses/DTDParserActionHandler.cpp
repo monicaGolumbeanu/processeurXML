@@ -11,11 +11,7 @@
 #include <DTDElement.h>
 #include <DTDAttribute.h>
 #include "DTDParserActionHandler.h"
-//*
-#ifndef DEBUG
-#define DEBUG
-#endif
-//*/
+
 using namespace std;
 
 DTDParserActionHandler::DTDParserActionHandler() {
@@ -28,7 +24,6 @@ DTDParserActionHandler::DTDParserActionHandler() {
 }
 
 DTDParserActionHandler::~DTDParserActionHandler() {
-    // TODO Auto-generated destructor stub
 }
 
 DTD* DTDParserActionHandler::getDTD() {
@@ -298,8 +293,8 @@ void DTDParserActionHandler::checkProblems() {
     }
 #ifdef DEBUG
     cout << "[PRINT] Printing DTD." << endl;
-#endif
     dtd->print();
+#endif
 }
 
 void DTDParserActionHandler::setNewAttributeType(string att_type) {

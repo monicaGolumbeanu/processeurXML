@@ -18,7 +18,7 @@ using namespace std;
 #include "XMLTag.h"
 #include "commun.h"
 #include "yy.tab_xml.h"
-#include "analyse.h"
+#include "tools.h"
 
 #include <DTD.h>
 #include <DTDParserActionHandler.h>
@@ -32,7 +32,7 @@ extern XMLTag * root;
 
 // some useful functions used inside this file
 static void pretty_print(XMLNode* node);
-static int  check_xml(char * file_name);
+static int  check_xml(const char * file_name);
 static void construct_XSLmap( XMLTag * xsl_root );
 static void printMap();
 static void transform( XMLTag * xml_root );
@@ -49,35 +49,39 @@ DTDParserActionHandler handler;
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
-  XMLTag * xml_root;
-  XMLTag * xsl_root;
-  int      parse_error;
+  string       xml_name;
+  const char * xml_name_char;
+  XMLTag     * xml_root;
+  XMLTag     * xsl_root;
+  int          parse_error;
   handler = DTDParserActionHandler();
   
   // only one argument allowed : xml file name
   if ( argc != 2 ) {
-    cout << "Please enter the name of the XML file only" << endl;
-    return 1;
+    cout << "Please enter the name of the XML file you want to parse : " << endl;
+    cin >> xml_name;
+    xml_name_char = xml_name.c_str();
+  }
+  else
+  {
+    xml_name_char = argv[1];
   }
 
   // Checking XML
-  parse_error = check_xml(argv[1]);
+  parse_error = check_xml(xml_name_char);
   if ( parse_error == 1 )
   {
     return 1;
   }
   xml_root = root;
-  //dtd_xml->validate(xml_root);
 
   // Parsing XSL
-  //handler.setDTD(dtd_xsl);
   parse_error = check_xml(xsl_name);
   if ( parse_error == 1 )
   {
     return 1;
   }
   xsl_root = root;
-  //dtd_xsl->validate(xsl_root);
 
  
 #ifdef DEBUG
@@ -111,7 +115,7 @@ int main(int argc, char **argv)
 ////////////////////////////////////////////////////////////////////////////////
 //                              check_xml
 ////////////////////////////////////////////////////////////////////////////////
-int check_xml( char * file_name )
+int check_xml( const char * file_name )
 // Function that parses a xml file and its dtd and then validate the xml file
 // thanks to the dtd
 // parameters : file_name : name of the file containing the xml
@@ -166,7 +170,10 @@ int check_xml( char * file_name )
   }
   
   //////////// XML VALIDITY CHECK
+#ifdef DEBUG
+  cout << "VALIDATE XML" << endl;
   dtd->validate(root);
+#endif
   
   return 0;
 }

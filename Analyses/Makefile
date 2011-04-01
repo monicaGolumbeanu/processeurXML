@@ -30,9 +30,9 @@ dtd.tab.c:
 
 analyse: $(OBJS_CPP) $(OBJS_C)
 	@mkdir -p $(BINDIR)
-	@g++ -g -DYYDEBUG=1 $(OBJS_CPP) $(OBJS_C) $(CPPFLAGS) -o $(BINDIR)/analyse
+	@g++ -g -DYYDEBUG=1 $(OBJS_CPP) $(OBJS_C) $(CPPFLAGS) -o $(BINDIR)/test
 	@echo "=========================================="
-	@echo " * " Finished. Executable file: $(BINDIR)/analyse
+	@echo " * " Finished. Executable file: $(BINDIR)/test
 
 clean:
 	@echo " * " Cleaning...
@@ -47,3 +47,6 @@ clean:
 %.c.o: %.c
 	@echo " * " Building $@...
 	@$(CXX) -g -c $(CXXFLAGS) $< -o $@
+
+test:
+	./bin/test

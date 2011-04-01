@@ -13,7 +13,7 @@
 #include <DTDTest.h>
 
 void DTDTest() {
-    //XML Tree
+    /*//XML Tree
     XMLTag* html = new XMLTag("html");
     XMLTag* body = new XMLTag("body");
     XMLTag* head = new XMLTag("head");
@@ -62,10 +62,13 @@ void DTDTest() {
     DTDRuleSequence* rule_html = new DTDRuleSequence();
     rule_html->addRule(rule_body);
     rule_html->addRule(rule_head);
-    html_element->setRule(rule_html);
-    if(dtd->validate(html))
+    html_element->setRule(rule_html);*/
+    // TEST 1
+    // TEST 2
+    // TEST 3
+    // TEST 4
+    /*if(dtd->validate(html))
         cout << "VALID!" << endl;
     else
-        cout << "INVALID!" << endl;
-    dtd->print();
+        cout << "INVALID!" << endl;*/
 }

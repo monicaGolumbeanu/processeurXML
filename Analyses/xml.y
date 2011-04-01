@@ -12,7 +12,7 @@ using namespace std;
 #include "XML/XMLTag.h"
 #include "XML/XMLAttr.h"
 #include "XML/XMLPCDATA.h"
-#include "analyse.h"
+#include "tools.h"
 
 char   * dtd_name;
 char   * xsl_name;

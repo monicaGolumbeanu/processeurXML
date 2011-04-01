@@ -9,11 +9,7 @@
 #include <DTDRuleAtomic.h>
 #include <DTDRuleFinal.h>
 #include <InvalidElementException.h>
-//*
-#ifndef DEBUG
-#define DEBUG
-#endif
-//*/
+
 using namespace DTDExceptions;
 
 DTDRule::DTDRule(RULE_ID idType) {
