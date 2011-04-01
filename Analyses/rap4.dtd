@@ -1,0 +1,3 @@
+<!ELEMENT p (elem)+>
+<!ELEMENT test EMPTY>
+<!ELEMENT elem (#PCDATA)>
