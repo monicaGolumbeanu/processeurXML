@@ -6,7 +6,11 @@
 #include <InvalidElementException.h>
 #include <EmptyTagException.h>
 #include <ExtraElementFoundException.h>
-
+//*
+#ifndef DEBUG
+#define DEBUG
+#endif
+//*/
 using namespace DTDExceptions;
 
 DTDRuleFinal::DTDRuleFinal() : DTDRule(RULE_FINAL) {
@@ -111,12 +115,22 @@ bool DTDRuleFinal::validate(XMLTag* tag) {
     
 void DTDRuleFinal::print( )
 {
-    //cout << "{" << getName() << "}";
-    if (this->isEmpty())
+    /*if(this->getTagName() == "")
+    {*/
+        if (this->isEmpty())
+            cout << "EMPTY";
+        else if (this->isAny())
+            cout << "ANY";
+        else
+            cout << "#PCDATA";
+    /*}
+    else {
+        cout << "test" << this->getTagName();
+        cout << this->getCardinality();
+    }*/
+    /*if (this->isEmpty())
         cout << "(EMPTY)";
     else if (this->isAny())
-        cout << "(ANY)";
-    else
-        cout << "(#PCDATA)";
+        cout << "(ANY)";*/
 }
 

@@ -138,7 +138,7 @@ void DTDRuleChoice::print()
     {
         if(i > 0)
             cout << " | ";
-        switch((*childrenRules)[i]->getType()) {
+        /*switch((*childrenRules)[i]->getType()) {
             case RULE_FINAL:
                 if((*childrenRules)[i]->getTagName() == "")
                     cout << "#PCDATA";
@@ -154,8 +154,8 @@ void DTDRuleChoice::print()
             default:
                 (*childrenRules)[i]->print();
                 break;
-        }
-
+        }*/
+(*childrenRules)[i]->print();
     }
     cout << " )" << this->getCardinality();
 }

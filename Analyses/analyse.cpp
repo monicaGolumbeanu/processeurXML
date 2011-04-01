@@ -22,7 +22,11 @@ using namespace std;
 
 #include <DTD.h>
 #include <DTDParserActionHandler.h>
-
+/*
+#ifndef DEBUG
+#define DEBUG
+#endif
+//*/
 // globals
 extern FILE   * xml_in;
 extern FILE   * dtd_in;
@@ -49,52 +53,59 @@ DTDParserActionHandler handler;
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
-  handler = DTDParserActionHandler();
   XMLTag * xml_root;
   XMLTag * xsl_root;
-  DTD* dtd_xml = new DTD();
-  DTD* dtd_xsl = new DTD();
   int      parse_error;
+  handler = DTDParserActionHandler();
   
   // only one argument allowed : xml file name
   if ( argc != 2 ) {
-    /*printf("Please enter the name of the XML file only\n");*/
-    //DTDTest();
+    cout << "Please enter the name of the XML file only" << endl;
     return 1;
   }
 
-  // Parsing XML
-  handler.setDTD(dtd_xml);
+  // Checking XML
   parse_error = check_xml(argv[1]);
   if ( parse_error == 1 )
   {
     return 1;
   }
   xml_root = root;
-  dtd_xml->validate(xml_root);
+  //dtd_xml->validate(xml_root);
 
   // Parsing XSL
-  handler.setDTD(dtd_xsl);
+  //handler.setDTD(dtd_xsl);
   parse_error = check_xml(xsl_name);
   if ( parse_error == 1 )
   {
     return 1;
   }
   xsl_root = root;
-  dtd_xsl->validate(xsl_root);
+  //dtd_xsl->validate(xsl_root);
 
  
-  //pretty_print(xml_root);
-  //pretty_print(xsl_root);
+#ifdef DEBUG
+    cout << endl << "XML TREE COMPLETE : " << endl;
+    pretty_print(xml_root);
+    cout << endl << "XSL TREE COMPLETE : " << endl;
+    pretty_print(xsl_root);
+    cout << endl;
+#endif
 
+  // Construct a map to link the templates to the xml markup name
   construct_XSLmap( xsl_root );
-  // printMap();
+#ifdef DEBUG
+    cout << endl << "MAP XSL COMPLETE" << endl;
+    printMap();
+    cout << endl;
+#endif
+
+  // Transform xml to html using xsl sheet
   transform( xml_root ) ;
-  
-  // DEBUG : check if the html tree is conform
-  cout << "pretty print transform" << endl;
-  pretty_print( html_root );
-    
+  cout << endl << "HTML TREE COMPLETE : " << endl;
+  pretty_print(html_root);
+  cout << endl;
+
   delete(xml_root);
   delete(xsl_root);
   
@@ -113,47 +124,54 @@ int check_xml( char * file_name )
 {
   int    xml_err;
   int    dtd_err;
-
+  DTD *  dtd = new DTD();
+  handler.setDTD(dtd);
+  
   //////////// XML PARSING
-  printf("Your XML file : %s\n", file_name);
+#ifdef DEBUG
+    cout << "Your XML file : " << file_name << endl;
+#endif
   xml_in = fopen(file_name, "r");
   if ( xml_in == 0 )
   {
-    printf("Can't open XML file\n");
+    cout << "Can't open XML file" << endl;
     return 1;
   }
   xml_err = xml_parse();
   if (xml_err != 0)
   {
-    printf("XML Parse ended with %d error(s)\n\n", xml_err);
+    cout << "XML Parse ended with " << xml_err <<  " error(s)" << endl << endl;
     return 1;
   }
   else
   {
-    printf("XML Parse ended with success\n\n");
+    cout << "XML Parse ended with success" << endl << endl;
   }
-
-  // DTD PARSING
+  //////////// DTD PARSING
+#ifdef DEBUG
+    cout << "Your DTD file : " << dtd_name << endl;
+#endif
   dtd_in = fopen(dtd_name, "r");
   if ( dtd_in == 0 )
   {
-    printf("Can't open DTD file : %s\n", dtd_name);
+    cout << "Can't open DTD file " << dtd_name << endl;
     return 1;
   }
   
   dtd_err = dtd_parse();
   if (dtd_err != 0)
   {
-    printf("DTD Parse ended with %d error(s)\n\n", dtd_err);
+    cout << "DTD Parse ended with " << dtd_err << " error(s)" << endl << endl;
     return 1;
   }
   else
   {
-    printf("DTD Parse ended with success\n\n");
+    cout << "DTD Parse ended with success" << endl << endl;
   }
   
   //////////// XML VALIDITY CHECK
-  // TODO
+  dtd->validate(root);
+  
   return 0;
 }
 
@@ -241,7 +259,7 @@ void printMap()
 
 	for(p = XSLmap.begin(); p != XSLmap.end(); p++) {
 		cout << p->first << '\n';
-		//pretty_print(p->second);
+		pretty_print(p->second);
   	}
 }
 

@@ -101,11 +101,11 @@ void DTDRuleSequence::print()
 {
     vector<DTDRule *> * childrenRules = this->getChildrenRules();
     cout << "( ";
-    for ( int i=0; i < childrenRules->size(); i++ )
+    for ( unsigned int i=0; i < childrenRules->size(); i++ )
     {
         if(i > 0)
             cout << " , ";
-        switch((*childrenRules)[i]->getType()) {
+        /*switch((*childrenRules)[i]->getType()) {
             case RULE_FINAL:
                 cout << (*childrenRules)[i]->getTagName();
                 cout << (*childrenRules)[i]->getCardinality();
@@ -117,7 +117,8 @@ void DTDRuleSequence::print()
             default:
                 (*childrenRules)[i]->print();
                 break;
-        }
+        }*/
+        (*childrenRules)[i]->print();
     }
     cout << " )" << this->getCardinality();
 }

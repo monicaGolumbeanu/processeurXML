@@ -9,7 +9,11 @@
 #include <DTDRuleAtomic.h>
 #include <DTDRuleFinal.h>
 #include <InvalidElementException.h>
-
+//*
+#ifndef DEBUG
+#define DEBUG
+#endif
+//*/
 using namespace DTDExceptions;
 
 DTDRule::DTDRule(RULE_ID idType) {
@@ -142,12 +146,13 @@ void DTDRule::replaceIncompleteRules(DTD* dtd) {
         else if(type == RULE_FINAL) {
             final = static_cast<DTDRuleFinal*>((*children)[i]);
             rule = dynamic_cast<DTDRule*>(final);
+            return;
         }
-        if(type == RULE_ATOMIC || type == RULE_FINAL) {
+        if(type == RULE_ATOMIC /*|| type == RULE_FINAL*/) {
             elements = dtd->getElements();
             //Searching corresponding "complete" rule
-            for(unsigned int j = 0; j < 1; j++) {
-            //for(unsigned int j = 0; j < elements->size(); j++) {
+            //for(unsigned int j = 0; j < 1; j++) {
+            for(unsigned int j = 0; j < elements->size(); j++) {
 #ifdef DEBUG
                 cout << "[INFO] Checking... "
                      << " * Element: " << (*elements)[j]->getName()

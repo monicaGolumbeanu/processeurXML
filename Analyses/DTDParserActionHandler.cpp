@@ -11,7 +11,11 @@
 #include <DTDElement.h>
 #include <DTDAttribute.h>
 #include "DTDParserActionHandler.h"
-
+//*
+#ifndef DEBUG
+#define DEBUG
+#endif
+//*/
 using namespace std;
 
 DTDParserActionHandler::DTDParserActionHandler() {
@@ -228,7 +232,7 @@ void DTDParserActionHandler::createNewItem(string name) {
     if(subrules.empty()) {
 #ifdef DEBUG
         cout << "[ERROR] Trying to add rule '" << name
-             << "' to current pile's top element, which is NULL." << endl;
+             << "' to current stack's top element, which is NULL." << endl;
 #endif
         return;
     }
@@ -248,6 +252,7 @@ void DTDParserActionHandler::createNewItem(string name) {
     cout << "[INFO] New simple rule '" << genericrule->getName() <<"' created"
          << " with cardinality '" << genericrule->getCardinality()
          << "'." << endl;
+    cout << "It was added to rule : " << (*subrules.top())[0]->getName() << endl;
 #endif
 }
 

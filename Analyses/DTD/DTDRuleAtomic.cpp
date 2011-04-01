@@ -6,7 +6,11 @@
 #include <InvalidElementException.h>
 #include <EmptyTagException.h>
 #include <ExtraElementFoundException.h>
-
+//*
+#ifndef DEBUG
+#define DEBUG
+#endif
+//*/
 using namespace std;
 using namespace DTDExceptions;
 
@@ -120,8 +124,8 @@ void DTDRuleAtomic::print()
 #endif
     }
     else {
-        cout << "( ";
-        this->getRule()->print();
-        cout << " )" << this->getCardinality();
+        cout << "FUCKK" << this->getTagName();
+        cout << this->getCardinality();
+        this->getCardinality();
     }
 }
