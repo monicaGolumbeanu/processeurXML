@@ -14,8 +14,6 @@ void yyerror(char *msg);
 int  yywrap(void);
 int  yylex(void);
 
-DTDParserActionHandler handler = DTDParserActionHandler(new DTD());
-
 %}
 
 %union { 
@@ -32,15 +30,6 @@ DTDParserActionHandler handler = DTDParserActionHandler(new DTD());
 main: dtd  
     {
         handler.checkProblems();
-        /*if ( !problems.empty() )
-        {
-            printf( "There are %d attributes with no element\n", problems.size() );
-            printf( "The elements needed are : \n" );
-            for ( int i=0; i<problems.size(); i++ )
-            {
-                printf("\t%s\n", problems[i]->getName() );
-            }
-        }*/
     }                         
     ;
 dtd

@@ -12,11 +12,10 @@ class DTDRuleFinal : public DTDRule {
         void setAny(bool);
         virtual bool validate(XMLTag* tag);
         virtual int partialValidate(XMLTag* tag, unsigned int position);
-        virtual void printRule();
+        virtual void print();
     private:
         bool empty;
         bool any;
-        std::string tagName;
 };
 
 #endif /* DTDRULEFINAL_H_ */

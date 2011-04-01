@@ -112,9 +112,16 @@ int DTDRuleAtomic::partialValidate(XMLTag* tag, unsigned int position) {
     return i;
 }
 
-void DTDRuleAtomic::printRule()
+void DTDRuleAtomic::print()
 {
-    cout << "( ";
-    this->getRule()->printRule();
-    cout << " )" << this->getCardinalite();
+    if(!this->getRule()) {
+#ifdef DEBUG
+        cout << "[INFO] Empty atomic rule detected." << endl;
+#endif
+    }
+    else {
+        cout << "( ";
+        this->getRule()->print();
+        cout << " )" << this->getCardinality();
+    }
 }

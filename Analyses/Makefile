@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-Wall -IXML -IDTD -IDTD/Exceptions -I. -D_GLIBCXX_DEBUG -D DEBUG
+CXXFLAGS=-Wall -IXML -IDTD -IDTD/Exceptions -I. -D_GLIBCXX_DEBUG #-D DEBUG
 SRC_C=lex.xml_.c xml.tab.c lex.dtd_.c dtd.tab.c
 OBJS_C=$(SRC_C:.c=.c.o)
 SRC_CPP=$(shell find -name "*.cpp" | xargs -l1 basename | xargs)

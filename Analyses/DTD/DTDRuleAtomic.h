@@ -19,7 +19,7 @@ class DTDRuleAtomic : public DTDRule {
         void setRule(DTDRule* rule);
         virtual bool validate(XMLTag* tag);
         virtual int partialValidate(XMLTag* tag, unsigned int position);
-        virtual void printRule();
+        virtual void print();
 };
 
 #endif /* DTDRULEATOMIC_H_ */

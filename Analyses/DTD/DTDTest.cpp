@@ -46,10 +46,10 @@ void DTDTest() {
     //body_element->addAttribute( att2 );
     title_element->addAttribute( att2 );
     title_element->addAttribute( att3 );
-    DTDRuleFinal* rule_title = new DTDRuleFinal("1");
-    DTDRuleFinal* rule_meta = new DTDRuleFinal("2");
-    DTDRuleFinal* rule_link = new DTDRuleFinal("3");
-    DTDRuleFinal* rule_body = new DTDRuleFinal("4");
+    DTDRuleFinal* rule_title = new DTDRuleFinal();
+    DTDRuleFinal* rule_meta = new DTDRuleFinal();
+    DTDRuleFinal* rule_link = new DTDRuleFinal();
+    DTDRuleFinal* rule_body = new DTDRuleFinal();
     title_element->setRule(rule_title);
     link_element->setRule(rule_link);
     meta_element->setRule(rule_meta);
@@ -67,5 +67,5 @@ void DTDTest() {
         cout << "VALID!" << endl;
     else
         cout << "INVALID!" << endl;
-    dtd->printDTD();
+    dtd->print();
 }

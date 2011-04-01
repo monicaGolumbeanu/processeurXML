@@ -7,6 +7,7 @@
 using namespace std;
 
 class XMLTag;
+class DTD;
 class DTDElement;
 
 typedef enum {
@@ -29,7 +30,8 @@ class DTDRule {
         string getName();
         bool isOptional();
         bool canRepeat();
-        virtual void printRule() = 0;
+        virtual void print() = 0;
+        void replaceIncompleteRules(DTD* dtd);
     protected:
         int applyChildRule(XMLTag* tag, unsigned int position, DTDRule* childRule);
     private:

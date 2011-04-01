@@ -15,7 +15,7 @@ class DTDRule;
 
 class DTDParserActionHandler {
     public:
-        DTDParserActionHandler(DTD* dtd);
+        DTDParserActionHandler();
         virtual ~DTDParserActionHandler();
         void finishElement(std::string);
         void finishAttlist(std::string);
@@ -30,6 +30,8 @@ class DTDParserActionHandler {
         void setNewRuleCardinality(char);
         void updateCardinality();
         void checkProblems();
+        DTD* getDTD();
+        void setDTD(DTD*);
     private:
         DTD* dtd;
         DTDAttribute* currAttribute;
@@ -40,7 +42,8 @@ class DTDParserActionHandler {
 
         //Problems related
         vector<string> attlistProblems; //ATTLIST without ELEMENT
-        //void linkRules();
 };
+
+extern DTDParserActionHandler handler;
 
 #endif /* DTDPARSERACTIONHANDLER_H_ */

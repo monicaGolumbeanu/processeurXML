@@ -97,17 +97,28 @@ int DTDRuleSequence::partialValidate(XMLTag* tag, unsigned int position) {
     return position;
 }
 
-void DTDRuleSequence::printRule()
+void DTDRuleSequence::print()
 {
     vector<DTDRule *> * childrenRules = this->getChildrenRules();
     cout << "( ";
-    // print first rule
-    (*childrenRules)[0]->printRule();
-    for ( int i=1; i < childrenRules->size(); i++ )
+    for ( int i=0; i < childrenRules->size(); i++ )
     {
-        cout << " , ";
-        (*childrenRules)[i]->printRule();
+        if(i > 0)
+            cout << " , ";
+        switch((*childrenRules)[i]->getType()) {
+            case RULE_FINAL:
+                cout << (*childrenRules)[i]->getTagName();
+                cout << (*childrenRules)[i]->getCardinality();
+                break;
+            case RULE_ATOMIC:
+                cout << (*childrenRules)[i]->getTagName();
+                cout << (*childrenRules)[i]->getCardinality();
+                break;
+            default:
+                (*childrenRules)[i]->print();
+                break;
+        }
     }
-    cout << " )" << this->getCardinalite();
+    cout << " )" << this->getCardinality();
 }
 

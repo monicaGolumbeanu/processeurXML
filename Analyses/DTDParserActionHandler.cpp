@@ -14,16 +14,31 @@
 
 using namespace std;
 
-DTDParserActionHandler::DTDParserActionHandler(DTD* dtd) {
+DTDParserActionHandler::DTDParserActionHandler() {
     this->dtd = dtd;
     currAttribute = NULL;
     currCardinality = '\0';
     rule = NULL;
+    dtd = NULL;
 
 }
 
 DTDParserActionHandler::~DTDParserActionHandler() {
     // TODO Auto-generated destructor stub
+}
+
+DTD* DTDParserActionHandler::getDTD() {
+    return dtd;
+}
+
+void DTDParserActionHandler::setDTD(DTD* dtd) {
+    this->dtd = dtd;
+    currAttributes.clear();
+    while(subrules.size())
+        subrules.pop();
+    currCardinality = '\0';
+    rule = NULL;
+    currAttribute = NULL;
 }
 
 void DTDParserActionHandler::finishElement(string name) {
@@ -207,9 +222,9 @@ void DTDParserActionHandler::createNewItem(string name) {
     //RULE: mixed --> OPENPAR PCDATA contenu_mixed CLOSEPAR cardinalite
     //      contenu_mixed --> contenu_mixed PIPE debut
     //=================================================================
-    DTDRuleAtomic* atomic = new DTDRuleAtomic();
-    atomic->setName(name);
-    atomic->setCardinality(currCardinality);
+    DTDRuleAtomic* atomic;
+    DTDRuleFinal* final;
+    DTDRule* genericrule;
     if(subrules.empty()) {
 #ifdef DEBUG
         cout << "[ERROR] Trying to add rule '" << name
@@ -217,11 +232,22 @@ void DTDParserActionHandler::createNewItem(string name) {
 #endif
         return;
     }
-    (subrules.top())->push_back(atomic);
+    if(name == "#PCDATA") {
+        final = new DTDRuleFinal();
+        genericrule = dynamic_cast<DTDRule*>(final);
+    }
+    else {
+        atomic = new DTDRuleAtomic();
+        atomic->setName(name);
+        atomic->setCardinality(currCardinality);
+        genericrule = dynamic_cast<DTDRule*>(atomic);
+    }
+    (subrules.top())->push_back(genericrule);
     currCardinality = '\0';
 #ifdef DEBUG
-    cout << "[INFO] New simple rule '" << name <<"' created"
-         << " with cardinality '" << atomic->getCardinality() << "'." << endl;
+    cout << "[INFO] New simple rule '" << genericrule->getName() <<"' created"
+         << " with cardinality '" << genericrule->getCardinality()
+         << "'." << endl;
 #endif
 }
 
@@ -254,8 +280,22 @@ void DTDParserActionHandler::updateCardinality() {
 }
 
 void DTDParserActionHandler::checkProblems() {
-    //Varrer árvore substituindo DTDRuleAtomic com name pela regra
-    //apropriada...;
+    //Final construction step: replace raw strings by the real rules
+#ifdef DEBUG
+    cout << "[INFO] Beginning rules replacement..." << endl;
+#endif
+    vector<DTDElement*> *elements = dtd->getElements();
+    for(unsigned int i=0; i < elements->size(); i++) {
+#ifdef DEBUG
+    cout << "[INFO] Replacing rules for element: '"
+         << (*elements)[i]->getName() << "'." << endl;
+#endif
+        (*elements)[i]->getRule()->replaceIncompleteRules(dtd);
+    }
+#ifdef DEBUG
+    cout << "[PRINT] Printing DTD." << endl;
+#endif
+    dtd->print();
 }
 
 void DTDParserActionHandler::setNewAttributeType(string att_type) {
@@ -279,47 +319,3 @@ void DTDParserActionHandler::setNewRuleCardinality(char cardinality) {
 #endif
 }
 
-
-/*void DTDParserActionHandler::linkRules() {
-    MapIncompleteRules::const_iterator end = incomplete.end();
-    vector<string> names;
-    DTDRuleChoice *ruleChoice;
-    DTDRuleSequence *ruleSequence;
-    DTDRuleAtomic *ruleAtomic;
-    DTDElement *elem;
-    for (MapIncompleteRules::const_iterator it = incomplete.begin(); it != end; ++it) {
-        names = it->second;
-        switch(it->first->getType()) {
-            case RULE_CHOICE:
-                ruleChoice = static_cast<DTDRuleChoice*>(it->first);
-                for(unsigned int i = 0; i < names.size(); i++) {
-                    elem = high->getElementByName(names[i]);
-                    if(elem != NULL)
-                        cout << "Error! Element " << names[i] << "not defined.";
-                    else
-                        ruleChoice->addRule(elem->getRule());
-                }
-                break;
-            case RULE_SEQUENCE:
-                ruleSequence = static_cast<DTDRuleSequence*>(it->first);
-                for(unsigned int i = 0; i < names.size(); i++) {
-                    elem = high->getElementByName(names[i]);
-                    if(elem != NULL)
-                        cout << "Error! Element " << names[i] << "not defined.";
-                    else
-                        ruleSequence->addRule(elem->getRule());
-                }
-                break;
-            case RULE_ATOMIC:
-                ruleAtomic = static_cast<DTDRuleAtomic*>(it->first);
-                for(unsigned int i = 0; i < names.size(); i++) {
-                    elem = high->getElementByName(names[i]);
-                    if(elem != NULL)
-                        cout << "Error! Element " << names[i] << "not defined.";
-                    else
-                        ruleAtomic->setRule(elem->getRule());
-                }
-                break;
-        }
-    }
-}*/

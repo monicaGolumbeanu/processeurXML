@@ -20,7 +20,8 @@ using namespace std;
 #include "yy.tab_xml.h"
 #include "analyse.h"
 
-#include "DTDTest.h"
+#include <DTD.h>
+#include <DTDParserActionHandler.h>
 
 // globals
 extern FILE   * xml_in;
@@ -41,36 +42,47 @@ static void apply_xsl( XMLNode * xsl_node, XMLTag * html_node, XMLNode * xml_roo
 static map<string, XMLTag*>   XSLmap;
 static XMLTag               * html_root = NULL;
 
+DTDParserActionHandler handler;
+
 ////////////////////////////////////////////////////////////////////////////////
 //                              main
 ////////////////////////////////////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
+  handler = DTDParserActionHandler();
   XMLTag * xml_root;
   XMLTag * xsl_root;
+  DTD* dtd_xml = new DTD();
+  DTD* dtd_xsl = new DTD();
   int      parse_error;
   
   // only one argument allowed : xml file name
   if ( argc != 2 ) {
     /*printf("Please enter the name of the XML file only\n");*/
-    DTDTest();
+    //DTDTest();
     return 1;
   }
 
   // Parsing XML
+  handler.setDTD(dtd_xml);
   parse_error = check_xml(argv[1]);
   if ( parse_error == 1 )
   {
     return 1;
   }
   xml_root = root;
+  dtd_xml->validate(xml_root);
+
   // Parsing XSL
+  handler.setDTD(dtd_xsl);
   parse_error = check_xml(xsl_name);
   if ( parse_error == 1 )
   {
     return 1;
   }
   xsl_root = root;
+  dtd_xsl->validate(xsl_root);
+
  
   //pretty_print(xml_root);
   //pretty_print(xsl_root);
@@ -120,8 +132,8 @@ int check_xml( char * file_name )
   {
     printf("XML Parse ended with success\n\n");
   }
-  /*
-  //////////// DTD PARSING
+
+  // DTD PARSING
   dtd_in = fopen(dtd_name, "r");
   if ( dtd_in == 0 )
   {
@@ -138,7 +150,7 @@ int check_xml( char * file_name )
   else
   {
     printf("DTD Parse ended with success\n\n");
-  }*/
+  }
   
   //////////// XML VALIDITY CHECK
   // TODO
@@ -229,7 +241,7 @@ void printMap()
 
 	for(p = XSLmap.begin(); p != XSLmap.end(); p++) {
 		cout << p->first << '\n';
-		pretty_print(p->second);
+		//pretty_print(p->second);
   	}
 }
 

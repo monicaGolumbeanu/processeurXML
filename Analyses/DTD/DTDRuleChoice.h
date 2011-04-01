@@ -17,7 +17,7 @@ class DTDRuleChoice : public DTDRule {
         vector<DTDRule*>* getChildrenRules();
         virtual bool validate(XMLTag* tag);
         virtual int partialValidate(XMLTag* tag, unsigned int position);
-        virtual void printRule();
+        virtual void print();
 };
 
 #endif /* DTDRULECHOICE_H_ */

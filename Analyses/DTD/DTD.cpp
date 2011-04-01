@@ -66,20 +66,29 @@ bool DTD::validate(XMLNode* node) {
     }
 }
 
-void DTD::printDTD ()
+void DTD::print ()
 // Print the DTD
 //    <!ELEMENT a (b | (c,d,e)+ )>
 //    <!ATTLIST a PCDATA #IMPLIED >
 {
+    DTDRule* rule;
     for ( unsigned int i=0; i < elements->size(); i++ )
     {
         cout << "<!ELEMENT " << (*elements)[i]->getName() << " ";
         // Print the rule
-        (*elements)[i]->getRule()->printRule();
+        rule =  (*elements)[i]->getRule();
+        if(rule == NULL) {
+#ifdef DEBUG
+            cout << "[PRINT] NULL rule detected for element '"
+                 << (*elements)[i]->getName() << "'." << endl;
+#endif
+        }
+        else
+            rule->print();
         cout << " >" << endl;
         // print the attribute list
         vector<DTDAttribute *> * attributes = (*elements)[i]->getAttributes();
-        if ( attributes->size() > 0 )
+        if ( !attributes->empty())
         {
             cout << "<!ATTLIST " << (*elements)[i]->getName();
             for ( unsigned int attI=0; attI < attributes->size(); attI++ )

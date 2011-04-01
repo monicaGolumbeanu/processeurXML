@@ -109,11 +109,14 @@ bool DTDRuleFinal::validate(XMLTag* tag) {
     }
 }
     
-void DTDRuleFinal::printRule( )
+void DTDRuleFinal::print( )
 {
-    if ( !this->isEmpty() )
-        cout << tagName;
+    //cout << "{" << getName() << "}";
+    if (this->isEmpty())
+        cout << "(EMPTY)";
+    else if (this->isAny())
+        cout << "(ANY)";
     else
-        cout << "EMPTY";
+        cout << "(#PCDATA)";
 }
 
